@@ -4,9 +4,13 @@
 }
 %option noyywrap nounput batch noinput
 ALPHA [A-Za-z0-9]+ 
+%x DBQUO
 %%
-\${ALPHA}					{ return yy::parser::make_VAR(yytext); 	}
-'{1}[^'\n]*'{1}			{ return yy::parser::make_STR(yytext); 	}
+\"							{ BEGIN(DBQUO);							}
+<DBQUO>\"					{ BEGIN(INITIAL);						}
+<DBQUO>[^"$]*				{ return yy::parser::make_DBQ(yytext);	}
+<INITIAL,DBQUO>\${ALPHA}	{ return yy::parser::make_VAR(yytext); 	}
+'{1}[^'\n]*'{1}				{ return yy::parser::make_STR(yytext); 	}
 \|{1}						{ return yy::parser::make_PIPE(); 		}
 ;{1}						{ return yy::parser::make_SEMI(); 		}
 [ \t]+						{ return yy::parser::make_SPACE(yytext);}
