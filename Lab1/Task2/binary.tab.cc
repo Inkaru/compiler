@@ -196,7 +196,8 @@ namespace yy {
     {
       case 3: // LINE
       case 7: // SPACE
-      case 9: // text
+      case 8: // VAR
+      case 10: // text
         value.move< std::string > (that.value);
         break;
 
@@ -217,7 +218,8 @@ namespace yy {
     {
       case 3: // LINE
       case 7: // SPACE
-      case 9: // text
+      case 8: // VAR
+      case 10: // text
         value.copy< std::string > (that.value);
         break;
 
@@ -446,7 +448,8 @@ namespace yy {
     {
       case 3: // LINE
       case 7: // SPACE
-      case 9: // text
+      case 8: // VAR
+      case 10: // text
         yylhs.value.build< std::string > ();
         break;
 
@@ -463,67 +466,79 @@ namespace yy {
           switch (yyn)
             {
   case 2:
-#line 18 "binary.yy" // lalr1.cc:859
+#line 19 "binary.yy" // lalr1.cc:859
     {std::cout << "Text ->" << yystack_[0].value.as< std::string > () << "<-"<< std::endl;}
-#line 469 "binary.tab.cc" // lalr1.cc:859
+#line 472 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 3:
-#line 19 "binary.yy" // lalr1.cc:859
+#line 20 "binary.yy" // lalr1.cc:859
     {std::cout << "NL:" << std::endl;}
-#line 475 "binary.tab.cc" // lalr1.cc:859
+#line 478 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 4:
-#line 20 "binary.yy" // lalr1.cc:859
+#line 21 "binary.yy" // lalr1.cc:859
     {std::cout << "Pipe" << std::endl;}
-#line 481 "binary.tab.cc" // lalr1.cc:859
+#line 484 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 5:
-#line 21 "binary.yy" // lalr1.cc:859
+#line 22 "binary.yy" // lalr1.cc:859
     {std::cout << "Semi" << std::endl;}
-#line 487 "binary.tab.cc" // lalr1.cc:859
+#line 490 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 6:
-#line 22 "binary.yy" // lalr1.cc:859
+#line 23 "binary.yy" // lalr1.cc:859
     {std::cout << "Blank: size " << yystack_[0].value.as< std::string > ().size() << std::endl;}
-#line 493 "binary.tab.cc" // lalr1.cc:859
+#line 496 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 7:
-#line 23 "binary.yy" // lalr1.cc:859
-    {std::cout << "Text ->" << yystack_[0].value.as< std::string > () << "<-" << std::endl;}
-#line 499 "binary.tab.cc" // lalr1.cc:859
+#line 24 "binary.yy" // lalr1.cc:859
+    {std::cout << "Var ->" << yystack_[0].value.as< std::string > ().erase(0,1) << "<-"<< std::endl;}
+#line 502 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 8:
-#line 24 "binary.yy" // lalr1.cc:859
-    {std::cout << "NL:" << std::endl;}
-#line 505 "binary.tab.cc" // lalr1.cc:859
+#line 25 "binary.yy" // lalr1.cc:859
+    {std::cout << "Text ->" << yystack_[0].value.as< std::string > () << "<-" << std::endl;}
+#line 508 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 9:
-#line 25 "binary.yy" // lalr1.cc:859
-    {std::cout << "Pipe" << std::endl;}
-#line 511 "binary.tab.cc" // lalr1.cc:859
+#line 26 "binary.yy" // lalr1.cc:859
+    {std::cout << "NL:" << std::endl;}
+#line 514 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 10:
-#line 26 "binary.yy" // lalr1.cc:859
-    {std::cout << "Semi" << std::endl;}
-#line 517 "binary.tab.cc" // lalr1.cc:859
+#line 27 "binary.yy" // lalr1.cc:859
+    {std::cout << "Pipe" << std::endl;}
+#line 520 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 11:
-#line 27 "binary.yy" // lalr1.cc:859
+#line 28 "binary.yy" // lalr1.cc:859
+    {std::cout << "Semi" << std::endl;}
+#line 526 "binary.tab.cc" // lalr1.cc:859
+    break;
+
+  case 12:
+#line 29 "binary.yy" // lalr1.cc:859
     {std::cout << "Blank: size " << yystack_[0].value.as< std::string > ().size() << std::endl;}
-#line 523 "binary.tab.cc" // lalr1.cc:859
+#line 532 "binary.tab.cc" // lalr1.cc:859
+    break;
+
+  case 13:
+#line 30 "binary.yy" // lalr1.cc:859
+    {std::cout << "Var ->" << yystack_[0].value.as< std::string > ().erase(0,1) << "<-"<< std::endl;}
+#line 538 "binary.tab.cc" // lalr1.cc:859
     break;
 
 
-#line 527 "binary.tab.cc" // lalr1.cc:859
+#line 542 "binary.tab.cc" // lalr1.cc:859
             default:
               break;
             }
@@ -691,15 +706,15 @@ namespace yy {
   const signed char
   parser::yypact_[] =
   {
-       5,    -1,    -1,    -1,    -1,    -1,     0,    -1,    -1,    -1,
-      -1,    -1,    -1
+       6,    -1,    -1,    -1,    -1,    -1,    -1,     0,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1
   };
 
   const unsigned char
   parser::yydefact_[] =
   {
-       0,     2,     3,     4,     5,     6,     0,     1,     7,     8,
-       9,    10,    11
+       0,     2,     3,     4,     5,     6,     7,     0,     1,     8,
+       9,    10,    11,    12,    13
   };
 
   const signed char
@@ -711,42 +726,42 @@ namespace yy {
   const signed char
   parser::yydefgoto_[] =
   {
-      -1,     6
+      -1,     7
   };
 
   const unsigned char
   parser::yytable_[] =
   {
-       7,     0,     0,     8,     9,    10,    11,    12,     1,     2,
-       3,     4,     5
+       8,     0,     0,     9,    10,    11,    12,    13,    14,     1,
+       2,     3,     4,     5,     6
   };
 
   const signed char
   parser::yycheck_[] =
   {
-       0,    -1,    -1,     3,     4,     5,     6,     7,     3,     4,
-       5,     6,     7
+       0,    -1,    -1,     3,     4,     5,     6,     7,     8,     3,
+       4,     5,     6,     7,     8
   };
 
   const unsigned char
   parser::yystos_[] =
   {
-       0,     3,     4,     5,     6,     7,     9,     0,     3,     4,
-       5,     6,     7
+       0,     3,     4,     5,     6,     7,     8,    10,     0,     3,
+       4,     5,     6,     7,     8
   };
 
   const unsigned char
   parser::yyr1_[] =
   {
-       0,     8,     9,     9,     9,     9,     9,     9,     9,     9,
-       9,     9
+       0,     9,    10,    10,    10,    10,    10,    10,    10,    10,
+      10,    10,    10,    10
   };
 
   const unsigned char
   parser::yyr2_[] =
   {
-       0,     2,     1,     1,     1,     1,     1,     2,     2,     2,
-       2,     2
+       0,     2,     1,     1,     1,     1,     1,     1,     2,     2,
+       2,     2,     2,     2
   };
 
 
@@ -757,15 +772,15 @@ namespace yy {
   const parser::yytname_[] =
   {
   "\"end of file\"", "error", "$undefined", "LINE", "\"newline\"",
-  "\"pipe\"", "\"semicolon\"", "SPACE", "$accept", "text", YY_NULLPTR
+  "\"pipe\"", "\"semicolon\"", "SPACE", "VAR", "$accept", "text", YY_NULLPTR
   };
 
 
   const unsigned char
   parser::yyrline_[] =
   {
-       0,    18,    18,    19,    20,    21,    22,    23,    24,    25,
-      26,    27
+       0,    19,    19,    20,    21,    22,    23,    24,    25,    26,
+      27,    28,    29,    30
   };
 
   // Print the state stack on the debug stream.
@@ -800,4 +815,4 @@ namespace yy {
 
 
 } // yy
-#line 804 "binary.tab.cc" // lalr1.cc:1167
+#line 819 "binary.tab.cc" // lalr1.cc:1167

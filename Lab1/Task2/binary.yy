@@ -14,15 +14,18 @@
 %token PIPE 2 "pipe"
 %token SEMI 3 "semicolon"
 %token <std::string> SPACE
+%token <std::string> VAR
 %%
 text : 	LINE 			{std::cout << "Text ->" << $1 << "<-"<< std::endl;}
 	 |	NL 				{std::cout << "NL:" << std::endl;}
 	 |	PIPE 			{std::cout << "Pipe" << std::endl;}
 	 |	SEMI 			{std::cout << "Semi" << std::endl;}
 	 |	SPACE 			{std::cout << "Blank: size " << $1.size() << std::endl;}
+	 |	VAR 			{std::cout << "Var ->" << $1.erase(0,1) << "<-"<< std::endl;}
 	 |	text LINE 		{std::cout << "Text ->" << $2 << "<-" << std::endl;}
 	 |	text NL			{std::cout << "NL:" << std::endl;}
 	 |	text PIPE		{std::cout << "Pipe" << std::endl;}
 	 |	text SEMI		{std::cout << "Semi" << std::endl;}
 	 |	text SPACE 		{std::cout << "Blank: size " << $2.size() << std::endl;}
+	 |	text VAR 		{std::cout << "Var ->" << $2.erase(0,1) << "<-"<< std::endl;}
 	 ;

@@ -264,6 +264,7 @@ namespace yy {
     {
       // LINE
       // SPACE
+      // VAR
       // text
       char dummy1[sizeof(std::string)];
 };
@@ -290,7 +291,8 @@ namespace yy {
         NL = 1,
         PIPE = 2,
         SEMI = 3,
-        SPACE = 259
+        SPACE = 259,
+        VAR = 260
       };
     };
 
@@ -416,6 +418,10 @@ namespace yy {
     static inline
     symbol_type
     make_SPACE (const std::string& v);
+
+    static inline
+    symbol_type
+    make_VAR (const std::string& v);
 
 
     /// Build a parser object.
@@ -618,12 +624,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 12,     ///< Last index in yytable_.
+      yylast_ = 14,     ///< Last index in yytable_.
       yynnts_ = 2,  ///< Number of nonterminal symbols.
-      yyfinal_ = 7, ///< Termination state number.
+      yyfinal_ = 8, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 8  ///< Number of tokens.
+      yyntokens_ = 9  ///< Number of tokens.
     };
 
 
@@ -663,9 +669,10 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     3,     7
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     7,
+       8
     };
-    const unsigned int user_token_number_max_ = 259;
+    const unsigned int user_token_number_max_ = 260;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -698,7 +705,8 @@ namespace yy {
     {
       case 3: // LINE
       case 7: // SPACE
-      case 9: // text
+      case 8: // VAR
+      case 10: // text
         value.copy< std::string > (other.value);
         break;
 
@@ -720,7 +728,8 @@ namespace yy {
     {
       case 3: // LINE
       case 7: // SPACE
-      case 9: // text
+      case 8: // VAR
+      case 10: // text
         value.copy< std::string > (v);
         break;
 
@@ -772,7 +781,8 @@ namespace yy {
     {
       case 3: // LINE
       case 7: // SPACE
-      case 9: // text
+      case 8: // VAR
+      case 10: // text
         value.template destroy< std::string > ();
         break;
 
@@ -801,7 +811,8 @@ namespace yy {
     {
       case 3: // LINE
       case 7: // SPACE
-      case 9: // text
+      case 8: // VAR
+      case 10: // text
         value.move< std::string > (s.value);
         break;
 
@@ -859,7 +870,7 @@ namespace yy {
     const unsigned short int
     yytoken_number_[] =
     {
-       0,   256,   257,   258,     1,     2,     3,   259
+       0,   256,   257,   258,     1,     2,     3,   259,   260
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -900,10 +911,16 @@ namespace yy {
     return symbol_type (token::SPACE, v);
   }
 
+  parser::symbol_type
+  parser::make_VAR (const std::string& v)
+  {
+    return symbol_type (token::VAR, v);
+  }
+
 
 
 } // yy
-#line 907 "binary.tab.hh" // lalr1.cc:377
+#line 924 "binary.tab.hh" // lalr1.cc:377
 
 
 
