@@ -6,7 +6,7 @@
 ALPHA [A-Za-z0-9]+ 
 %%
 \${ALPHA}					{ return yy::parser::make_VAR(yytext); 	}
-\"[^"\n]*["\n]				{ return yy::parser::make_STR(yytext); 	}
+\'{1}[^'\n]*[']{1}				{ return yy::parser::make_STR(yytext); 	}
 \|{1}						{ return yy::parser::make_PIPE(); 		}
 ;{1}						{ return yy::parser::make_SEMI(); 		}
 [ \t]+						{ return yy::parser::make_SPACE(yytext);}
