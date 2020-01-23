@@ -464,7 +464,7 @@ namespace yy {
             {
   case 2:
 #line 18 "binary.yy" // lalr1.cc:859
-    {std::cout << "Text ->" << yystack_[0].value.as< std::string > () << "<-" << std::endl;}
+    {std::cout << "Text ->" << yystack_[0].value.as< std::string > () << "<-"<< std::endl;}
 #line 469 "binary.tab.cc" // lalr1.cc:859
     break;
 
@@ -488,7 +488,7 @@ namespace yy {
 
   case 6:
 #line 22 "binary.yy" // lalr1.cc:859
-    {std::cout << "Blank " << std::endl;}
+    {std::cout << "Blank: size " << yystack_[0].value.as< std::string > ().size() << std::endl;}
 #line 493 "binary.tab.cc" // lalr1.cc:859
     break;
 
@@ -518,7 +518,7 @@ namespace yy {
 
   case 11:
 #line 27 "binary.yy" // lalr1.cc:859
-    {std::cout << "Blank " << std::endl;}
+    {std::cout << "Blank: size " << yystack_[0].value.as< std::string > ().size() << std::endl;}
 #line 523 "binary.tab.cc" // lalr1.cc:859
     break;
 
