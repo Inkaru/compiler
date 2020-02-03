@@ -15,16 +15,15 @@
 
 %type  <Node> stream optline line anything unit
 
-%token <std::string> TEXT
+%token <std::string> WORD
 %token END 0 "end of file"
 %token NEWL 1 "newline"
 %token PIPE 2 "pipe"
+%token SEMI 3 "semi"
 %token <std::string> SPACE
 %token <std::string> VAR
 %token <std::string> STR
 %token <std::string> DBQ
-
-%right ';'
 
 %start stream
 
@@ -44,18 +43,17 @@ optline : /*empty*/ 		{ $$ = Node("optline","empty");}
         ;
 
 anything :	PIPE 			{ $$ = Node("PIPE", "|"); }
-		 |	TEXT 			{ $$ = Node("TEXT", $1); }
+		 |	WORD 			{ $$ = Node("WORD", $1); }
 		 |	SPACE 			{ $$ = Node("SPACE", $1); }
 		 |	VAR 			{ $$ = Node("VAR", $1); }
 		 |	STR 			{ $$ = Node("STR", $1); }
 		 |	DBQ 			{ $$ = Node("DBLQ", $1); }
 		 ;
 
-line : unit					{ 	$$ = Node("line",""); $$.children.push_back($1); }
-     | line ';' unit		{	 
-							     $1.children.push_back($3); 
-							     $$ = $1;	
-							}
+line : unit					{ 	$$ = $1; }
+     | line SEMI unit		{	$$ = Node("line","");
+	 							$$.children.push_back($1);
+								$$.children.push_back($3); }
 	 ;
 
 unit : anything				{ $$ = Node("units",""); $$.children.push_back($1); }

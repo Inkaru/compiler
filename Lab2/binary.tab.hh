@@ -274,7 +274,7 @@ namespace yy {
       // unit
       char dummy1[sizeof(Node)];
 
-      // TEXT
+      // WORD
       // SPACE
       // VAR
       // STR
@@ -300,9 +300,10 @@ namespace yy {
       enum yytokentype
       {
         END = 0,
-        TEXT = 258,
+        WORD = 258,
         NEWL = 1,
         PIPE = 2,
+        SEMI = 3,
         SPACE = 259,
         VAR = 260,
         STR = 261,
@@ -417,7 +418,7 @@ namespace yy {
 
     static inline
     symbol_type
-    make_TEXT (const std::string& v);
+    make_WORD (const std::string& v);
 
     static inline
     symbol_type
@@ -426,6 +427,10 @@ namespace yy {
     static inline
     symbol_type
     make_PIPE ();
+
+    static inline
+    symbol_type
+    make_SEMI ();
 
     static inline
     symbol_type
@@ -664,12 +669,7 @@ namespace yy {
     const token_number_type
     translate_table[] =
     {
-     0,     4,     5,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    10,
+     0,     4,     5,     6,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -689,8 +689,13 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     3,     6,
-       7,     8,     9
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     7,
+       8,     9,    10
     };
     const unsigned int user_token_number_max_ = 262;
     const token_number_type undef_token_ = 2;
@@ -731,11 +736,11 @@ namespace yy {
         value.copy< Node > (other.value);
         break;
 
-      case 3: // TEXT
-      case 6: // SPACE
-      case 7: // VAR
-      case 8: // STR
-      case 9: // DBQ
+      case 3: // WORD
+      case 7: // SPACE
+      case 8: // VAR
+      case 9: // STR
+      case 10: // DBQ
         value.copy< std::string > (other.value);
         break;
 
@@ -763,11 +768,11 @@ namespace yy {
         value.copy< Node > (v);
         break;
 
-      case 3: // TEXT
-      case 6: // SPACE
-      case 7: // VAR
-      case 8: // STR
-      case 9: // DBQ
+      case 3: // WORD
+      case 7: // SPACE
+      case 8: // VAR
+      case 9: // STR
+      case 10: // DBQ
         value.copy< std::string > (v);
         break;
 
@@ -831,11 +836,11 @@ namespace yy {
         value.template destroy< Node > ();
         break;
 
-      case 3: // TEXT
-      case 6: // SPACE
-      case 7: // VAR
-      case 8: // STR
-      case 9: // DBQ
+      case 3: // WORD
+      case 7: // SPACE
+      case 8: // VAR
+      case 9: // STR
+      case 10: // DBQ
         value.template destroy< std::string > ();
         break;
 
@@ -870,11 +875,11 @@ namespace yy {
         value.move< Node > (s.value);
         break;
 
-      case 3: // TEXT
-      case 6: // SPACE
-      case 7: // VAR
-      case 8: // STR
-      case 9: // DBQ
+      case 3: // WORD
+      case 7: // SPACE
+      case 8: // VAR
+      case 9: // STR
+      case 10: // DBQ
         value.move< std::string > (s.value);
         break;
 
@@ -932,8 +937,8 @@ namespace yy {
     const unsigned short int
     yytoken_number_[] =
     {
-       0,   256,   257,   258,     1,     2,   259,   260,   261,   262,
-      59
+       0,   256,   257,   258,     1,     2,     3,   259,   260,   261,
+     262
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -945,9 +950,9 @@ namespace yy {
   }
 
   parser::symbol_type
-  parser::make_TEXT (const std::string& v)
+  parser::make_WORD (const std::string& v)
   {
-    return symbol_type (token::TEXT, v);
+    return symbol_type (token::WORD, v);
   }
 
   parser::symbol_type
@@ -960,6 +965,12 @@ namespace yy {
   parser::make_PIPE ()
   {
     return symbol_type (token::PIPE);
+  }
+
+  parser::symbol_type
+  parser::make_SEMI ()
+  {
+    return symbol_type (token::SEMI);
   }
 
   parser::symbol_type
@@ -989,7 +1000,7 @@ namespace yy {
 
 
 } // yy
-#line 993 "binary.tab.hh" // lalr1.cc:377
+#line 1004 "binary.tab.hh" // lalr1.cc:377
 
 
 
