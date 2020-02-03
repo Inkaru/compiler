@@ -380,8 +380,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 11
-#define YY_END_OF_BUFFER 12
+#define YY_NUM_RULES 10
+#define YY_END_OF_BUFFER 11
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -389,11 +389,11 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[28] =
+static yyconst flex_int16_t yy_accept[27] =
     {   0,
-        9,    9,    0,    0,   12,   11,    8,   10,    1,   11,
-       11,    9,    9,    7,   11,    6,    3,    2,    8,    4,
-        0,    5,    9,    9,    0,   10,    0
+        8,    8,    0,    0,   11,   10,    7,    9,    1,   10,
+       10,    8,    8,   10,    6,    3,    2,    7,    4,    0,
+        5,    8,    8,    0,    9,    0
     } ;
 
 static yyconst YY_CHAR yy_ec[256] =
@@ -434,40 +434,40 @@ static yyconst YY_CHAR yy_meta[14] =
         6,    7,    6
     } ;
 
-static yyconst flex_uint16_t yy_base[33] =
+static yyconst flex_uint16_t yy_base[32] =
     {   0,
         0,    0,    9,   11,   44,   47,    0,   47,   47,    0,
-       31,   10,    0,   47,   22,   47,   47,   47,    0,    0,
-       24,   47,    0,    0,    8,   47,   47,   22,   28,   28,
-       35,   39
+       31,   10,    0,   22,   47,   47,   47,    0,    0,   24,
+       47,    0,    0,    8,   47,   47,   22,   28,   28,   35,
+       39
     } ;
 
-static yyconst flex_int16_t yy_def[33] =
+static yyconst flex_int16_t yy_def[32] =
     {   0,
-       27,    1,   28,   28,   27,   27,   29,   27,   27,   30,
-       31,   27,   12,   27,   32,   27,   27,   27,   29,   30,
-       31,   27,   12,   12,   32,   27,    0,   27,   27,   27,
-       27,   27
+       26,    1,   27,   27,   26,   26,   28,   26,   26,   29,
+       30,   26,   12,   31,   26,   26,   26,   28,   29,   30,
+       26,   12,   12,   31,   26,    0,   26,   26,   26,   26,
+       26
     } ;
 
 static yyconst flex_uint16_t yy_nxt[61] =
     {   0,
-        6,    7,    8,    7,    9,   10,   11,   12,   13,   14,
-       15,   13,   16,   18,   10,   18,   10,   23,   24,   27,
-       25,   24,   17,   17,   17,   17,   17,   17,   17,   19,
-       22,   19,   20,   26,   20,   21,   21,   22,   21,   21,
-       21,   21,   23,   27,   23,   23,    5,   27,   27,   27,
-       27,   27,   27,   27,   27,   27,   27,   27,   27,   27
+        6,    7,    8,    7,    9,   10,   11,   12,   13,    6,
+       14,   13,   15,   17,   10,   17,   10,   22,   23,   26,
+       24,   23,   16,   16,   16,   16,   16,   16,   16,   18,
+       21,   18,   19,   25,   19,   20,   20,   21,   20,   20,
+       20,   20,   22,   26,   22,   22,    5,   26,   26,   26,
+       26,   26,   26,   26,   26,   26,   26,   26,   26,   26
     } ;
 
 static yyconst flex_int16_t yy_chk[61] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    3,    3,    4,    4,   12,   12,   25,
-       12,   12,   28,   28,   28,   28,   28,   28,   28,   29,
-       21,   29,   30,   15,   30,   31,   31,   11,   31,   31,
-       31,   31,   32,    5,   32,   32,   27,   27,   27,   27,
-       27,   27,   27,   27,   27,   27,   27,   27,   27,   27
+        1,    1,    1,    3,    3,    4,    4,   12,   12,   24,
+       12,   12,   27,   27,   27,   27,   27,   27,   27,   28,
+       20,   28,   29,   14,   29,   30,   30,   11,   30,   30,
+       30,   30,   31,    5,   31,   31,   26,   26,   26,   26,
+       26,   26,   26,   26,   26,   26,   26,   26,   26,   26
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -734,13 +734,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 28 )
+				if ( yy_current_state >= 27 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_current_state != 27 );
+		while ( yy_current_state != 26 );
 		yy_cp = (yy_last_accepting_cpos);
 		yy_current_state = (yy_last_accepting_state);
 
@@ -794,35 +794,30 @@ return yy::parser::make_PIPE();
 case 7:
 YY_RULE_SETUP
 #line 15 "binary.ll"
-return yy::parser::make_SEMI();
+return yy::parser::make_SPACE(yytext);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 16 "binary.ll"
-return yy::parser::make_SPACE(yytext);
-	YY_BREAK
-case 9:
-YY_RULE_SETUP
-#line 17 "binary.ll"
 return yy::parser::make_TEXT(yytext);
 	YY_BREAK
-case 10:
-/* rule 10 can match eol */
+case 9:
+/* rule 9 can match eol */
 YY_RULE_SETUP
-#line 18 "binary.ll"
+#line 17 "binary.ll"
 return yy::parser::make_NEWL();
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(DBQUO):
-#line 19 "binary.ll"
+#line 18 "binary.ll"
 return yy::parser::make_END();
 	YY_BREAK
-case 11:
+case 10:
 YY_RULE_SETUP
-#line 20 "binary.ll"
+#line 19 "binary.ll"
 ECHO;
 	YY_BREAK
-#line 826 "lex.yy.c"
+#line 821 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1114,7 +1109,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 28 )
+			if ( yy_current_state >= 27 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1142,11 +1137,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 28 )
+		if ( yy_current_state >= 27 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 27);
+	yy_is_jam = (yy_current_state == 26);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1785,6 +1780,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 20 "binary.ll"
+#line 19 "binary.ll"
 
 
