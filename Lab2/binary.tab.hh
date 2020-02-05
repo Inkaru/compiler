@@ -272,6 +272,7 @@ namespace yy {
       // anything
       // line
       // unit
+      // pipeline
       char dummy1[sizeof(Node)];
 
       // WORD
@@ -301,13 +302,13 @@ namespace yy {
       {
         END = 0,
         WORD = 258,
-        NEWL = 1,
-        PIPE = 2,
-        SEMI = 3,
-        SPACE = 259,
-        VAR = 260,
-        STR = 261,
-        DBQ = 262
+        NEWL = 259,
+        PIPE = 260,
+        SEMI = 261,
+        SPACE = 262,
+        VAR = 263,
+        STR = 264,
+        DBQ = 265
       };
     };
 
@@ -530,9 +531,9 @@ namespace yy {
   // YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
   // positive, shift that token.  If negative, reduce the rule whose
   // number is the opposite.  If YYTABLE_NINF, syntax error.
-  static const unsigned char yytable_[];
+  static const signed char yytable_[];
 
-  static const unsigned char yycheck_[];
+  static const signed char yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -649,8 +650,8 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 12,     ///< Last index in yytable_.
-      yynnts_ = 6,  ///< Number of nonterminal symbols.
+      yylast_ = 22,     ///< Last index in yytable_.
+      yynnts_ = 7,  ///< Number of nonterminal symbols.
       yyfinal_ = 12, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
@@ -669,7 +670,7 @@ namespace yy {
     const token_number_type
     translate_table[] =
     {
-     0,     4,     5,     6,     2,     2,     2,     2,     2,     2,
+     0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -694,10 +695,10 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     3,     7,
-       8,     9,    10
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
+       5,     6,     7,     8,     9,    10
     };
-    const unsigned int user_token_number_max_ = 262;
+    const unsigned int user_token_number_max_ = 265;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -733,6 +734,7 @@ namespace yy {
       case 14: // anything
       case 15: // line
       case 16: // unit
+      case 17: // pipeline
         value.copy< Node > (other.value);
         break;
 
@@ -765,6 +767,7 @@ namespace yy {
       case 14: // anything
       case 15: // line
       case 16: // unit
+      case 17: // pipeline
         value.copy< Node > (v);
         break;
 
@@ -833,6 +836,7 @@ namespace yy {
       case 14: // anything
       case 15: // line
       case 16: // unit
+      case 17: // pipeline
         value.template destroy< Node > ();
         break;
 
@@ -872,6 +876,7 @@ namespace yy {
       case 14: // anything
       case 15: // line
       case 16: // unit
+      case 17: // pipeline
         value.move< Node > (s.value);
         break;
 
@@ -937,8 +942,8 @@ namespace yy {
     const unsigned short int
     yytoken_number_[] =
     {
-       0,   256,   257,   258,     1,     2,     3,   259,   260,   261,
-     262
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
+     265
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -1000,7 +1005,7 @@ namespace yy {
 
 
 } // yy
-#line 1004 "binary.tab.hh" // lalr1.cc:377
+#line 1009 "binary.tab.hh" // lalr1.cc:377
 
 
 

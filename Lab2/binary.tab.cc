@@ -203,6 +203,7 @@ namespace yy {
       case 14: // anything
       case 15: // line
       case 16: // unit
+      case 17: // pipeline
         value.move< Node > (that.value);
         break;
 
@@ -234,6 +235,7 @@ namespace yy {
       case 14: // anything
       case 15: // line
       case 16: // unit
+      case 17: // pipeline
         value.copy< Node > (that.value);
         break;
 
@@ -473,6 +475,7 @@ namespace yy {
       case 14: // anything
       case 15: // line
       case 16: // unit
+      case 17: // pipeline
         yylhs.value.build< Node > ();
         break;
 
@@ -502,19 +505,19 @@ namespace yy {
 									yylhs.value.as< Node > ().children.push_back(yystack_[0].value.as< Node > ());
 									root = yylhs.value.as< Node > (); 
 								}
-#line 506 "binary.tab.cc" // lalr1.cc:859
+#line 509 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 3:
 #line 36 "binary.yy" // lalr1.cc:859
     {	root.children.push_back(yystack_[0].value.as< Node > ()); }
-#line 512 "binary.tab.cc" // lalr1.cc:859
+#line 515 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 4:
 #line 39 "binary.yy" // lalr1.cc:859
     { yylhs.value.as< Node > () = Node("optline","empty");}
-#line 518 "binary.tab.cc" // lalr1.cc:859
+#line 521 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 5:
@@ -522,49 +525,49 @@ namespace yy {
     { yylhs.value.as< Node > () = Node("optline","has line");
 	                     		yylhs.value.as< Node > ().children.push_back(yystack_[0].value.as< Node > ());
                        		}
-#line 526 "binary.tab.cc" // lalr1.cc:859
+#line 529 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 6:
 #line 45 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node > () = Node("PIPE", "|"); }
-#line 532 "binary.tab.cc" // lalr1.cc:859
+    { yylhs.value.as< Node > () = Node("WORD", yystack_[0].value.as< std::string > ()); }
+#line 535 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 7:
 #line 46 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node > () = Node("WORD", yystack_[0].value.as< std::string > ()); }
-#line 538 "binary.tab.cc" // lalr1.cc:859
+    { yylhs.value.as< Node > () = Node("SPACE", yystack_[0].value.as< std::string > ()); }
+#line 541 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 8:
 #line 47 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node > () = Node("SPACE", yystack_[0].value.as< std::string > ()); }
-#line 544 "binary.tab.cc" // lalr1.cc:859
+    { yylhs.value.as< Node > () = Node("VAR", yystack_[0].value.as< std::string > ()); }
+#line 547 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 9:
 #line 48 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node > () = Node("VAR", yystack_[0].value.as< std::string > ()); }
-#line 550 "binary.tab.cc" // lalr1.cc:859
+    { yylhs.value.as< Node > () = Node("STR", yystack_[0].value.as< std::string > ()); }
+#line 553 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 10:
 #line 49 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node > () = Node("STR", yystack_[0].value.as< std::string > ()); }
-#line 556 "binary.tab.cc" // lalr1.cc:859
+    { yylhs.value.as< Node > () = Node("DBLQ", yystack_[0].value.as< std::string > ()); }
+#line 559 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 11:
-#line 50 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node > () = Node("DBLQ", yystack_[0].value.as< std::string > ()); }
-#line 562 "binary.tab.cc" // lalr1.cc:859
+#line 52 "binary.yy" // lalr1.cc:859
+    { 	yylhs.value.as< Node > () = yystack_[0].value.as< Node > (); }
+#line 565 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 12:
 #line 53 "binary.yy" // lalr1.cc:859
-    { 	yylhs.value.as< Node > () = yystack_[0].value.as< Node > (); }
-#line 568 "binary.tab.cc" // lalr1.cc:859
+    {	yylhs.value.as< Node > () = yystack_[0].value.as< Node > (); }
+#line 571 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 13:
@@ -572,23 +575,45 @@ namespace yy {
     {	yylhs.value.as< Node > () = Node("line","");
 	 							yylhs.value.as< Node > ().children.push_back(yystack_[2].value.as< Node > ());
 								yylhs.value.as< Node > ().children.push_back(yystack_[0].value.as< Node > ()); }
-#line 576 "binary.tab.cc" // lalr1.cc:859
+#line 579 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 14:
-#line 59 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node > () = Node("units",""); yylhs.value.as< Node > ().children.push_back(yystack_[0].value.as< Node > ()); }
-#line 582 "binary.tab.cc" // lalr1.cc:859
+#line 57 "binary.yy" // lalr1.cc:859
+    {	yylhs.value.as< Node > () = Node("line","");
+								yylhs.value.as< Node > ().children.push_back(yystack_[2].value.as< Node > ());
+								yylhs.value.as< Node > ().children.push_back(yystack_[0].value.as< Node > ()); }
+#line 587 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 15:
-#line 60 "binary.yy" // lalr1.cc:859
+#line 62 "binary.yy" // lalr1.cc:859
+    { yylhs.value.as< Node > () = Node("units",""); yylhs.value.as< Node > ().children.push_back(yystack_[0].value.as< Node > ()); }
+#line 593 "binary.tab.cc" // lalr1.cc:859
+    break;
+
+  case 16:
+#line 63 "binary.yy" // lalr1.cc:859
     { yystack_[1].value.as< Node > ().children.push_back(yystack_[0].value.as< Node > ()); yylhs.value.as< Node > () = yystack_[1].value.as< Node > (); 	}
-#line 588 "binary.tab.cc" // lalr1.cc:859
+#line 599 "binary.tab.cc" // lalr1.cc:859
+    break;
+
+  case 17:
+#line 66 "binary.yy" // lalr1.cc:859
+    { 	yylhs.value.as< Node > () = yystack_[0].value.as< Node > (); }
+#line 605 "binary.tab.cc" // lalr1.cc:859
+    break;
+
+  case 18:
+#line 67 "binary.yy" // lalr1.cc:859
+    { 	yylhs.value.as< Node > () = Node("pipeline",""); 
+		 							yylhs.value.as< Node > ().children.push_back(yystack_[2].value.as< Node > ());
+									yylhs.value.as< Node > ().children.push_back(yystack_[0].value.as< Node > ()); }
+#line 613 "binary.tab.cc" // lalr1.cc:859
     break;
 
 
-#line 592 "binary.tab.cc" // lalr1.cc:859
+#line 617 "binary.tab.cc" // lalr1.cc:859
             default:
               break;
             }
@@ -749,69 +774,74 @@ namespace yy {
   }
 
 
-  const signed char parser::yypact_ninf_ = -9;
+  const signed char parser::yypact_ninf_ = -13;
 
-  const signed char parser::yytable_ninf_ = -1;
+  const signed char parser::yytable_ninf_ = -18;
 
   const signed char
   parser::yypact_[] =
   {
-      -3,    -9,    -9,    -9,    -9,    -9,    -9,     8,    -9,    -9,
-      -5,    -3,    -9,    -3,    -3,    -9,    -9,    -3
+      12,   -13,   -13,   -13,   -13,   -13,     1,   -13,   -13,    -3,
+       4,    11,   -13,    12,    12,   -13,    12,   -13,     4,    11,
+      12
   };
 
   const unsigned char
   parser::yydefact_[] =
   {
-       4,     7,     6,     8,     9,    10,    11,     0,     2,    14,
-       5,    12,     1,     4,     0,    15,     3,    13
+       4,     6,     7,     8,     9,    10,     0,     2,    15,     5,
+      12,    11,     1,     4,     0,    16,     0,     3,    14,    13,
+      18
   };
 
   const signed char
   parser::yypgoto_[] =
   {
-      -9,    -9,    -2,    -8,    -9,    -4
+     -13,   -13,    -7,   -10,   -13,   -12,     3
   };
 
   const signed char
   parser::yydefgoto_[] =
   {
-      -1,     7,     8,     9,    10,    11
+      -1,     6,     7,     8,     9,    10,    11
   };
 
-  const unsigned char
+  const signed char
   parser::yytable_[] =
   {
-       1,    14,     2,    15,     3,     4,     5,     6,    12,    15,
-      17,    16,    13
+      15,    12,    18,    14,    20,    13,    17,     1,    15,   -17,
+      15,     2,     3,     4,     5,     1,    16,    19,     0,     2,
+       3,     4,     5
   };
 
-  const unsigned char
+  const signed char
   parser::yycheck_[] =
   {
-       3,     6,     5,    11,     7,     8,     9,    10,     0,    17,
-      14,    13,     4
+      10,     0,    14,     6,    16,     4,    13,     3,    18,     5,
+      20,     7,     8,     9,    10,     3,     5,    14,    -1,     7,
+       8,     9,    10
   };
 
   const unsigned char
   parser::yystos_[] =
   {
-       0,     3,     5,     7,     8,     9,    10,    12,    13,    14,
-      15,    16,     0,     4,     6,    14,    13,    16
+       0,     3,     7,     8,     9,    10,    12,    13,    14,    15,
+      16,    17,     0,     4,     6,    14,     5,    13,    16,    17,
+      16
   };
 
   const unsigned char
   parser::yyr1_[] =
   {
        0,    11,    12,    12,    13,    13,    14,    14,    14,    14,
-      14,    14,    15,    15,    16,    16
+      14,    15,    15,    15,    15,    16,    16,    17,    17
   };
 
   const unsigned char
   parser::yyr2_[] =
   {
        0,     2,     1,     3,     0,     1,     1,     1,     1,     1,
-       1,     1,     1,     3,     1,     2
+       1,     1,     1,     3,     3,     1,     2,     1,     3
   };
 
 
@@ -821,9 +851,9 @@ namespace yy {
   const char*
   const parser::yytname_[] =
   {
-  "\"end of file\"", "error", "$undefined", "WORD", "\"newline\"",
-  "\"pipe\"", "\"semi\"", "SPACE", "VAR", "STR", "DBQ", "$accept",
-  "stream", "optline", "anything", "line", "unit", YY_NULLPTR
+  "END", "error", "$undefined", "WORD", "NEWL", "PIPE", "SEMI", "SPACE",
+  "VAR", "STR", "DBQ", "$accept", "stream", "optline", "anything", "line",
+  "unit", "pipeline", YY_NULLPTR
   };
 
 
@@ -831,7 +861,7 @@ namespace yy {
   parser::yyrline_[] =
   {
        0,    32,    32,    36,    39,    40,    45,    46,    47,    48,
-      49,    50,    53,    54,    59,    60
+      49,    52,    53,    54,    57,    62,    63,    66,    67
   };
 
   // Print the state stack on the debug stream.
@@ -866,4 +896,4 @@ namespace yy {
 
 
 } // yy
-#line 870 "binary.tab.cc" // lalr1.cc:1167
+#line 900 "binary.tab.cc" // lalr1.cc:1167
