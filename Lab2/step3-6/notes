@@ -1,0 +1,15 @@
+equals : anything EQUALS units		{	$$ = Node("equals","");
+	 									$$.children.push_back($1);
+										$$.children.push_back($3); }
+	   | anything EQUALS anything	{	$$ = Node("equals","");
+										$$.children.push_back($1);
+										$$.children.push_back($3); }
+	   | equals equals 				{	$$ = $1;
+										$$.children.push_back($2);  }
+	   | equals units				{	$$ = $1;
+	   									$$.children.push_back($2);	}
+	   | equals anything			{	$$ = $1;
+	   									$$.children.push_back($2);	}
+	   | equals pipeline			{	$$ = $1;
+	   									$$.children.push_back($2);	}
+	   ;
