@@ -16,6 +16,12 @@ public:
 	{
 		tag = "uninitialised";
 	} // Bison needs this.
+
+    ~Node(){
+        for(auto n: children)
+            delete n;
+    }
+
 	void dump(int depth = 0)
 	{
 		for (int i = 0; i < depth; i++)
@@ -54,11 +60,30 @@ class StdNode : public Node {
         }
 };
 
-class IntNode : public Node {
+class CalcNode : public Node {
+    public: 
+        CalcNode* left;
+        CalcNode* right;
+
+        CalcNode(string t, CalcNode* left, CalcNode* right, int i): Node(t,i), left(left), right(right) {}
+
+        virtual float eval() =0;
+};
+
+class PlusNode : public CalcNode {
+    public:
+        PlusNode(string t, CalcNode* left, CalcNode* right, int i): CalcNode(t,left,right,i) {}
+
+        float eval(){
+            return left->eval() + right->eval();
+        }
+};
+
+class IntNode : public CalcNode {
 	public : 
 
         int value;
-		IntNode(string t, int v, int i): Node(t,i), value(v) {}
+		IntNode(string t, int v, int i): CalcNode(t,nullptr,nullptr,i), value(v) {}
 
         void dumpDot(ofstream& file){
             file << node_id << " [label=\"" << tag << ": " << value << "\"];" << '\n';
@@ -68,7 +93,7 @@ class IntNode : public Node {
                 i->dumpDot(file);
         }
 
-		int eval() {
+		float eval() {
 			return value;
 		}
 };

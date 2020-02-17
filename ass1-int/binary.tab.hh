@@ -267,7 +267,7 @@ namespace yy {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
-      // chunck
+      // chunk
       // block
       // stat
       // laststat
@@ -278,7 +278,7 @@ namespace yy {
       // functioncall
       // args
       // explist
-      char dummy1[sizeof(Node)];
+      char dummy1[sizeof(Node *)];
 
       // NUM
       // NAME
@@ -365,7 +365,7 @@ namespace yy {
 
   basic_symbol (typename Base::kind_type t);
 
-  basic_symbol (typename Base::kind_type t, const Node v);
+  basic_symbol (typename Base::kind_type t, const Node * v);
 
   basic_symbol (typename Base::kind_type t, const std::string v);
 
@@ -814,7 +814,7 @@ namespace yy {
   {
       switch (other.type_get ())
     {
-      case 28: // chunck
+      case 28: // chunk
       case 29: // block
       case 30: // stat
       case 31: // laststat
@@ -825,7 +825,7 @@ namespace yy {
       case 36: // functioncall
       case 37: // args
       case 38: // explist
-        value.copy< Node > (other.value);
+        value.copy< Node * > (other.value);
         break;
 
       case 12: // NUM
@@ -850,7 +850,7 @@ namespace yy {
     (void) v;
       switch (this->type_get ())
     {
-      case 28: // chunck
+      case 28: // chunk
       case 29: // block
       case 30: // stat
       case 31: // laststat
@@ -861,7 +861,7 @@ namespace yy {
       case 36: // functioncall
       case 37: // args
       case 38: // explist
-        value.copy< Node > (v);
+        value.copy< Node * > (v);
         break;
 
       case 12: // NUM
@@ -885,7 +885,7 @@ namespace yy {
   {}
 
   template <typename Base>
-  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const Node v)
+  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const Node * v)
     : Base (t)
     , value (v)
   {}
@@ -922,7 +922,7 @@ namespace yy {
     // Type destructor.
     switch (yytype)
     {
-      case 28: // chunck
+      case 28: // chunk
       case 29: // block
       case 30: // stat
       case 31: // laststat
@@ -933,7 +933,7 @@ namespace yy {
       case 36: // functioncall
       case 37: // args
       case 38: // explist
-        value.template destroy< Node > ();
+        value.template destroy< Node * > ();
         break;
 
       case 12: // NUM
@@ -965,7 +965,7 @@ namespace yy {
     super_type::move(s);
       switch (this->type_get ())
     {
-      case 28: // chunck
+      case 28: // chunk
       case 29: // block
       case 30: // stat
       case 31: // laststat
@@ -976,7 +976,7 @@ namespace yy {
       case 36: // functioncall
       case 37: // args
       case 38: // explist
-        value.move< Node > (s.value);
+        value.move< Node * > (s.value);
         break;
 
       case 12: // NUM
