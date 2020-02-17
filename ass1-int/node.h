@@ -47,4 +47,12 @@ public:
 	}
 };
 
+class Expr : public Node {
+	public : 
+		Expr(string t, string v, int i): Node(t,v,i) {}
+		int eval() {
+			return 0;
+		}
+};
+
 
