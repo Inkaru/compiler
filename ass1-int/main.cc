@@ -12,8 +12,9 @@ int main(int argc, char **argv)
 {
 yy::parser parser;
   if(!parser.parse()){
-  	root->dump();
+  	// root->dump();
     root->dumpRoot();
+    root->execute();
   }
   return 0;
 }

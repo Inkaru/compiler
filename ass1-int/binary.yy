@@ -43,7 +43,7 @@ chunk : stat                 {	$$ = new StdNode("chunk","", count++);
        | chunk stat          {	$$ = $1;
                                 $$->children.push_back($2);   }
        | chunk laststat      {	$$ = $1;
-                                  $$->children.push_back($2); }
+                                $$->children.push_back($2); }
        ;
 
 block : chunk {	  $$ = new StdNode("block","", count++);
@@ -68,57 +68,55 @@ laststat : RETURN explist     {	$$ = new StdNode("laststat","RETURN", count++);
 
 
 exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
-    | STRING          {	$$ = new StdNode("String",$1, count++);  }
+    | STRING          {	$$ = new StringNode("String",$1, count++);  }
     | prefixexp       {	$$ = $1;              }
     | exp PLUS exp    {	$$ = new PlusNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp MINUS exp   {	$$ = new StdNode("exp","MINUS", count++);
+    | exp MINUS exp   {	$$ = new MinusNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp MULT exp    {	$$ = new StdNode("exp","MULT", count++);
+    | exp MULT exp    {	$$ = new MultNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp DIV exp     {	$$ = new StdNode("exp","DIV", count++);
+    | exp DIV exp     {	$$ = new DivNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp EXPO exp    {	$$ = new StdNode("exp","EXPO", count++);
+    | exp EXPO exp    {	$$ = new ExpoNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp INF exp     {	$$ = new StdNode("exp","INF", count++);
+    | exp INF exp     {	$$ = new ExpNodeImpl("exp","INF", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp SUP exp     {	$$ = new StdNode("exp","SUP", count++);
+    | exp SUP exp     {	$$ = new ExpNodeImpl("exp","SUP", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp EQU exp     {	$$ = new StdNode("exp","EQU", count++);
+    | exp EQU exp     {	$$ = new ExpNodeImpl("exp","EQU", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp NEQU exp    {	$$ = new StdNode("exp","NEQU", count++);
+    | exp NEQU exp    {	$$ = new ExpNodeImpl("exp","NEQU", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp INFEQ exp   {	$$ = new StdNode("exp","INFEQ", count++);
+    | exp INFEQ exp   {	$$ = new ExpNodeImpl("exp","INFEQ", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp SUPEQ exp   {	$$ = new StdNode("exp","SUPEQ", count++);
+    | exp SUPEQ exp   {	$$ = new ExpNodeImpl("exp","SUPEQ", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp DBEQU exp   {	$$ = new StdNode("exp","DBEQU", count++);
+    | exp DBEQU exp   {	$$ = new ExpNodeImpl("exp","DBEQU", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
     ;
 
-prefixexp : var                 {	$$ = new StdNode("prefixexp","", count++);  
-                                  $$->children.push_back($1);         }
-          | functioncall        {	$$ = new StdNode("prefixexp","", count++);  
-                                  $$->children.push_back($1);         }
-          | BROPEN exp BRCLOSE  {	$$ = new StdNode("prefixexp","", count++);  
-                                  $$->children.push_back($2);         }
+prefixexp : var                 {	$$ = $1;         }
+          | functioncall        {	$$ = $1;         }
+          | BROPEN exp BRCLOSE  {	$$ = $2;         }
           ;
 
 var : NAME                      {	$$ = new StdNode("var",$1, count++);               }
-    | prefixexp DOT NAME        {	$$ = new StdNode("dot",$3, count++);
-                                  $$->children.push_back($1);         }
+    | prefixexp DOT NAME        {	$$ = $1;
+                                  StdNode* tmp = new StdNode("dot",$3, count++);
+                                  $$->children.push_back(tmp);         }
     ;
 
 varlist : var                   {	$$ = new StdNode("varlist","", count++); 
@@ -127,17 +125,17 @@ varlist : var                   {	$$ = new StdNode("varlist","", count++);
                                   $$->children.push_back($3);         }
         ;  
 
-functioncall : prefixexp args   {	$$ = new StdNode("functioncall","", count++);
+functioncall : prefixexp args   {	$$ = new FuncCallNode("functioncall", $1, $2, count++);
                                   $$->children.push_back($1); 
                                   $$->children.push_back($2);         }
              ;
 
-args : BROPEN explist BRCLOSE   {	$$ = new StdNode("args","", count++); 
+args : STRING                   {	$$ = new StringNode("String",$1, count++);}
+     | BROPEN explist BRCLOSE   {	$$ = new ArgsNode("args", count++); 
                                   $$->children.push_back($2);         }
-     | STRING                   {	$$ = new StdNode("String",$1, count++);              }
      ;
 
-explist : exp                   {	$$ = new StdNode("explist","", count++); 
+explist : exp                   {	$$ = new ExpListNode("explist", count++); 
                                   $$->children.push_back($1);         }
         | explist COMMA exp     {	$$ = $1;
                                   $$->children.push_back($3);         }

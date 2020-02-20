@@ -3,7 +3,14 @@
 #include <iostream>
 #include <fstream>
 
+#include <cmath>
+
 using namespace std;
+
+class Environment {
+	public:
+
+};
 
 class Node
 {
@@ -53,6 +60,9 @@ public:
 	}
 
 	virtual string getValue() = 0;
+
+	virtual string eval() =0;
+	virtual void execute() =0;
 };
 
 class StdNode : public Node
@@ -62,30 +72,124 @@ public:
 	StdNode(string t, string v, int i) : Node(t, i), value(v) {}
 
 	string getValue() { return value; }
+
+	void execute() {
+		cout << "stdnode;";
+		for (auto n: children){
+			n->execute();
+		}
+	}
+
+	string eval(){}
 };
+
 
 class ExpNode : public Node
 {
 public:
-	ExpNode *left;
-	ExpNode *right;
+	Node *left;
+	Node *right;
 
-	ExpNode(string t, ExpNode *left, ExpNode *right, int i) : Node(t, i), left(left), right(right) {}
+	ExpNode(string t, Node *left, Node *right, int i) : Node(t, i), left(left), right(right) {}
 
-	virtual float eval() = 0;
-	virtual string getValue() = 0;
+};
+
+class ExpNodeImpl : public ExpNode
+{
+public:
+	ExpNodeImpl(string t, string v, int i) : ExpNode(t, nullptr, nullptr, i) {}
+
+	string getValue() { return "EXP"; }
+
+	void execute(){
+		cout << "expImplNode;";
+	}
+
+	string eval(){}
 };
 
 class PlusNode : public ExpNode
 {
 public:
-	PlusNode(string t, ExpNode *left, ExpNode *right, int i) : ExpNode(t, left, right, i) {}
+	PlusNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
 
 	string getValue() { return "PLUS"; }
 
-	float eval()
+	void execute(){
+		cout << "PLUS" << eval() ;
+	}
+
+	string eval()
 	{
-		return left->eval() + right->eval();
+		return to_string(stof(left->eval()) + stof(right->eval()));
+	}
+};
+
+class MinusNode : public ExpNode
+{
+public:
+	MinusNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+
+	string getValue() { return "MINUS"; }
+
+	void execute(){
+		cout << "MINUS" << eval() ;
+	}
+
+	string eval()
+	{
+		return to_string(stof(left->eval()) - stof(right->eval()));
+	}
+};
+
+class MultNode : public ExpNode
+{
+public:
+	MultNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+
+	string getValue() { return "MULT"; }
+
+	void execute(){
+		cout << "MULT" << eval() ;
+	}
+
+	string eval()
+	{
+		return to_string(stof(left->eval()) * stof(right->eval()));
+	}
+};
+
+class DivNode : public ExpNode
+{
+public:
+	DivNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+
+	string getValue() { return "DIV"; }
+
+	void execute(){
+		cout << "DIV" << eval() ;
+	}
+
+	string eval()
+	{
+		return to_string(stof(left->eval()) / stof(right->eval()));
+	}
+};
+
+class ExpoNode : public ExpNode
+{
+public:
+	ExpoNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+
+	string getValue() { return "EXPO"; }
+
+	void execute(){
+		cout << "EXPO" << eval() ;
+	}
+
+	string eval()
+	{
+		return to_string(pow(stof(left->eval()), stof(right->eval())));
 	}
 };
 
@@ -97,8 +201,95 @@ public:
 
 	string getValue() { return to_string(value); }
 
-	float eval()
+	void execute(){}
+
+	string eval()
 	{
-		return value;
+		return to_string(value);
 	}
+};
+
+class StringNode : public ExpNode
+{
+public:
+	string value;
+	StringNode(string t, string v, int i) : ExpNode(t, nullptr, nullptr, i), value(v) {}
+
+	string getValue() { return value; }
+
+	void execute(){}
+
+	string eval(){ return value; }
+};
+
+class ArgsNode : public Node {
+	public:
+		ArgsNode(string t, int i): Node(t,i){}
+
+		string getValue(){return "";}
+
+		void execute(){}
+
+		string eval(){}
+
+		Node* get(int i){
+			list<Node*>::iterator it = next(children.begin(), i);
+			return (*it);
+		}
+};
+
+class ExpListNode : public Node {
+	public:
+	ExpListNode(string t, int i): Node(t,i){}
+
+	string getValue(){return "";}
+
+	void execute(){}
+
+	string eval(){}
+
+	Node* get(int i){
+		list<Node*>::iterator it = next(children.begin(), i);
+		return (*it);
+	}
+};
+
+class FuncCallNode : public Node {
+	public:
+		Node* left;
+		Node* right;
+		FuncCallNode(string t, Node* left, Node* right, int i) : Node(t,i), left(left), right(right) {} 
+
+		string getValue(){ return "";}
+
+		void execute(){
+			if(left->getValue() == "print"){
+				ArgsNode* args = dynamic_cast<ArgsNode*>(right);
+				Node* res = args->get(0);
+
+				if(dynamic_cast<ExpListNode *>(res) != nullptr){
+					cout << "debug : explist" << endl;
+					for(auto n: res->children){
+						cout << n->eval() << " " ;
+					}
+
+					cout << endl ;
+				}
+
+				if(dynamic_cast<ExpNode *>(res) != nullptr){
+					cout << "debug : exp" << endl;
+					cout << res->eval() << endl;
+				}
+
+				if(dynamic_cast<StringNode *>(res) != nullptr){
+					cout << "debug : string" << endl;
+					cout << res->getValue() << endl;
+				}
+
+			} else {
+				cout << "func not implemented yet" << endl;
+			}
+		}
+
+		string eval(){}
 };
