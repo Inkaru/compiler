@@ -267,6 +267,9 @@ namespace yy {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
+      // explist
+      char dummy1[sizeof(ExpListNode *)];
+
       // chunk
       // block
       // stat
@@ -274,22 +277,23 @@ namespace yy {
       // exp
       // prefixexp
       // var
-      // varlist
       // functioncall
       // args
-      // explist
       // tableconstructor
       // fieldlist
       // field
       // funcname
       // funcbody
       // parlist
-      char dummy1[sizeof(Node *)];
+      char dummy2[sizeof(Node *)];
+
+      // varlist
+      char dummy3[sizeof(VarListNode *)];
 
       // NUM
       // NAME
       // STRING
-      char dummy2[sizeof(std::string)];
+      char dummy4[sizeof(std::string)];
 };
 
     /// Symbol semantic values.
@@ -385,7 +389,11 @@ namespace yy {
 
   basic_symbol (typename Base::kind_type t);
 
+  basic_symbol (typename Base::kind_type t, const ExpListNode * v);
+
   basic_symbol (typename Base::kind_type t, const Node * v);
+
+  basic_symbol (typename Base::kind_type t, const VarListNode * v);
 
   basic_symbol (typename Base::kind_type t, const std::string v);
 
@@ -891,6 +899,10 @@ namespace yy {
   {
       switch (other.type_get ())
     {
+      case 52: // explist
+        value.copy< ExpListNode * > (other.value);
+        break;
+
       case 42: // chunk
       case 43: // block
       case 44: // stat
@@ -898,10 +910,8 @@ namespace yy {
       case 46: // exp
       case 47: // prefixexp
       case 48: // var
-      case 49: // varlist
       case 50: // functioncall
       case 51: // args
-      case 52: // explist
       case 53: // tableconstructor
       case 54: // fieldlist
       case 55: // field
@@ -909,6 +919,10 @@ namespace yy {
       case 57: // funcbody
       case 58: // parlist
         value.copy< Node * > (other.value);
+        break;
+
+      case 49: // varlist
+        value.copy< VarListNode * > (other.value);
         break;
 
       case 25: // NUM
@@ -933,6 +947,10 @@ namespace yy {
     (void) v;
       switch (this->type_get ())
     {
+      case 52: // explist
+        value.copy< ExpListNode * > (v);
+        break;
+
       case 42: // chunk
       case 43: // block
       case 44: // stat
@@ -940,10 +958,8 @@ namespace yy {
       case 46: // exp
       case 47: // prefixexp
       case 48: // var
-      case 49: // varlist
       case 50: // functioncall
       case 51: // args
-      case 52: // explist
       case 53: // tableconstructor
       case 54: // fieldlist
       case 55: // field
@@ -951,6 +967,10 @@ namespace yy {
       case 57: // funcbody
       case 58: // parlist
         value.copy< Node * > (v);
+        break;
+
+      case 49: // varlist
+        value.copy< VarListNode * > (v);
         break;
 
       case 25: // NUM
@@ -974,7 +994,19 @@ namespace yy {
   {}
 
   template <typename Base>
+  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const ExpListNode * v)
+    : Base (t)
+    , value (v)
+  {}
+
+  template <typename Base>
   parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const Node * v)
+    : Base (t)
+    , value (v)
+  {}
+
+  template <typename Base>
+  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const VarListNode * v)
     : Base (t)
     , value (v)
   {}
@@ -1011,6 +1043,10 @@ namespace yy {
     // Type destructor.
     switch (yytype)
     {
+      case 52: // explist
+        value.template destroy< ExpListNode * > ();
+        break;
+
       case 42: // chunk
       case 43: // block
       case 44: // stat
@@ -1018,10 +1054,8 @@ namespace yy {
       case 46: // exp
       case 47: // prefixexp
       case 48: // var
-      case 49: // varlist
       case 50: // functioncall
       case 51: // args
-      case 52: // explist
       case 53: // tableconstructor
       case 54: // fieldlist
       case 55: // field
@@ -1029,6 +1063,10 @@ namespace yy {
       case 57: // funcbody
       case 58: // parlist
         value.template destroy< Node * > ();
+        break;
+
+      case 49: // varlist
+        value.template destroy< VarListNode * > ();
         break;
 
       case 25: // NUM
@@ -1060,6 +1098,10 @@ namespace yy {
     super_type::move(s);
       switch (this->type_get ())
     {
+      case 52: // explist
+        value.move< ExpListNode * > (s.value);
+        break;
+
       case 42: // chunk
       case 43: // block
       case 44: // stat
@@ -1067,10 +1109,8 @@ namespace yy {
       case 46: // exp
       case 47: // prefixexp
       case 48: // var
-      case 49: // varlist
       case 50: // functioncall
       case 51: // args
-      case 52: // explist
       case 53: // tableconstructor
       case 54: // fieldlist
       case 55: // field
@@ -1078,6 +1118,10 @@ namespace yy {
       case 57: // funcbody
       case 58: // parlist
         value.move< Node * > (s.value);
+        break;
+
+      case 49: // varlist
+        value.move< VarListNode * > (s.value);
         break;
 
       case 25: // NUM
@@ -1386,7 +1430,7 @@ namespace yy {
 
 
 } // yy
-#line 1390 "binary.tab.hh" // lalr1.cc:377
+#line 1434 "binary.tab.hh" // lalr1.cc:377
 
 
 

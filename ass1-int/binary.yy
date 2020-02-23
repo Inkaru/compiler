@@ -15,7 +15,10 @@
 
 }
 
-%type <Node *> chunk stat laststat block exp prefixexp var varlist functioncall args explist tableconstructor field fieldlist funcname funcbody parlist
+%type <Node *> chunk stat laststat block exp prefixexp var functioncall args tableconstructor field fieldlist funcname funcbody parlist
+
+%type <VarListNode *> varlist
+%type <ExpListNode *> explist
 
 %token END 0
 %token NEWL
@@ -57,7 +60,7 @@ block : chunk {	  $$ = new StdNode("block","", count++);
       ;
 
 
-stat : varlist EQU explist    {	$$ = new StdNode("stat","EQU", count++);
+stat : varlist EQU explist    {	$$ = new AssignNode("stat", $1, $3, count++);
                                 $$->children.push_back($1); 	
                                 $$->children.push_back($3);  }
      | REPEAT block UNTIL exp {	$$ = new StdNode("repeat","", count++);
@@ -156,7 +159,7 @@ var : NAME                      {	$$ = new StdNode("var",$1, count++);          
                                           $$->children.push_back($3);  }
     ;
 
-varlist : var                   {	$$ = new StdNode("varlist","", count++); 
+varlist : var                   {	$$ = new VarListNode("varlist", count++); 
                                   $$->children.push_back($1);         }
         | varlist COMMA var     {	$$ = $1;
                                   $$->children.push_back($3);         }
