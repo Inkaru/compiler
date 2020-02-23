@@ -9,25 +9,25 @@ using namespace std;
 
 class Environment {
 	public:
-		map<string, string> env;
+		map<string, string> vars;
 
 		Environment(){}
 
 		void declare(string var, string val = ""){
 			if(isDeclared(var)) {
-				env.find(var)->second = val;
+				vars.find(var)->second = val;
 			}
 			else {
-				env.insert({var,val}); 
+				vars.insert({var,val}); 
 			}
 		}
 
 		bool isDeclared(string var){
-			return env.find(var) != env.end();
+			return vars.find(var) != vars.end();
 		}
 		
 		string get(string var){
-			return env.find(var)->second;
+			return vars.find(var)->second;
 		}
 
 };

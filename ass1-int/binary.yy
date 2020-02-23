@@ -150,9 +150,8 @@ prefixexp : var                 {	$$ = $1;         }
           ;
 
 var : NAME                      {	$$ = new VarNode("var",$1, count++);          }
-    | prefixexp DOT NAME        {	$$ = $1;
-                                  StdNode* tmp = new StdNode("dot",$3, count++);
-                                  $$->children.push_back(tmp);         }
+    | prefixexp DOT NAME        {	string name = $1->getValue() + "." + $3;
+                                  $$ = new StdNode("func",name,count++);        }
     | prefixexp SQBROPEN exp SQBRCLOSE {	$$ = new StdNode("var","[]", count++);
                                           $$->children.push_back($1);
                                           $$->children.push_back($3);  }
