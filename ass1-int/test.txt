@@ -1,1 +1,1 @@
-n = io.read.test("*number")
+n = io.read("*number")

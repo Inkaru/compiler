@@ -1,7 +1,7 @@
 #include <list>
-#include <string>
-#include <iostream>
+#include <cstring>
 #include <fstream>
+#include <iostream>
 #include <cmath>
 #include <map> 
 
@@ -373,6 +373,20 @@ class FuncCallNode : public Node {
 					cout << "debug : string" << endl;
 					cout << str->getValue() << endl;
 				}
+
+			} else if (left->getValue() == "io.read") {
+
+				// ArgsNode* args = dynamic_cast<ArgsNode*>(right);
+				// ExpListNode* explist = dynamic_cast<ExpListNode*>(args->get(0));
+				// StringNode* str = dynamic_cast<StringNode*>(explist->get(0));
+
+				string val;
+
+				cin.ignore();
+				cin.sync(); cin.get();
+        getline(cin, val); 
+
+				return val;
 
 			} else {
 				cout << "func not implemented yet" << endl;
