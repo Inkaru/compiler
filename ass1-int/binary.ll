@@ -27,6 +27,8 @@ num ({d2}+{n}?)|{n}
 "^"             return yy::parser::make_EXPO();
 "%"             return yy::parser::make_MOD();
 
+"#"             return yy::parser::make_HASH();
+
 "<"             return yy::parser::make_INF();
 "<="            return yy::parser::make_INFEQ();
 ">"             return yy::parser::make_SUP();

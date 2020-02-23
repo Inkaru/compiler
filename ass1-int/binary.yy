@@ -20,7 +20,7 @@
 %token END 0
 %token NEWL
 %token BROPEN BRCLOSE
-%token DOT COMMA
+%token DOT COMMA HASH
 %token RETURN BREAK
 %token REPEAT UNTIL
 %token FOR IF THEN DO STEND
@@ -126,6 +126,10 @@ exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
     | exp DBEQU exp   {	$$ = new ExpNodeImpl("exp","DBEQU", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
+    | MINUS exp       {	$$ = new ExpNodeImpl("exp","NEG", count++);
+										    $$->children.push_back($2);   }
+    | HASH exp        {	$$ = new ExpNodeImpl("exp","HASH", count++);
+										    $$->children.push_back($2);  }
     ;
 
 prefixexp : var                 {	$$ = $1;         }
