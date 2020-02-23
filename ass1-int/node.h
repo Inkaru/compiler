@@ -340,7 +340,9 @@ class FuncCallNode : public Node {
 		string getValue(){ return "";}
 
 		string execute(Environment& env){
-			if(left->getValue() == "print"){
+			if(left->getValue() == "print" || left->getValue() == "io.write"){
+
+				bool doesReturn = left->getValue() == "print";
 
 				if(dynamic_cast<ArgsNode*>(right) != nullptr){
 					ArgsNode* args = dynamic_cast<ArgsNode*>(right);
@@ -348,12 +350,12 @@ class FuncCallNode : public Node {
 
 					if(dynamic_cast<ExpNode *>(res) != nullptr){
 						cout << "debug : exp" << endl;
-						cout << res->execute(env) << endl;
+						cout << res->execute(env);
 					}
 
 					if(dynamic_cast<StringNode *>(res) != nullptr){
 						cout << "debug : string" << endl;
-						cout << res->getValue() << endl;
+						cout << res->getValue();
 					}
 
 					if(dynamic_cast<ExpListNode *>(res) != nullptr){
@@ -362,8 +364,10 @@ class FuncCallNode : public Node {
 						for(auto n: res->children){
 							cout << n->execute(env) << " " ;
 						}
+					}
 
-						cout << endl ;
+					if(doesReturn){
+						cout << endl;
 					}
 
 				}
@@ -382,11 +386,28 @@ class FuncCallNode : public Node {
 
 				string val;
 
-				cin.ignore();
-				cin.sync(); cin.get();
-        getline(cin, val); 
+				// cin.ignore();
+				// cin.sync(); cin.get(); cin.clear();
+        // getline(cin, val); 
 
-				return val;
+				// if (cin.fail ()){
+				// 	cout << "error" << endl;
+				// }
+
+				// int iValid = 1;
+				// while (iValid == 1)
+				// {
+				// 	if (cin.fail())
+				// 	{
+				// 					cin.ignore();
+				// 					cout<<"Wrong! Enter a #!"<<endl;
+				// 					cin>>val;
+				// 	} //closes if
+				// 	else
+				// 					iValid = 0;
+				// }
+
+				return "1";
 
 			} else {
 				cout << "func not implemented yet" << endl;
@@ -396,8 +417,6 @@ class FuncCallNode : public Node {
 		}
 
 };
-
-
 
 class AssignNode : public Node
 {
@@ -429,6 +448,37 @@ public:
 			itVar++;
 			itExp++;
 		}
+
+		return "0";
+
+	}
+
+};
+
+class ForNode : public Node
+{
+public:
+	Node* var;
+	Node* exp1;
+	Node* exp2;
+	Node* block;
+
+	ForNode(string t, Node* v, Node* e1, Node* e2, Node* blo, int i) : Node(t, i), var(v), exp1(e1), exp2(e2), block(blo) {}
+
+	string getValue() { return "FOR"; }
+
+	string execute(Environment& env) {
+		cout << "For Node;";
+
+		env.declare(var->getValue(), exp1->execute(env));
+
+		string lim = exp2->execute(env);
+
+		while(env.get(var->getValue()) != lim){
+			block->execute(env);
+			env.declare(var->getValue(), to_string(1+stoi(env.get(var->getValue()))));
+		}
+		block->execute(env);
 
 		return "0";
 

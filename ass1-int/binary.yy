@@ -73,8 +73,9 @@ stat : varlist EQU explist    {	$$ = new AssignNode("stat", $1, $3, count++);
                                  $$->children.push_back($4);
                                 }
      | FOR NAME EQU exp COMMA exp DO block STEND {
-                                $$ = new StdNode("stat","for", count++);
-                                $$->children.push_back(new StdNode("var", $2, count++));
+                                VarNode* var = new VarNode("var", $2, count++);
+                                $$ = new ForNode("For", var,$4,$6,$8, count++);
+                                $$->children.push_back(var);
                                 $$->children.push_back($4);
                                 $$->children.push_back($6);
                                 $$->children.push_back($8);
