@@ -15,7 +15,7 @@
 
 }
 
-%type <Node *> chunk stat laststat block exp prefixexp var varlist functioncall args explist tableconstructor field fieldlist
+%type <Node *> chunk stat laststat block exp prefixexp var varlist functioncall args explist tableconstructor field fieldlist funcname funcbody parlist
 
 %token END 0
 %token NEWL
@@ -26,6 +26,8 @@
 %token RETURN BREAK
 %token REPEAT UNTIL
 %token FOR IF THEN DO STEND
+%token FUNCTION
+%token FALSE TRUE
 %token <std::string> NUM
 %token <std::string> NAME
 %token <std::string> STRING
@@ -77,6 +79,9 @@ stat : varlist EQU explist    {	$$ = new StdNode("stat","EQU", count++);
                               } 
      | functioncall           {	$$ = new StdNode("stat","functioncall", count++);
                                 $$->children.push_back($1);  }
+     | FUNCTION funcname funcbody { $$ = new StdNode("function", "", count++);
+                                    $$->children.push_back($2);
+                                    $$->children.push_back($3); }
      ;
 
 
@@ -90,6 +95,8 @@ exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
     | STRING          {	$$ = new StringNode("String",$1, count++);  }
     | prefixexp       {	$$ = $1;              }
     | tableconstructor{ $$ = $1;              }
+    | FALSE           { $$ = new FalseNode(count++);  }
+    | TRUE            { $$ = new TrueNode(count++);  }
     | exp PLUS exp    {	$$ = new PlusNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
@@ -184,3 +191,21 @@ fieldlist : field                   {	$$ = new StdNode("fieldlist", "", count++)
 
 field : exp {	$$ = $1 ;  }
       ;
+
+funcname : NAME                   {	$$ = new StdNode("funcname", $1, count++);  }
+         | NAME DOT funcname      {	$$ = new StdNode("funcname", $1, count++); 
+                                    $$->children.push_back($3);         }
+         ;
+
+funcbody : BROPEN parlist BRCLOSE block STEND { $$ = new StdNode("funcbody","parlist", count++);
+                                                $$->children.push_back($2);
+                                                $$->children.push_back($4); }
+         | BROPEN BRCLOSE block STEND { $$ = new StdNode("funcbody","empty", count++);
+                                                $$->children.push_back($3); }
+         ;
+
+parlist : NAME                    {	$$ = new StdNode("namelist", "", count++); 
+                                      $$->children.push_back(new StdNode("var",$1, count++));         }
+        | parlist COMMA NAME      {	$$ = $1;
+                                    $$->children.push_back(new StdNode("var",$3, count++));         }
+        ;

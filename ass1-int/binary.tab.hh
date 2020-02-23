@@ -281,6 +281,9 @@ namespace yy {
       // tableconstructor
       // fieldlist
       // field
+      // funcname
+      // funcbody
+      // parlist
       char dummy1[sizeof(Node *)];
 
       // NUM
@@ -326,22 +329,25 @@ namespace yy {
         THEN = 274,
         DO = 275,
         STEND = 276,
-        NUM = 277,
-        NAME = 278,
-        STRING = 279,
-        INF = 280,
-        SUP = 281,
-        EQU = 282,
-        NEQU = 283,
-        INFEQ = 284,
-        SUPEQ = 285,
-        DBEQU = 286,
-        PLUS = 287,
-        MINUS = 288,
-        MULT = 289,
-        DIV = 290,
-        MOD = 291,
-        EXPO = 292
+        FUNCTION = 277,
+        FALSE = 278,
+        TRUE = 279,
+        NUM = 280,
+        NAME = 281,
+        STRING = 282,
+        INF = 283,
+        SUP = 284,
+        EQU = 285,
+        NEQU = 286,
+        INFEQ = 287,
+        SUPEQ = 288,
+        DBEQU = 289,
+        PLUS = 290,
+        MINUS = 291,
+        MULT = 292,
+        DIV = 293,
+        MOD = 294,
+        EXPO = 295
       };
     };
 
@@ -525,6 +531,18 @@ namespace yy {
     static inline
     symbol_type
     make_STEND ();
+
+    static inline
+    symbol_type
+    make_FUNCTION ();
+
+    static inline
+    symbol_type
+    make_FALSE ();
+
+    static inline
+    symbol_type
+    make_TRUE ();
 
     static inline
     symbol_type
@@ -791,12 +809,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 218,     ///< Last index in yytable_.
-      yynnts_ = 15,  ///< Number of nonterminal symbols.
-      yyfinal_ = 35, ///< Termination state number.
+      yylast_ = 269,     ///< Last index in yytable_.
+      yynnts_ = 18,  ///< Number of nonterminal symbols.
+      yyfinal_ = 40, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 38  ///< Number of tokens.
+      yyntokens_ = 41  ///< Number of tokens.
     };
 
 
@@ -840,9 +858,9 @@ namespace yy {
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37
+      35,    36,    37,    38,    39,    40
     };
-    const unsigned int user_token_number_max_ = 292;
+    const unsigned int user_token_number_max_ = 295;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -873,26 +891,29 @@ namespace yy {
   {
       switch (other.type_get ())
     {
-      case 39: // chunk
-      case 40: // block
-      case 41: // stat
-      case 42: // laststat
-      case 43: // exp
-      case 44: // prefixexp
-      case 45: // var
-      case 46: // varlist
-      case 47: // functioncall
-      case 48: // args
-      case 49: // explist
-      case 50: // tableconstructor
-      case 51: // fieldlist
-      case 52: // field
+      case 42: // chunk
+      case 43: // block
+      case 44: // stat
+      case 45: // laststat
+      case 46: // exp
+      case 47: // prefixexp
+      case 48: // var
+      case 49: // varlist
+      case 50: // functioncall
+      case 51: // args
+      case 52: // explist
+      case 53: // tableconstructor
+      case 54: // fieldlist
+      case 55: // field
+      case 56: // funcname
+      case 57: // funcbody
+      case 58: // parlist
         value.copy< Node * > (other.value);
         break;
 
-      case 22: // NUM
-      case 23: // NAME
-      case 24: // STRING
+      case 25: // NUM
+      case 26: // NAME
+      case 27: // STRING
         value.copy< std::string > (other.value);
         break;
 
@@ -912,26 +933,29 @@ namespace yy {
     (void) v;
       switch (this->type_get ())
     {
-      case 39: // chunk
-      case 40: // block
-      case 41: // stat
-      case 42: // laststat
-      case 43: // exp
-      case 44: // prefixexp
-      case 45: // var
-      case 46: // varlist
-      case 47: // functioncall
-      case 48: // args
-      case 49: // explist
-      case 50: // tableconstructor
-      case 51: // fieldlist
-      case 52: // field
+      case 42: // chunk
+      case 43: // block
+      case 44: // stat
+      case 45: // laststat
+      case 46: // exp
+      case 47: // prefixexp
+      case 48: // var
+      case 49: // varlist
+      case 50: // functioncall
+      case 51: // args
+      case 52: // explist
+      case 53: // tableconstructor
+      case 54: // fieldlist
+      case 55: // field
+      case 56: // funcname
+      case 57: // funcbody
+      case 58: // parlist
         value.copy< Node * > (v);
         break;
 
-      case 22: // NUM
-      case 23: // NAME
-      case 24: // STRING
+      case 25: // NUM
+      case 26: // NAME
+      case 27: // STRING
         value.copy< std::string > (v);
         break;
 
@@ -987,26 +1011,29 @@ namespace yy {
     // Type destructor.
     switch (yytype)
     {
-      case 39: // chunk
-      case 40: // block
-      case 41: // stat
-      case 42: // laststat
-      case 43: // exp
-      case 44: // prefixexp
-      case 45: // var
-      case 46: // varlist
-      case 47: // functioncall
-      case 48: // args
-      case 49: // explist
-      case 50: // tableconstructor
-      case 51: // fieldlist
-      case 52: // field
+      case 42: // chunk
+      case 43: // block
+      case 44: // stat
+      case 45: // laststat
+      case 46: // exp
+      case 47: // prefixexp
+      case 48: // var
+      case 49: // varlist
+      case 50: // functioncall
+      case 51: // args
+      case 52: // explist
+      case 53: // tableconstructor
+      case 54: // fieldlist
+      case 55: // field
+      case 56: // funcname
+      case 57: // funcbody
+      case 58: // parlist
         value.template destroy< Node * > ();
         break;
 
-      case 22: // NUM
-      case 23: // NAME
-      case 24: // STRING
+      case 25: // NUM
+      case 26: // NAME
+      case 27: // STRING
         value.template destroy< std::string > ();
         break;
 
@@ -1033,26 +1060,29 @@ namespace yy {
     super_type::move(s);
       switch (this->type_get ())
     {
-      case 39: // chunk
-      case 40: // block
-      case 41: // stat
-      case 42: // laststat
-      case 43: // exp
-      case 44: // prefixexp
-      case 45: // var
-      case 46: // varlist
-      case 47: // functioncall
-      case 48: // args
-      case 49: // explist
-      case 50: // tableconstructor
-      case 51: // fieldlist
-      case 52: // field
+      case 42: // chunk
+      case 43: // block
+      case 44: // stat
+      case 45: // laststat
+      case 46: // exp
+      case 47: // prefixexp
+      case 48: // var
+      case 49: // varlist
+      case 50: // functioncall
+      case 51: // args
+      case 52: // explist
+      case 53: // tableconstructor
+      case 54: // fieldlist
+      case 55: // field
+      case 56: // funcname
+      case 57: // funcbody
+      case 58: // parlist
         value.move< Node * > (s.value);
         break;
 
-      case 22: // NUM
-      case 23: // NAME
-      case 24: // STRING
+      case 25: // NUM
+      case 26: // NAME
+      case 27: // STRING
         value.move< std::string > (s.value);
         break;
 
@@ -1113,7 +1143,8 @@ namespace yy {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
-     285,   286,   287,   288,   289,   290,   291,   292
+     285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
+     295
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -1239,6 +1270,24 @@ namespace yy {
   }
 
   parser::symbol_type
+  parser::make_FUNCTION ()
+  {
+    return symbol_type (token::FUNCTION);
+  }
+
+  parser::symbol_type
+  parser::make_FALSE ()
+  {
+    return symbol_type (token::FALSE);
+  }
+
+  parser::symbol_type
+  parser::make_TRUE ()
+  {
+    return symbol_type (token::TRUE);
+  }
+
+  parser::symbol_type
   parser::make_NUM (const std::string& v)
   {
     return symbol_type (token::NUM, v);
@@ -1337,7 +1386,7 @@ namespace yy {
 
 
 } // yy
-#line 1341 "binary.tab.hh" // lalr1.cc:377
+#line 1390 "binary.tab.hh" // lalr1.cc:377
 
 
 

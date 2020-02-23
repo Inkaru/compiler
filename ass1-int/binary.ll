@@ -49,7 +49,8 @@ num ({d2}+{n}?)|{n}
 "."             return yy::parser::make_DOT();
 ","             return yy::parser::make_COMMA();
 
-
+"false"         return yy::parser::make_FALSE();
+"true"          return yy::parser::make_TRUE();
 
 "return"        return yy::parser::make_RETURN();
 "break"         return yy::parser::make_BREAK();
@@ -62,6 +63,8 @@ num ({d2}+{n}?)|{n}
 
 "repeat"        return yy::parser::make_REPEAT();
 "until"         return yy::parser::make_UNTIL();
+
+"function"      return yy::parser::make_FUNCTION();
 
 {num}           return yy::parser::make_NUM(yytext);
 

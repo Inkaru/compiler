@@ -1,6 +1,1 @@
-for i = 1, itemCount do
-  if list[i] > list[i + 1] then
-    list[i], list[i + 1] = list[i + 1], list[i]
-    hasChanged = true
-  end
-end
+a = true

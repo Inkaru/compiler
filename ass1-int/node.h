@@ -227,6 +227,38 @@ public:
 	}
 };
 
+class TrueNode : public ExpNode
+{
+public:
+	int value = 1;
+	TrueNode(int i) : ExpNode("TRUE", nullptr, nullptr, i) {}
+
+	string getValue() { return to_string(value); }
+
+	void execute(){}
+
+	string eval()
+	{
+		return to_string(value);
+	}
+};
+
+class FalseNode : public ExpNode
+{
+public:
+	int value = 0;
+	FalseNode(int i) : ExpNode("TRUE", nullptr, nullptr, i) {}
+
+	string getValue() { return to_string(value); }
+
+	void execute(){}
+
+	string eval()
+	{
+		return to_string(value);
+	}
+};
+
 class StringNode : public ExpNode
 {
 public:
