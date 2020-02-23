@@ -3,12 +3,27 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <map> 
 
 using namespace std;
 
 class Environment {
 	public:
+		map<string, string> env;
 
+		Environment(){}
+
+		void declare(string var, string val = ""){
+			env.insert({var,val});
+		}
+
+		bool isDeclared(string var){
+			return env.find(var) != env.end();
+		}
+		
+		string get(string var){
+			return env.find(var)->second;
+		}
 };
 
 class Node
@@ -61,7 +76,7 @@ public:
 	virtual string getValue() = 0;
 
 	virtual string eval() =0;
-	virtual void execute() =0;
+	virtual void execute(Environment env) =0;
 };
 
 class StdNode : public Node
@@ -72,10 +87,10 @@ public:
 
 	string getValue() { return value; }
 
-	void execute() {
+	void execute(Environment env) {
 		cout << "stdnode;";
 		for (auto n: children){
-			n->execute();
+			n->execute(env);
 		}
 	}
 
@@ -100,7 +115,7 @@ public:
 
 	string getValue() { return "EXP"; }
 
-	void execute(){
+	void execute(Environment env){
 		cout << "expImplNode;";
 	}
 
@@ -114,7 +129,7 @@ public:
 
 	string getValue() { return "PLUS"; }
 
-	void execute(){
+	void execute(Environment env){
 		cout << "PLUS" << eval() ;
 	}
 
@@ -131,7 +146,7 @@ public:
 
 	string getValue() { return "MINUS"; }
 
-	void execute(){
+	void execute(Environment env){
 		cout << "MINUS" << eval() ;
 	}
 
@@ -148,7 +163,7 @@ public:
 
 	string getValue() { return "MULT"; }
 
-	void execute(){
+	void execute(Environment env){
 		cout << "MULT" << eval() ;
 	}
 
@@ -165,7 +180,7 @@ public:
 
 	string getValue() { return "DIV"; }
 
-	void execute(){
+	void execute(Environment env){
 		cout << "DIV" << eval() ;
 	}
 
@@ -182,7 +197,7 @@ public:
 
 	string getValue() { return "MOD"; }
 
-	void execute(){
+	void execute(Environment env){
 		cout << "MOD" << eval() ;
 	}
 
@@ -201,7 +216,7 @@ public:
 
 	string getValue() { return "EXPO"; }
 
-	void execute(){
+	void execute(Environment env){
 		cout << "EXPO" << eval() ;
 	}
 
@@ -219,7 +234,7 @@ public:
 
 	string getValue() { return to_string(value); }
 
-	void execute(){}
+	void execute(Environment env){}
 
 	string eval()
 	{
@@ -235,7 +250,7 @@ public:
 
 	string getValue() { return to_string(value); }
 
-	void execute(){}
+	void execute(Environment env){}
 
 	string eval()
 	{
@@ -251,7 +266,7 @@ public:
 
 	string getValue() { return to_string(value); }
 
-	void execute(){}
+	void execute(Environment env){}
 
 	string eval()
 	{
@@ -267,7 +282,7 @@ public:
 
 	string getValue() { return value; }
 
-	void execute(){}
+	void execute(Environment env){}
 
 	string eval(){ return value; }
 };
@@ -278,7 +293,7 @@ class ArgsNode : public Node {
 
 		string getValue(){return "";}
 
-		void execute(){}
+		void execute(Environment env){}
 
 		string eval(){}
 
@@ -294,7 +309,7 @@ class ExpListNode : public Node {
 
 	string getValue(){return "";}
 
-	void execute(){}
+	void execute(Environment env){}
 
 	string eval(){}
 
@@ -312,7 +327,7 @@ class FuncCallNode : public Node {
 
 		string getValue(){ return "";}
 
-		void execute(){
+		void execute(Environment env){
 			if(left->getValue() == "print"){
 
 				if(dynamic_cast<ArgsNode*>(right) != nullptr){

@@ -14,7 +14,9 @@ yy::parser parser;
   if(!parser.parse()){
   	// root->dump();
     root->dumpRoot();
-    root->execute();
+
+    Environment env;
+    root->execute(env);
   }
   return 0;
 }
