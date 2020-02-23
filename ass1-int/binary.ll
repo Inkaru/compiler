@@ -45,6 +45,12 @@ num ({d2}+{n}?)|{n}
 "return"        return yy::parser::make_RETURN();
 "break"         return yy::parser::make_BREAK();
 
+"for"           return yy::parser::make_FOR();
+"if"            return yy::parser::make_IF();
+"then"          return yy::parser::make_THEN();
+"end"           return yy::parser::make_STEND();
+"do"            return yy::parser::make_DO();
+
 "repeat"        return yy::parser::make_REPEAT();
 "until"         return yy::parser::make_UNTIL();
 

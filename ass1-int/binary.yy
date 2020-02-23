@@ -23,6 +23,7 @@
 %token DOT COMMA
 %token RETURN BREAK
 %token REPEAT UNTIL
+%token FOR IF THEN DO STEND
 %token <std::string> NUM
 %token <std::string> NAME
 %token <std::string> STRING
@@ -57,9 +58,20 @@ stat : varlist EQU explist    {	$$ = new StdNode("stat","EQU", count++);
      | REPEAT block UNTIL exp {	$$ = new StdNode("repeat","", count++);
                                 $$->children.push_back($2); 	
                                 $$->children.push_back($4);  }
+     | DO block STEND           { $$ = new StdNode("stat","do", count++);
+                                $$->children.push_back($2);
+                              }
+     | FOR NAME EQU exp COMMA exp DO block STEND {
+                                $$ = new StdNode("stat","for", count++);
+                                $$->children.push_back(new StdNode("var", $2, count++));
+                                $$->children.push_back($4);
+                                $$->children.push_back($6);
+                                $$->children.push_back($8);
+                              } 
      | functioncall           {	$$ = new StdNode("stat","functioncall", count++);
                                 $$->children.push_back($1);  }
      ;
+
 
 laststat : RETURN explist     {	$$ = new StdNode("laststat","RETURN", count++);
                                 $$->children.push_back($2);      }
