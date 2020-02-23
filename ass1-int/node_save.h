@@ -81,8 +81,8 @@ public:
 
 	virtual string getValue() = 0;
 
-	virtual string execute(Environment& env) =0;
-
+	virtual string eval(Environment& env) =0;
+	virtual void execute(Environment& env) =0;
 };
 
 class StdNode : public Node
@@ -93,14 +93,14 @@ public:
 
 	string getValue() { return value; }
 
-	string execute(Environment& env) {
+	void execute(Environment& env) {
 		cout << "stdnode;";
 		for (auto n: children){
 			n->execute(env);
 		}
-		return "0";
 	}
 
+	string eval(Environment& env){}
 };
 
 class VarNode : public Node
@@ -111,11 +111,11 @@ public:
 
 	string getValue() { return value; }
 
-	string execute(Environment& env) {
+	void execute(Environment& env) {
 		cout << "varnode;";
-		return env.get(value);
 	}
 
+	string eval(Environment& env){ return env.get(value);}
 };
 
 class ExpNode : public Node
@@ -132,7 +132,7 @@ public:
 		}
 
 		if(dynamic_cast<ExpNode*>(node) != nullptr){
-			return node->execute(env);
+			return node->eval(env);
 		}
 	}
 
@@ -145,11 +145,11 @@ public:
 
 	string getValue() { return "EXP"; }
 
-	string execute(Environment& env){
+	void execute(Environment& env){
 		cout << "expImplNode;";
-		return "0";
 	}
 
+	string eval(Environment& env){ return "0";}
 };
 
 class PlusNode : public ExpNode
@@ -159,10 +159,14 @@ public:
 
 	string getValue() { return "PLUS"; }
 
-	string execute(Environment& env){
-		return to_string(stof(childEval(env,left)) + stof(childEval(env,right)));
+	void execute(Environment& env){
+		cout << "PLUS" << eval(env) ;
 	}
 
+	string eval(Environment& env)
+	{
+		return to_string(stof(childEval(env,left)) + stof(childEval(env,right)));
+	}
 };
 
 class MinusNode : public ExpNode
@@ -172,7 +176,12 @@ public:
 
 	string getValue() { return "MINUS"; }
 
-	string execute(Environment& env){
+	void execute(Environment& env){
+		cout << "MINUS" << eval(env) ;
+	}
+
+	string eval(Environment& env)
+	{
 		return to_string(stof(childEval(env,left)) - stof(childEval(env,right)));
 	}
 };
@@ -184,7 +193,12 @@ public:
 
 	string getValue() { return "MULT"; }
 
-	string execute(Environment& env){
+	void execute(Environment& env){
+		cout << "MULT" << eval(env) ;
+	}
+
+	string eval(Environment& env)
+	{
 		return to_string(stof(childEval(env,left)) * stof(childEval(env,right)));
 	}
 };
@@ -196,7 +210,12 @@ public:
 
 	string getValue() { return "DIV"; }
 
-	string execute(Environment& env){
+	void execute(Environment& env){
+		cout << "DIV" << eval(env) ;
+	}
+
+	string eval(Environment& env)
+	{
 		return to_string(stof(childEval(env,left)) / stof(childEval(env,right)));
 	}
 };
@@ -208,7 +227,12 @@ public:
 
 	string getValue() { return "MOD"; }
 
-	string execute(Environment& env){
+	void execute(Environment& env){
+		cout << "MOD" << eval(env) ;
+	}
+
+	string eval(Environment& env)
+	{
 		float a = stof(childEval(env,left));
 		float b = stof(childEval(env,right));
 		return to_string(a - floor(a/b)*b);
@@ -222,7 +246,12 @@ public:
 
 	string getValue() { return "EXPO"; }
 
-	string execute(Environment& env){
+	void execute(Environment& env){
+		cout << "EXPO" << eval(env) ;
+	}
+
+	string eval(Environment& env)
+	{
 		return to_string(pow(stof(childEval(env,left)), stof(childEval(env,right))));
 	}
 };
@@ -234,7 +263,12 @@ public:
 
 	string getValue() { return "NEG"; }
 
-	string execute(Environment& env){
+	void execute(Environment& env){
+		cout << "NEG" << eval(env) ;
+	}
+
+	string eval(Environment& env)
+	{
 		return to_string( - stof(childEval(env,right)));
 	}
 };
@@ -247,7 +281,10 @@ public:
 
 	string getValue() { return to_string(value); }
 
-	string execute(Environment& env){
+	void execute(Environment& env){}
+
+	string eval(Environment& env)
+	{
 		return to_string(value);
 	}
 };
@@ -260,7 +297,10 @@ public:
 
 	string getValue() { return to_string(value); }
 
-	string execute(Environment& env){
+	void execute(Environment& env){}
+
+	string eval(Environment& env)
+	{
 		return to_string(value);
 	}
 };
@@ -273,7 +313,10 @@ public:
 
 	string getValue() { return to_string(value); }
 
-	string execute(Environment& env){
+	void execute(Environment& env){}
+
+	string eval(Environment& env)
+	{
 		return to_string(value);
 	}
 };
@@ -286,7 +329,9 @@ public:
 
 	string getValue() { return value; }
 
-	string execute(Environment& env){ return value; }
+	void execute(Environment& env){}
+
+	string eval(Environment& env){ return value; }
 };
 
 class ArgsNode : public Node {
@@ -295,7 +340,9 @@ class ArgsNode : public Node {
 
 		string getValue(){return "";}
 
-		string execute(Environment& env){ return "0"; }
+		void execute(Environment& env){}
+
+		string eval(Environment& env){}
 
 		Node* get(int i){
 			list<Node*>::iterator it = next(children.begin(), i);
@@ -309,7 +356,9 @@ class ExpListNode : public Node {
 
 	string getValue(){return "";}
 
-	string execute(Environment& env){ return "0"; }
+	void execute(Environment& env){}
+
+	string eval(Environment& env){}
 
 	Node* get(int i){
 		list<Node*>::iterator it = next(children.begin(), i);
@@ -323,7 +372,9 @@ class VarListNode : public Node {
 
 	string getValue(){return "";}
 
-	string execute(Environment& env){ return "0"; }
+	void execute(Environment& env){}
+
+	string eval(Environment& env){}
 
 	Node* get(int i){
 		list<Node*>::iterator it = next(children.begin(), i);
@@ -339,7 +390,7 @@ class FuncCallNode : public Node {
 
 		string getValue(){ return "";}
 
-		string execute(Environment& env){
+		void execute(Environment& env){
 			if(left->getValue() == "print"){
 
 				if(dynamic_cast<ArgsNode*>(right) != nullptr){
@@ -348,7 +399,7 @@ class FuncCallNode : public Node {
 
 					if(dynamic_cast<ExpNode *>(res) != nullptr){
 						cout << "debug : exp" << endl;
-						cout << res->execute(env) << endl;
+						cout << res->eval(env) << endl;
 					}
 
 					if(dynamic_cast<StringNode *>(res) != nullptr){
@@ -360,7 +411,7 @@ class FuncCallNode : public Node {
 						cout << "debug : explist" << endl;
 
 						for(auto n: res->children){
-							cout << n->execute(env) << " " ;
+							cout << n->eval(env) << " " ;
 						}
 
 						cout << endl ;
@@ -377,10 +428,9 @@ class FuncCallNode : public Node {
 			} else {
 				cout << "func not implemented yet" << endl;
 			}
-
-			return "0";
 		}
 
+		string eval(Environment& env){}
 };
 
 
@@ -395,7 +445,7 @@ public:
 
 	string getValue() { return "Assign"; }
 
-	string execute(Environment& env) {
+	void execute(Environment& env) {
 		cout << "Assign Node;";
 
 		auto itVar = left->children.begin();
@@ -407,7 +457,7 @@ public:
 		while(itVar != left->children.end() && itExp != left->children.end()){
 
 			var = (*itVar)->getValue();
-			exp = (*itExp)->execute(env);
+			exp = (*itExp)->eval(env);
 			cout << "debug : " << var << "=" << exp << endl;
 
 			env.declare(var,exp);
@@ -416,8 +466,7 @@ public:
 			itExp++;
 		}
 
-		return "0";
-
 	}
 
+	string eval(Environment& env){}
 };
