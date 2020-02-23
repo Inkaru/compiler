@@ -15,11 +15,13 @@
 
 }
 
-%type <Node *> chunk stat laststat block exp prefixexp var varlist functioncall args explist
+%type <Node *> chunk stat laststat block exp prefixexp var varlist functioncall args explist tableconstructor field fieldlist
 
 %token END 0
 %token NEWL
 %token BROPEN BRCLOSE
+%token ACOPEN ACCLOSE
+%token SQBROPEN SQBRCLOSE
 %token DOT COMMA HASH
 %token RETURN BREAK
 %token REPEAT UNTIL
@@ -87,6 +89,7 @@ laststat : RETURN explist     {	$$ = new StdNode("laststat","RETURN", count++);
 exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
     | STRING          {	$$ = new StringNode("String",$1, count++);  }
     | prefixexp       {	$$ = $1;              }
+    | tableconstructor{ $$ = $1;              }
     | exp PLUS exp    {	$$ = new PlusNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
@@ -137,10 +140,13 @@ prefixexp : var                 {	$$ = $1;         }
           | BROPEN exp BRCLOSE  {	$$ = $2;         }
           ;
 
-var : NAME                      {	$$ = new StdNode("var",$1, count++);               }
+var : NAME                      {	$$ = new StdNode("var",$1, count++);          }
     | prefixexp DOT NAME        {	$$ = $1;
                                   StdNode* tmp = new StdNode("dot",$3, count++);
                                   $$->children.push_back(tmp);         }
+    | prefixexp SQBROPEN exp SQBRCLOSE {	$$ = new StdNode("var","[]", count++);
+                                          $$->children.push_back($1);
+                                          $$->children.push_back($3);  }
     ;
 
 varlist : var                   {	$$ = new StdNode("varlist","", count++); 
@@ -164,3 +170,17 @@ explist : exp                   {	$$ = new ExpListNode("explist", count++);
         | explist COMMA exp     {	$$ = $1;
                                   $$->children.push_back($3);         }
         ; 
+
+tableconstructor : ACOPEN ACCLOSE           { $$ = new StdNode("tableconstructor","empty", count++);}
+                 | ACOPEN fieldlist ACCLOSE { $$ = new StdNode("tableconstructor","", count++);
+                                              $$->children.push_back($2); }
+                 ;
+
+fieldlist : field                   {	$$ = new StdNode("fieldlist", "", count++); 
+                                      $$->children.push_back($1);         }
+          | fieldlist COMMA field   {	$$ = $1;
+                                      $$->children.push_back($3);         }
+          ;
+
+field : exp {	$$ = $1 ;  }
+      ;

@@ -40,6 +40,12 @@ num ({d2}+{n}?)|{n}
 "("             return yy::parser::make_BROPEN();
 ")"             return yy::parser::make_BRCLOSE();
 
+"{"             return yy::parser::make_ACOPEN();
+"}"             return yy::parser::make_ACCLOSE();
+
+"["             return yy::parser::make_SQBROPEN();
+"]"             return yy::parser::make_SQBRCLOSE();
+
 "."             return yy::parser::make_DOT();
 ","             return yy::parser::make_COMMA();
 

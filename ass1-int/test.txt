@@ -1,2 +1,6 @@
-print(2^((4*2) + 10 - 2*6 + 1/4)*2)
-print("hello world")
+for i = 1, itemCount do
+  if list[i] > list[i + 1] then
+    list[i], list[i + 1] = list[i + 1], list[i]
+    hasChanged = true
+  end
+end

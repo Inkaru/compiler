@@ -104,7 +104,7 @@ public:
 		cout << "expImplNode;";
 	}
 
-	string eval(){}
+	string eval(){ return "0";}
 };
 
 class PlusNode : public ExpNode
