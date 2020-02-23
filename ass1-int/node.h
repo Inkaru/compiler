@@ -97,6 +97,21 @@ public:
 	string eval(Environment& env){}
 };
 
+class VarNode : public Node
+{
+public:
+	string value;
+	VarNode(string t, string v, int i) : Node(t, i), value(v) {}
+
+	string getValue() { return value; }
+
+	void execute(Environment& env) {
+		cout << "varnode;";
+	}
+
+	string eval(Environment& env){}
+};
+
 class ExpNode : public Node
 {
 public:
@@ -104,6 +119,16 @@ public:
 	Node *right;
 
 	ExpNode(string t, Node *left, Node *right, int i) : Node(t, i), left(left), right(right) {}
+
+	string childEval(Environment& env, Node* node){
+		if(dynamic_cast<VarNode*>(node) != nullptr){
+			return env.get(node->getValue());
+		}
+
+		if(dynamic_cast<ExpNode*>(node) != nullptr){
+			return node->eval(env);
+		}
+	}
 
 };
 
@@ -134,7 +159,7 @@ public:
 
 	string eval(Environment& env)
 	{
-		return to_string(stof(left->eval(env)) + stof(right->eval(env)));
+		return to_string(stof(childEval(env,left)) + stof(childEval(env,right)));
 	}
 };
 

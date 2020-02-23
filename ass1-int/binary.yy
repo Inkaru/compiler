@@ -150,7 +150,7 @@ prefixexp : var                 {	$$ = $1;         }
           | BROPEN exp BRCLOSE  {	$$ = $2;         }
           ;
 
-var : NAME                      {	$$ = new StdNode("var",$1, count++);          }
+var : NAME                      {	$$ = new VarNode("var",$1, count++);          }
     | prefixexp DOT NAME        {	$$ = $1;
                                   StdNode* tmp = new StdNode("dot",$3, count++);
                                   $$->children.push_back(tmp);         }

@@ -829,7 +829,7 @@ namespace yy {
 
   case 40:
 #line 153 "binary.yy" // lalr1.cc:859
-    {	yylhs.value.as< Node * > () = new StdNode("var",yystack_[0].value.as< std::string > (), count++);          }
+    {	yylhs.value.as< Node * > () = new VarNode("var",yystack_[0].value.as< std::string > (), count++);          }
 #line 834 "binary.tab.cc" // lalr1.cc:859
     break;
 
