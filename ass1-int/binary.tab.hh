@@ -332,7 +332,8 @@ namespace yy {
         MINUS = 283,
         MULT = 284,
         DIV = 285,
-        EXPO = 286
+        MOD = 286,
+        EXPO = 287
       };
     };
 
@@ -555,6 +556,10 @@ namespace yy {
 
     static inline
     symbol_type
+    make_MOD ();
+
+    static inline
+    symbol_type
     make_EXPO ();
 
 
@@ -623,7 +628,7 @@ namespace yy {
     // Tables.
   // YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
   // STATE-NUM.
-  static const signed char yypact_[];
+  static const short int yypact_[];
 
   // YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
   // Performed when YYTABLE does not specify something else to do.  Zero
@@ -758,12 +763,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 147,     ///< Last index in yytable_.
+      yylast_ = 179,     ///< Last index in yytable_.
       yynnts_ = 12,  ///< Number of nonterminal symbols.
-      yyfinal_ = 27, ///< Termination state number.
+      yyfinal_ = 31, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 32  ///< Number of tokens.
+      yyntokens_ = 33  ///< Number of tokens.
     };
 
 
@@ -806,9 +811,9 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31
+      25,    26,    27,    28,    29,    30,    31,    32
     };
-    const unsigned int user_token_number_max_ = 286;
+    const unsigned int user_token_number_max_ = 287;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -839,17 +844,17 @@ namespace yy {
   {
       switch (other.type_get ())
     {
-      case 33: // chunk
-      case 34: // block
-      case 35: // stat
-      case 36: // laststat
-      case 37: // exp
-      case 38: // prefixexp
-      case 39: // var
-      case 40: // varlist
-      case 41: // functioncall
-      case 42: // args
-      case 43: // explist
+      case 34: // chunk
+      case 35: // block
+      case 36: // stat
+      case 37: // laststat
+      case 38: // exp
+      case 39: // prefixexp
+      case 40: // var
+      case 41: // varlist
+      case 42: // functioncall
+      case 43: // args
+      case 44: // explist
         value.copy< Node * > (other.value);
         break;
 
@@ -875,17 +880,17 @@ namespace yy {
     (void) v;
       switch (this->type_get ())
     {
-      case 33: // chunk
-      case 34: // block
-      case 35: // stat
-      case 36: // laststat
-      case 37: // exp
-      case 38: // prefixexp
-      case 39: // var
-      case 40: // varlist
-      case 41: // functioncall
-      case 42: // args
-      case 43: // explist
+      case 34: // chunk
+      case 35: // block
+      case 36: // stat
+      case 37: // laststat
+      case 38: // exp
+      case 39: // prefixexp
+      case 40: // var
+      case 41: // varlist
+      case 42: // functioncall
+      case 43: // args
+      case 44: // explist
         value.copy< Node * > (v);
         break;
 
@@ -947,17 +952,17 @@ namespace yy {
     // Type destructor.
     switch (yytype)
     {
-      case 33: // chunk
-      case 34: // block
-      case 35: // stat
-      case 36: // laststat
-      case 37: // exp
-      case 38: // prefixexp
-      case 39: // var
-      case 40: // varlist
-      case 41: // functioncall
-      case 42: // args
-      case 43: // explist
+      case 34: // chunk
+      case 35: // block
+      case 36: // stat
+      case 37: // laststat
+      case 38: // exp
+      case 39: // prefixexp
+      case 40: // var
+      case 41: // varlist
+      case 42: // functioncall
+      case 43: // args
+      case 44: // explist
         value.template destroy< Node * > ();
         break;
 
@@ -990,17 +995,17 @@ namespace yy {
     super_type::move(s);
       switch (this->type_get ())
     {
-      case 33: // chunk
-      case 34: // block
-      case 35: // stat
-      case 36: // laststat
-      case 37: // exp
-      case 38: // prefixexp
-      case 39: // var
-      case 40: // varlist
-      case 41: // functioncall
-      case 42: // args
-      case 43: // explist
+      case 34: // chunk
+      case 35: // block
+      case 36: // stat
+      case 37: // laststat
+      case 38: // exp
+      case 39: // prefixexp
+      case 40: // var
+      case 41: // varlist
+      case 42: // functioncall
+      case 43: // args
+      case 44: // explist
         value.move< Node * > (s.value);
         break;
 
@@ -1067,7 +1072,7 @@ namespace yy {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
-     285,   286
+     285,   286,   287
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -1247,6 +1252,12 @@ namespace yy {
   }
 
   parser::symbol_type
+  parser::make_MOD ()
+  {
+    return symbol_type (token::MOD);
+  }
+
+  parser::symbol_type
   parser::make_EXPO ()
   {
     return symbol_type (token::EXPO);
@@ -1255,7 +1266,7 @@ namespace yy {
 
 
 } // yy
-#line 1259 "binary.tab.hh" // lalr1.cc:377
+#line 1270 "binary.tab.hh" // lalr1.cc:377
 
 
 

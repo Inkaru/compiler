@@ -30,7 +30,7 @@
 
 %left INF SUP EQU NEQU INFEQ SUPEQ DBEQU
 %left PLUS MINUS
-%left MULT DIV
+%left MULT DIV MOD
 %right EXPO
 
 %start block
@@ -52,15 +52,20 @@ block : chunk {	  $$ = new StdNode("block","", count++);
                   root = $$;                 }
       ;
 
+
 stat : varlist EQU explist    {	$$ = new StdNode("stat","EQU", count++);
                                 $$->children.push_back($1); 	
                                 $$->children.push_back($3);  }
      | REPEAT block UNTIL exp {	$$ = new StdNode("repeat","", count++);
                                 $$->children.push_back($2); 	
                                 $$->children.push_back($4);  }
-     | DO block STEND           { $$ = new StdNode("stat","do", count++);
+     | DO block STEND         { $$ = new StdNode("stat","do", count++);
                                 $$->children.push_back($2);
                               }
+     | IF exp THEN block STEND { $$ = new StdNode("stat","if", count++);
+                                 $$->children.push_back($2);
+                                 $$->children.push_back($4);
+                                }
      | FOR NAME EQU exp COMMA exp DO block STEND {
                                 $$ = new StdNode("stat","for", count++);
                                 $$->children.push_back(new StdNode("var", $2, count++));
@@ -92,6 +97,9 @@ exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
     | exp DIV exp     {	$$ = new DivNode("exp", $1, $3, count++);
+										    $$->children.push_back($1); 	
+										    $$->children.push_back($3);  }
+    | exp MOD exp     {	$$ = new ModNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
     | exp EXPO exp    {	$$ = new ExpoNode("exp", $1, $3, count++);

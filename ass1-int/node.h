@@ -175,6 +175,25 @@ public:
 	}
 };
 
+class ModNode : public ExpNode
+{
+public:
+	ModNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+
+	string getValue() { return "MOD"; }
+
+	void execute(){
+		cout << "MOD" << eval() ;
+	}
+
+	string eval()
+	{
+		float a = stof(left->eval());
+		float b = stof(right->eval());
+		return to_string(a - floor(a/b)*b);
+	}
+};
+
 class ExpoNode : public ExpNode
 {
 public:
@@ -263,26 +282,35 @@ class FuncCallNode : public Node {
 
 		void execute(){
 			if(left->getValue() == "print"){
-				ArgsNode* args = dynamic_cast<ArgsNode*>(right);
-				Node* res = args->get(0);
 
-				if(dynamic_cast<ExpListNode *>(res) != nullptr){
-					cout << "debug : explist" << endl;
-					for(auto n: res->children){
-						cout << n->eval() << " " ;
+				if(dynamic_cast<ArgsNode*>(right) != nullptr){
+					ArgsNode* args = dynamic_cast<ArgsNode*>(right);
+					Node* res = args->get(0);
+
+					if(dynamic_cast<ExpListNode *>(res) != nullptr){
+						cout << "debug : explist" << endl;
+						for(auto n: res->children){
+							cout << n->eval() << " ";
+						}
+
+						cout << endl ;
 					}
 
-					cout << endl ;
+					if(dynamic_cast<ExpNode *>(res) != nullptr){
+						cout << "debug : exp" << endl;
+						cout << res->eval() << endl;
+					}
+
+					if(dynamic_cast<StringNode *>(res) != nullptr){
+						cout << "debug : string" << endl;
+						cout << res->getValue() << endl;
+					}
 				}
 
-				if(dynamic_cast<ExpNode *>(res) != nullptr){
-					cout << "debug : exp" << endl;
-					cout << res->eval() << endl;
-				}
-
-				if(dynamic_cast<StringNode *>(res) != nullptr){
+				if(dynamic_cast<StringNode*>(right) != nullptr){
+					StringNode* str = dynamic_cast<StringNode*>(right);
 					cout << "debug : string" << endl;
-					cout << res->getValue() << endl;
+					cout << str->getValue() << endl;
 				}
 
 			} else {

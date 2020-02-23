@@ -25,6 +25,7 @@ num ({d2}+{n}?)|{n}
 "/"             return yy::parser::make_DIV();
 "*"             return yy::parser::make_MULT();
 "^"             return yy::parser::make_EXPO();
+"%"             return yy::parser::make_MOD();
 
 "<"             return yy::parser::make_INF();
 "<="            return yy::parser::make_INFEQ();
