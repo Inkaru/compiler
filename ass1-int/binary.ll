@@ -70,6 +70,7 @@ num ({d2}+{n}?)|{n}
 
 {name}          return yy::parser::make_NAME(yytext);
 
+[ \n\t\r]+ ;
 
 <<EOF>>        return yy::parser::make_END();
 

@@ -7,7 +7,6 @@
 
   Node *root;
   int count = 0;
-  int init = 0;
   #include <string>
   
   #define YY_DECL yy::parser::symbol_type yylex()
@@ -139,7 +138,7 @@ exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
     | exp DBEQU exp   {	$$ = new ExpNodeImpl("exp","DBEQU", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | MINUS exp       {	$$ = new ExpNodeImpl("exp","NEG", count++);
+    | MINUS exp       {	$$ = new NegNode("exp", $2, count++);
 										    $$->children.push_back($2);   }
     | HASH exp        {	$$ = new ExpNodeImpl("exp","HASH", count++);
 										    $$->children.push_back($2);  }

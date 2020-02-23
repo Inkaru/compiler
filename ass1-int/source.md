@@ -93,7 +93,7 @@ digraph {
 41 [label="var: z"];
 45 [label="explist: "];
 45 -> 44
-44 [label="exp: EXP"];
+44 [label="exp: NEG"];
 44 -> 43
 43 [label="var: z"];
 52 [label="stat: functioncall"];

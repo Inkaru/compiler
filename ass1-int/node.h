@@ -14,7 +14,12 @@ class Environment {
 		Environment(){}
 
 		void declare(string var, string val = ""){
-			env.insert({var,val});
+			if(isDeclared(var)) {
+				env.find(var)->second = val;
+			}
+			else {
+				env.insert({var,val}); 
+			}
 		}
 
 		bool isDeclared(string var){
@@ -24,6 +29,7 @@ class Environment {
 		string get(string var){
 			return env.find(var)->second;
 		}
+
 };
 
 class Node
@@ -109,7 +115,7 @@ public:
 		cout << "varnode;";
 	}
 
-	string eval(Environment& env){}
+	string eval(Environment& env){ return env.get(value);}
 };
 
 class ExpNode : public Node
@@ -176,7 +182,7 @@ public:
 
 	string eval(Environment& env)
 	{
-		return to_string(stof(left->eval(env)) - stof(right->eval(env)));
+		return to_string(stof(childEval(env,left)) - stof(childEval(env,right)));
 	}
 };
 
@@ -193,7 +199,7 @@ public:
 
 	string eval(Environment& env)
 	{
-		return to_string(stof(left->eval(env)) * stof(right->eval(env)));
+		return to_string(stof(childEval(env,left)) * stof(childEval(env,right)));
 	}
 };
 
@@ -210,7 +216,7 @@ public:
 
 	string eval(Environment& env)
 	{
-		return to_string(stof(left->eval(env)) / stof(right->eval(env)));
+		return to_string(stof(childEval(env,left)) / stof(childEval(env,right)));
 	}
 };
 
@@ -227,8 +233,8 @@ public:
 
 	string eval(Environment& env)
 	{
-		float a = stof(left->eval(env));
-		float b = stof(right->eval(env));
+		float a = stof(childEval(env,left));
+		float b = stof(childEval(env,right));
 		return to_string(a - floor(a/b)*b);
 	}
 };
@@ -246,7 +252,24 @@ public:
 
 	string eval(Environment& env)
 	{
-		return to_string(pow(stof(left->eval(env)), stof(right->eval(env))));
+		return to_string(pow(stof(childEval(env,left)), stof(childEval(env,right))));
+	}
+};
+
+class NegNode : public ExpNode
+{
+public:
+	NegNode(string t, Node *right, int i) : ExpNode(t, nullptr, right, i) {}
+
+	string getValue() { return "NEG"; }
+
+	void execute(Environment& env){
+		cout << "NEG" << eval(env) ;
+	}
+
+	string eval(Environment& env)
+	{
+		return to_string( - stof(childEval(env,right)));
 	}
 };
 
@@ -374,15 +397,6 @@ class FuncCallNode : public Node {
 					ArgsNode* args = dynamic_cast<ArgsNode*>(right);
 					Node* res = args->get(0);
 
-					if(dynamic_cast<ExpListNode *>(res) != nullptr){
-						cout << "debug : explist" << endl;
-						for(auto n: res->children){
-							cout << n->eval(env) << " ";
-						}
-
-						cout << endl ;
-					}
-
 					if(dynamic_cast<ExpNode *>(res) != nullptr){
 						cout << "debug : exp" << endl;
 						cout << res->eval(env) << endl;
@@ -392,6 +406,17 @@ class FuncCallNode : public Node {
 						cout << "debug : string" << endl;
 						cout << res->getValue() << endl;
 					}
+
+					if(dynamic_cast<ExpListNode *>(res) != nullptr){
+						cout << "debug : explist" << endl;
+
+						for(auto n: res->children){
+							cout << n->eval(env) << " " ;
+						}
+
+						cout << endl ;
+					}
+
 				}
 
 				if(dynamic_cast<StringNode*>(right) != nullptr){

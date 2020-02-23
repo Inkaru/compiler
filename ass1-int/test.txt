@@ -1,2 +1,6 @@
-a = 2
-a = a + 3
+x = 1
+y = 2
+z = 3
+print(x,y,z)
+print("hello")
+print(2+2)
