@@ -58,6 +58,7 @@ num ({d2}+{n}?)|{n}
 "for"           return yy::parser::make_FOR();
 "if"            return yy::parser::make_IF();
 "then"          return yy::parser::make_THEN();
+"else"          return yy::parser::make_ELSE();
 "end"           return yy::parser::make_STEND();
 "do"            return yy::parser::make_DO();
 

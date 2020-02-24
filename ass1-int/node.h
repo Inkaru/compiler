@@ -521,3 +521,28 @@ class IfNode : public Node {
 
 	}
 };
+
+class IfElseNode : public Node {
+	public:
+		Node* condition;
+		Node* block;
+		Node* block2;
+
+		IfElseNode(string t, Node* c, Node* blo, Node* blo2,int i) : Node(t, i), condition(c), block(blo), block2(blo) {}
+
+		string getValue() { return "IF"; }
+
+		string execute(Environment& env) {
+		cout << "If Node;";
+
+		if(condition->execute(env) != "0"){
+			block->execute(env);
+		} else
+		{
+			block2->execute(env);
+		}
+		
+		return "0";
+
+	}
+};

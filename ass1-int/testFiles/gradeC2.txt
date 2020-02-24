@@ -1,5 +1,5 @@
 print "enter a number:"
-n = 4
+n = io.read("*number")
 for i = 2,n 
 do
   if n%i==0 then

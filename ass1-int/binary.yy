@@ -27,7 +27,7 @@
 %token DOT COMMA HASH
 %token RETURN BREAK
 %token REPEAT UNTIL
-%token FOR IF THEN DO STEND
+%token FOR IF THEN ELSE DO STEND
 %token FUNCTION
 %token FALSE TRUE
 %token <std::string> NUM
@@ -71,6 +71,11 @@ stat : varlist EQU explist    {	$$ = new AssignNode("stat", $1, $3, count++);
      | IF exp THEN block STEND { $$ = new IfNode("if", $2, $4, count++);
                                  $$->children.push_back($2);
                                  $$->children.push_back($4);
+                                }
+     | IF exp THEN block ELSE block STEND { $$ = new IfElseNode("ifelse", $2, $4, $6, count++);
+                                 $$->children.push_back($2);
+                                 $$->children.push_back($4);
+                                 $$->children.push_back($6);
                                 }
      | FOR NAME EQU exp COMMA exp DO block STEND {
                                 VarNode* var = new VarNode("var", $2, count++);
