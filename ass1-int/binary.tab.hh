@@ -339,9 +339,9 @@ namespace yy {
         NUM = 280,
         NAME = 281,
         STRING = 282,
-        INF = 283,
-        SUP = 284,
-        EQU = 285,
+        EQU = 283,
+        INF = 284,
+        SUP = 285,
         NEQU = 286,
         INFEQ = 287,
         SUPEQ = 288,
@@ -566,15 +566,15 @@ namespace yy {
 
     static inline
     symbol_type
+    make_EQU ();
+
+    static inline
+    symbol_type
     make_INF ();
 
     static inline
     symbol_type
     make_SUP ();
-
-    static inline
-    symbol_type
-    make_EQU ();
 
     static inline
     symbol_type
@@ -817,7 +817,7 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 269,     ///< Last index in yytable_.
+      yylast_ = 263,     ///< Last index in yytable_.
       yynnts_ = 18,  ///< Number of nonterminal symbols.
       yyfinal_ = 40, ///< Termination state number.
       yyterror_ = 1,
@@ -1350,6 +1350,12 @@ namespace yy {
   }
 
   parser::symbol_type
+  parser::make_EQU ()
+  {
+    return symbol_type (token::EQU);
+  }
+
+  parser::symbol_type
   parser::make_INF ()
   {
     return symbol_type (token::INF);
@@ -1359,12 +1365,6 @@ namespace yy {
   parser::make_SUP ()
   {
     return symbol_type (token::SUP);
-  }
-
-  parser::symbol_type
-  parser::make_EQU ()
-  {
-    return symbol_type (token::EQU);
   }
 
   parser::symbol_type

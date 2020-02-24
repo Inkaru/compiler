@@ -227,6 +227,21 @@ public:
 	}
 };
 
+class EquNode : public ExpNode
+{
+public:
+	EquNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+
+	string getValue() { return "EQU"; }
+
+	string execute(Environment& env){
+		if(stof(childEval(env,left)) == stof(childEval(env,right)))
+			return "1";
+		else
+			return "0";
+	}
+};
+
 class NegNode : public ExpNode
 {
 public:
@@ -484,4 +499,25 @@ public:
 
 	}
 
+};
+
+class IfNode : public Node {
+	public:
+		Node* condition;
+		Node* block;
+
+		IfNode(string t, Node* c, Node* blo, int i) : Node(t, i), condition(c), block(blo) {}
+
+		string getValue() { return "IF"; }
+
+		string execute(Environment& env) {
+		cout << "If Node;";
+
+		if(condition->execute(env) != "0"){
+			block->execute(env);
+		}
+
+		return "0";
+
+	}
 };

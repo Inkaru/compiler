@@ -33,8 +33,8 @@
 %token <std::string> NUM
 %token <std::string> NAME
 %token <std::string> STRING
-
-%left INF SUP EQU NEQU INFEQ SUPEQ DBEQU
+%token EQU
+%left INF SUP NEQU INFEQ SUPEQ DBEQU
 %left PLUS MINUS
 %left MULT DIV MOD
 %right EXPO
@@ -68,7 +68,7 @@ stat : varlist EQU explist    {	$$ = new AssignNode("stat", $1, $3, count++);
      | DO block STEND         { $$ = new StdNode("stat","do", count++);
                                 $$->children.push_back($2);
                               }
-     | IF exp THEN block STEND { $$ = new StdNode("stat","if", count++);
+     | IF exp THEN block STEND { $$ = new IfNode("if", $2, $4, count++);
                                  $$->children.push_back($2);
                                  $$->children.push_back($4);
                                 }
@@ -124,7 +124,7 @@ exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
     | exp SUP exp     {	$$ = new ExpNodeImpl("exp","SUP", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp EQU exp     {	$$ = new ExpNodeImpl("exp","EQU", count++);
+    | exp DBEQU exp     {	$$ = new EquNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
     | exp NEQU exp    {	$$ = new ExpNodeImpl("exp","NEQU", count++);
@@ -134,9 +134,6 @@ exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
     | exp SUPEQ exp   {	$$ = new ExpNodeImpl("exp","SUPEQ", count++);
-										    $$->children.push_back($1); 	
-										    $$->children.push_back($3);  }
-    | exp DBEQU exp   {	$$ = new ExpNodeImpl("exp","DBEQU", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
     | MINUS exp       {	$$ = new NegNode("exp", $2, count++);
