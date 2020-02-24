@@ -591,7 +591,7 @@ namespace yy {
 
   case 8:
 #line 65 "binary.yy" // lalr1.cc:859
-    {	yylhs.value.as< Node * > () = new StdNode("repeat","", count++);
+    {	yylhs.value.as< Node * > () = new RepeatNode("repeat", yystack_[2].value.as< Node * > (),yystack_[0].value.as< Node * > (), count++);
                                 yylhs.value.as< Node * > ()->children.push_back(yystack_[2].value.as< Node * > ()); 	
                                 yylhs.value.as< Node * > ()->children.push_back(yystack_[0].value.as< Node * > ());  }
 #line 598 "binary.tab.cc" // lalr1.cc:859

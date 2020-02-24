@@ -324,6 +324,20 @@ public:
 	string execute(Environment &env);
 };
 
+class RepeatNode : public Node
+{
+public:
+	
+	Node *block;
+	Node* exp;
+
+	RepeatNode(string t, Node *blo, Node *e, int i) : Node(t, i), block(blo), exp(e) {}
+
+	string getValue();
+
+	string execute(Environment &env);
+};
+
 class IfNode : public Node
 {
 public:

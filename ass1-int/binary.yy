@@ -62,7 +62,7 @@ block : chunk {	  $$ = new StdNode("block","", count++);
 stat : varlist EQU explist    {	$$ = new AssignNode("stat", $1, $3, count++);
                                 $$->children.push_back($1); 	
                                 $$->children.push_back($3);  }
-     | REPEAT block UNTIL exp {	$$ = new StdNode("repeat","", count++);
+     | REPEAT block UNTIL exp {	$$ = new RepeatNode("repeat", $2,$4, count++);
                                 $$->children.push_back($2); 	
                                 $$->children.push_back($4);  }
      | DO block STEND         { $$ = new StdNode("stat","do", count++);

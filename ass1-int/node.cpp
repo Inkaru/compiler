@@ -475,6 +475,23 @@ string ForNode::execute(Environment &env)
   return "";
 }
 
+
+	string RepeatNode::getValue(){
+    return "REPEAT";
+  }
+
+	string RepeatNode::execute(Environment &env){
+    cout << "REPEAT NODE" << endl;
+    block->execute(env);
+    while(exp->execute(env) != "1"){
+      cout << "repeat" << endl;
+      block->execute(env);
+    }
+    cout << "ended" << endl;
+    return "";
+  }
+
+
 string IfNode::getValue() { return "IF"; }
 
 string IfNode::execute(Environment &env)
