@@ -68,7 +68,7 @@ string StdNode::execute(Environment &env)
     }
     returnValue += child->execute(env);
   }
-  cout << "StdNode : " << returnValue << endl;
+  // cout << "StdNode : " << returnValue << endl;
   return returnValue;
 }
 
@@ -76,14 +76,14 @@ string LastStatNode::getValue() { return value; }
 
 string LastStatNode::execute(Environment &env)
 {
-  cout << "LastStat " << endl;
+  // cout << "LastStat " << endl;
   if (value == "RETURN")
   {
     string returnValue = explist->execute(env);
-    cout << "   return : " << returnValue << endl;
+    // cout << "   return : " << returnValue << endl;
     return returnValue;
   }
-  cout << "   break" << endl;
+  // cout << "   break" << endl;
   return "";
 }
 
@@ -91,7 +91,7 @@ string VarNode::getValue() { return value; }
 
 string VarNode::execute(Environment &env)
 {
-  cout << "varnode;";
+  // cout << "varnode;";
   return env.get(value);
 }
 
@@ -133,7 +133,7 @@ string ExpNodeImpl::getValue() { return "EXP"; }
 
 string ExpNodeImpl::execute(Environment &env)
 {
-  cout << "expImplNode;";
+  // cout << "expImplNode;";
   return "";
 }
 
@@ -141,7 +141,7 @@ string PlusNode::getValue() { return "PLUS"; }
 
 string PlusNode::execute(Environment &env)
 {
-  cout << "PLUS NODE " << endl;
+  // cout << "PLUS NODE " << endl;
   return to_string(stof(childEval(env, left)) + stof(childEval(env, right)));
 }
 
@@ -268,10 +268,10 @@ string ExpListNode::execute(Environment &env)
   string returnValue = "";
   for (auto child : children)
   {
-    cout << "debug Explist child : " << child->tag << " " << child->getValue() << endl;
+    // cout << "debug Explist child : " << child->tag << " " << child->getValue() << endl;
     returnValue += child->execute(env);
   }
-  cout << "ExplistNode : " << returnValue << endl;
+  // cout << "ExplistNode : " << returnValue << endl;
   return returnValue;
 }
 
@@ -303,7 +303,7 @@ string FuncCallNode::execute(Environment &env)
 
         var = (*itVar)->getValue();
         exp = (*itExp)->execute(cpy);
-        cout << "debug : " << var << "=" << exp << endl;
+        // cout << "debug : " << var << "=" << exp << endl;
 
         cpy.declare(var, exp);
 
@@ -327,19 +327,19 @@ string FuncCallNode::execute(Environment &env)
 
       if (dynamic_cast<ExpNode *>(res) != nullptr)
       {
-        cout << "debug : exp" << endl;
+        // cout << "debug : exp" << endl;
         cout << res->execute(env);
       }
 
       if (dynamic_cast<StringNode *>(res) != nullptr)
       {
-        cout << "debug : string" << endl;
+        // cout << "debug : string" << endl;
         cout << res->getValue();
       }
 
       if (dynamic_cast<ExpListNode *>(res) != nullptr)
       {
-        cout << "debug : explist" << endl;
+        // cout << "debug : explist" << endl;
 
         for (auto n : res->children)
         {
@@ -356,7 +356,7 @@ string FuncCallNode::execute(Environment &env)
     if (dynamic_cast<StringNode *>(right) != nullptr)
     {
       StringNode *str = dynamic_cast<StringNode *>(right);
-      cout << "debug : string" << endl;
+      // cout << "debug : string" << endl;
       cout << str->getValue() << endl;
     }
   }
@@ -390,7 +390,7 @@ string FuncCallNode::execute(Environment &env)
     // 					iValid = 0;
     // }
 
-    return "1";
+    return "8";
   }
   else
   {
@@ -404,7 +404,8 @@ string AssignNode::getValue() { return "Assign"; }
 
 string AssignNode::execute(Environment &env)
 {
-  cout << "Assign Node;";
+  vector<string> exprs;
+  vector<vector<string> *> tables;
 
   auto itVar = left->children.begin();
   auto itExp = right->children.begin();
@@ -419,32 +420,45 @@ string AssignNode::execute(Environment &env)
     {
       var = (*itVar)->getValue();
       vector<string> *arr = tab->construct(env);
-      cout << "debug : " << var << "="
-           << "tab" << endl;
-
-      env.declareArray(var, arr);
+      tables.push_back(arr);
     }
     else
     {
-      if (dynamic_cast<TabNode *>(*itVar) != nullptr)
-      {
-        TabNode* tab = dynamic_cast<TabNode *>(*itVar);
-        cout << "=== EXPR ===" << endl;
-        exp = (*itExp)->execute(env);
-        cout << "new value : " << exp << endl;
+      exp = (*itExp)->execute(env);
+      exprs.push_back(exp);
+    }
 
-        Environment cpy1 = env;
+    itVar++;
+    itExp++;
+  }
 
-        env.getArray(tab->name->getValue())->at(stoi(tab->exp->execute(cpy1))-1) = exp;
-      }
-      else
-      {
-        var = (*itVar)->getValue();
-        exp = (*itExp)->execute(env);
-        cout << "debug : " << var << "=" << exp << endl;
+  itVar = left->children.begin();
+  itExp = right->children.begin();
 
-        env.declare(var, exp);
-      }
+  while (itVar != left->children.end() && itExp != left->children.end())
+  {
+    TableConstructorNode *tab = dynamic_cast<TableConstructorNode *>(*itExp);
+    if (tab != nullptr)
+    {
+      env.declareArray(var, (*tables.begin()));
+      tables.erase(tables.begin());
+    }
+    else if (dynamic_cast<TabNode *>(*itVar) != nullptr)
+    {
+      TabNode *tab = dynamic_cast<TabNode *>(*itVar);
+      Environment cpy1 = env;
+
+      // cout << (*exprs.begin()) << endl;
+
+      env.getArray(tab->name->getValue())->at(stoi(tab->exp->execute(cpy1))-1) = (*exprs.begin());
+
+      exprs.erase(exprs.begin());
+    }
+    else
+    {
+      var = (*itVar)->getValue();
+      env.declare(var, (*exprs.begin()));
+      exprs.erase(exprs.begin());
     }
 
     itVar++;
@@ -462,45 +476,45 @@ string ForNode::execute(Environment &env)
   env.declare(var->getValue(), exp1->execute(env));
 
   string lim = exp2->execute(env);
-  cout << "For Node " << var->getValue() << " until : " << lim << endl;
+  // cout << "For Node " << var->getValue() << " until : " << lim << endl;
 
-  while (stoi(env.get(var->getValue())) != stoi(lim))
+  while (stoi(env.get(var->getValue())) <= stoi(lim))
   {
     block->execute(env);
     env.declare(var->getValue(), to_string(1 + stoi(env.get(var->getValue()))));
-    cout << "For Node " << var->getValue() << " is : " << env.get(var->getValue()) << endl;
+    // cout << "For Node " << var->getValue() << " is : " << env.get(var->getValue()) << endl;
   }
-  block->execute(env);
 
   return "";
 }
 
+string RepeatNode::getValue()
+{
+  return "REPEAT";
+}
 
-	string RepeatNode::getValue(){
-    return "REPEAT";
-  }
-
-	string RepeatNode::execute(Environment &env){
-    cout << "REPEAT NODE" << endl;
+string RepeatNode::execute(Environment &env)
+{
+  // cout << "REPEAT NODE" << endl;
+  block->execute(env);
+  while (exp->execute(env) != "1")
+  {
+    // cout << "repeat" << endl;
     block->execute(env);
-    while(exp->execute(env) != "1"){
-      cout << "repeat" << endl;
-      block->execute(env);
-    }
-    cout << "ended" << endl;
-    return "";
   }
-
+  // cout << "ended" << endl;
+  return "";
+}
 
 string IfNode::getValue() { return "IF"; }
 
 string IfNode::execute(Environment &env)
 {
-  cout << "If Node;";
+  // cout << "If Node;";
 
   if (condition->execute(env) != "0")
   {
-    cout << " true condition" << endl;
+    // cout << " true condition" << endl;
     block->execute(env);
   }
 
@@ -511,16 +525,16 @@ string IfElseNode::getValue() { return "IF ELSE"; }
 
 string IfElseNode::execute(Environment &env)
 {
-  cout << "If Else Node ";
+  // cout << "If Else Node ";
 
   if (condition->execute(env) != "0")
   {
-    cout << "true condition" << endl;
+    // cout << "true condition" << endl;
     return block->execute(env);
   }
   else
   {
-    cout << "false condition" << endl;
+    // cout << "false condition" << endl;
     return block2->execute(env);
   }
 
@@ -531,7 +545,7 @@ string FunctionNode::getValue() { return "Function"; }
 
 string FunctionNode::execute(Environment &env)
 {
-  cout << "funtcion Node;";
+  // cout << "funtcion Node;";
 
   env.declareFunc(name, this);
 
@@ -540,7 +554,7 @@ string FunctionNode::execute(Environment &env)
 
 string FunctionNode::executeFunc(Environment &env)
 {
-  cout << "Function called : " << name << endl;
+  // cout << "Function called : " << name << endl;
 
   return get(1)->get(1)->execute(env);
 }
