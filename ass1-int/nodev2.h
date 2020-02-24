@@ -1,7 +1,7 @@
 #include <list>
-#include <string>
-#include <iostream>
+#include <cstring>
 #include <fstream>
+#include <iostream>
 #include <cmath>
 #include <map> 
 
@@ -227,6 +227,21 @@ public:
 	}
 };
 
+class EquNode : public ExpNode
+{
+public:
+	EquNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+
+	string getValue() { return "EQU"; }
+
+	string execute(Environment& env){
+		if(stof(childEval(env,left)) == stof(childEval(env,right)))
+			return "1";
+		else
+			return "0";
+	}
+};
+
 class NegNode : public ExpNode
 {
 public:
@@ -340,7 +355,9 @@ class FuncCallNode : public Node {
 		string getValue(){ return "";}
 
 		string execute(Environment& env){
-			if(left->getValue() == "print"){
+			if(left->getValue() == "print" || left->getValue() == "io.write"){
+
+				bool doesReturn = left->getValue() == "print";
 
 				if(dynamic_cast<ArgsNode*>(right) != nullptr){
 					ArgsNode* args = dynamic_cast<ArgsNode*>(right);
@@ -348,12 +365,12 @@ class FuncCallNode : public Node {
 
 					if(dynamic_cast<ExpNode *>(res) != nullptr){
 						cout << "debug : exp" << endl;
-						cout << res->execute(env) << endl;
+						cout << res->execute(env);
 					}
 
 					if(dynamic_cast<StringNode *>(res) != nullptr){
 						cout << "debug : string" << endl;
-						cout << res->getValue() << endl;
+						cout << res->getValue();
 					}
 
 					if(dynamic_cast<ExpListNode *>(res) != nullptr){
@@ -362,8 +379,10 @@ class FuncCallNode : public Node {
 						for(auto n: res->children){
 							cout << n->execute(env) << " " ;
 						}
+					}
 
-						cout << endl ;
+					if(doesReturn){
+						cout << endl;
 					}
 
 				}
@@ -374,6 +393,37 @@ class FuncCallNode : public Node {
 					cout << str->getValue() << endl;
 				}
 
+			} else if (left->getValue() == "io.read") {
+
+				// ArgsNode* args = dynamic_cast<ArgsNode*>(right);
+				// ExpListNode* explist = dynamic_cast<ExpListNode*>(args->get(0));
+				// StringNode* str = dynamic_cast<StringNode*>(explist->get(0));
+
+				string val;
+
+				// cin.ignore();
+				// cin.sync(); cin.get(); cin.clear();
+        // getline(cin, val); 
+
+				// if (cin.fail ()){
+				// 	cout << "error" << endl;
+				// }
+
+				// int iValid = 1;
+				// while (iValid == 1)
+				// {
+				// 	if (cin.fail())
+				// 	{
+				// 					cin.ignore();
+				// 					cout<<"Wrong! Enter a #!"<<endl;
+				// 					cin>>val;
+				// 	} //closes if
+				// 	else
+				// 					iValid = 0;
+				// }
+
+				return "1";
+
 			} else {
 				cout << "func not implemented yet" << endl;
 			}
@@ -382,8 +432,6 @@ class FuncCallNode : public Node {
 		}
 
 };
-
-
 
 class AssignNode : public Node
 {
@@ -420,4 +468,81 @@ public:
 
 	}
 
+};
+
+class ForNode : public Node
+{
+public:
+	Node* var;
+	Node* exp1;
+	Node* exp2;
+	Node* block;
+
+	ForNode(string t, Node* v, Node* e1, Node* e2, Node* blo, int i) : Node(t, i), var(v), exp1(e1), exp2(e2), block(blo) {}
+
+	string getValue() { return "FOR"; }
+
+	string execute(Environment& env) {
+		cout << "For Node;";
+
+		env.declare(var->getValue(), exp1->execute(env));
+
+		string lim = exp2->execute(env);
+
+		while(env.get(var->getValue()) != lim){
+			block->execute(env);
+			env.declare(var->getValue(), to_string(1+stoi(env.get(var->getValue()))));
+		}
+		block->execute(env);
+
+		return "0";
+
+	}
+
+};
+
+class IfNode : public Node {
+	public:
+		Node* condition;
+		Node* block;
+
+		IfNode(string t, Node* c, Node* blo, int i) : Node(t, i), condition(c), block(blo) {}
+
+		string getValue() { return "IF"; }
+
+		string execute(Environment& env) {
+		cout << "If Node;";
+
+		if(condition->execute(env) != "0"){
+			block->execute(env);
+		}
+
+		return "0";
+
+	}
+};
+
+class IfElseNode : public Node {
+	public:
+		Node* condition;
+		Node* block;
+		Node* block2;
+
+		IfElseNode(string t, Node* c, Node* blo, Node* blo2,int i) : Node(t, i), condition(c), block(blo), block2(blo) {}
+
+		string getValue() { return "IF"; }
+
+		string execute(Environment& env) {
+		cout << "If Node;";
+
+		if(condition->execute(env) != "0"){
+			block->execute(env);
+		} else
+		{
+			block2->execute(env);
+		}
+		
+		return "0";
+
+	}
 };

@@ -646,7 +646,7 @@ namespace yy {
 
   case 14:
 #line 90 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node * > () = new StdNode("function", "", count++);
+    { yylhs.value.as< Node * > () = new FunctionNode("function", yystack_[1].value.as< Node * > ()->getValue(), yystack_[0].value.as< Node * > (), count++);
                                     yylhs.value.as< Node * > ()->children.push_back(yystack_[1].value.as< Node * > ());
                                     yylhs.value.as< Node * > ()->children.push_back(yystack_[0].value.as< Node * > ()); }
 #line 653 "binary.tab.cc" // lalr1.cc:859

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "binary.tab.hh"
 
+
 extern Node *root;
 
 void yy::parser::error(std::string const&err)
@@ -15,8 +16,7 @@ yy::parser parser;
   	// root->dump();
     root->dumpRoot();
 
-    Environment env;
-    root->execute(env);
+    root->interpreter();
   }
   return 0;
 }

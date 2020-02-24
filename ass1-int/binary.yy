@@ -87,7 +87,7 @@ stat : varlist EQU explist    {	$$ = new AssignNode("stat", $1, $3, count++);
                               } 
      | functioncall           {	$$ = new StdNode("stat","functioncall", count++);
                                 $$->children.push_back($1);  }
-     | FUNCTION funcname funcbody { $$ = new StdNode("function", "", count++);
+     | FUNCTION funcname funcbody { $$ = new FunctionNode("function", $2->getValue(), $3, count++);
                                     $$->children.push_back($2);
                                     $$->children.push_back($3); }
      ;
