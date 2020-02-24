@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cmath>
 #include <map>
+#include <vector>
 
 class Environment;
 
@@ -29,7 +30,7 @@ public:
 	virtual string execute(Environment &env) = 0;
 	void interpreter();
 
-	Node* get(int i);
+	Node *get(int i);
 };
 
 class StdNode : public Node
@@ -47,8 +48,8 @@ class LastStatNode : public Node
 {
 public:
 	string value;
-	Node* explist;
-	LastStatNode(string t, string v, Node* explist,int i) : Node(t, i), value(v), explist(explist) {}
+	Node *explist;
+	LastStatNode(string t, string v, Node *explist, int i) : Node(t, i), value(v), explist(explist) {}
 
 	string getValue();
 
@@ -60,6 +61,18 @@ class VarNode : public Node
 public:
 	string value;
 	VarNode(string t, string v, int i) : Node(t, i), value(v) {}
+
+	string getValue();
+
+	string execute(Environment &env);
+};
+
+class TabNode : public Node
+{
+public:
+	Node* name;
+	Node* exp;
+	TabNode(string t, Node* name, Node* exp, int i) : Node(t, i), name(name), exp(exp) {}
 
 	string getValue();
 
@@ -167,10 +180,30 @@ public:
 	string execute(Environment &env);
 };
 
+class SupNode : public ExpNode
+{
+public:
+	SupNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+
+	string getValue();
+
+	string execute(Environment &env);
+};
+
 class NegNode : public ExpNode
 {
 public:
 	NegNode(string t, Node *right, int i) : ExpNode(t, nullptr, right, i) {}
+
+	string getValue();
+
+	string execute(Environment &env);
+};
+
+class HashNode : public ExpNode
+{
+public:
+	HashNode(string t, Node *right, int i) : ExpNode(t, nullptr, right, i) {}
 
 	string getValue();
 
@@ -229,7 +262,6 @@ public:
 	string getValue();
 
 	string execute(Environment &env);
-
 };
 
 class ExpListNode : public Node
@@ -240,7 +272,6 @@ public:
 	string getValue();
 
 	string execute(Environment &env);
-
 };
 
 class VarListNode : public Node
@@ -251,7 +282,6 @@ public:
 	string getValue();
 
 	string execute(Environment &env);
-
 };
 
 class FuncCallNode : public Node
@@ -333,5 +363,20 @@ public:
 
 	string execute(Environment &env);
 
-	string executeFunc(Environment& env);
+	string executeFunc(Environment &env);
+};
+
+class TableConstructorNode : public Node
+{
+public:
+	Node *fieldlist;
+	string value;
+
+	TableConstructorNode(string t, string v ,Node* list, int i) : Node(t, i), value(v), fieldlist(list) {}
+
+	string getValue();
+
+	string execute(Environment &env);
+
+	vector<string>* construct(Environment &env);
 };

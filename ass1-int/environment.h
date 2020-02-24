@@ -5,30 +5,39 @@
 #include <fstream>
 #include <iostream>
 #include <cmath>
-#include <map> 
+#include <map>
+#include <vector>
 
 class Node;
 class FunctionNode;
 
 using namespace std;
 
-class Environment {
-	public:
-		map<string, string> vars;
-    map<string, FunctionNode*> funcs;
+class Environment
+{
+public:
+  map<string, string> vars;
+  map<string, FunctionNode *> funcs;
+  map<string, vector<string>*> arrays;
 
-		Environment();
-    Environment(const Environment &env);
+  Environment();
+  Environment(const Environment &env);
 
-		void declare(string var, string val = "");
+  void declare(string var, string val = "");
 
-		bool varIsDeclared(string var);
+  void declareFunc(string name, FunctionNode *func);
 
-    bool funcIsDeclared(string var);
-		
-		string get(string var);
+  void declareArray(string name, vector<string>* vec);
 
-    FunctionNode* getFunc(string name);
+  bool varIsDeclared(string var);
 
-    void declareFunc(string name, FunctionNode* func);
+  bool funcIsDeclared(string var);
+
+  bool arrayIsDeclared(string var);
+
+  string get(string var);
+
+  FunctionNode* getFunc(string name);
+
+  vector<string>* getArray(string name);
 };

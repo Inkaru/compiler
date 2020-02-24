@@ -759,7 +759,7 @@ namespace yy {
 
   case 30:
 #line 129 "binary.yy" // lalr1.cc:859
-    {	yylhs.value.as< Node * > () = new ExpNodeImpl("exp","SUP", count++);
+    {	yylhs.value.as< Node * > () = new SupNode("exp", yystack_[2].value.as< Node * > (),yystack_[0].value.as< Node * > (), count++);
 										    yylhs.value.as< Node * > ()->children.push_back(yystack_[2].value.as< Node * > ()); 	
 										    yylhs.value.as< Node * > ()->children.push_back(yystack_[0].value.as< Node * > ());  }
 #line 766 "binary.tab.cc" // lalr1.cc:859
@@ -806,7 +806,7 @@ namespace yy {
 
   case 36:
 #line 146 "binary.yy" // lalr1.cc:859
-    {	yylhs.value.as< Node * > () = new ExpNodeImpl("exp","HASH", count++);
+    {	yylhs.value.as< Node * > () = new HashNode("exp", yystack_[0].value.as< Node * > (), count++);
 										    yylhs.value.as< Node * > ()->children.push_back(yystack_[0].value.as< Node * > ());  }
 #line 812 "binary.tab.cc" // lalr1.cc:859
     break;
@@ -844,7 +844,7 @@ namespace yy {
 
   case 42:
 #line 158 "binary.yy" // lalr1.cc:859
-    {	yylhs.value.as< Node * > () = new StdNode("var","[]", count++);
+    {	yylhs.value.as< Node * > () = new TabNode("var",yystack_[3].value.as< Node * > (),yystack_[1].value.as< Node * > (), count++);
                                           yylhs.value.as< Node * > ()->children.push_back(yystack_[3].value.as< Node * > ());
                                           yylhs.value.as< Node * > ()->children.push_back(yystack_[1].value.as< Node * > ());  }
 #line 851 "binary.tab.cc" // lalr1.cc:859
@@ -901,13 +901,13 @@ namespace yy {
 
   case 50:
 #line 185 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node * > () = new StdNode("tableconstructor","empty", count++);}
+    { yylhs.value.as< Node * > () = new TableConstructorNode("tableconstructor","empty", nullptr, count++);}
 #line 906 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 51:
 #line 186 "binary.yy" // lalr1.cc:859
-    { yylhs.value.as< Node * > () = new StdNode("tableconstructor","", count++);
+    { yylhs.value.as< Node * > () = new TableConstructorNode("tableconstructor","", yystack_[1].value.as< Node * > (),count++);
                                               yylhs.value.as< Node * > ()->children.push_back(yystack_[1].value.as< Node * > ()); }
 #line 913 "binary.tab.cc" // lalr1.cc:859
     break;

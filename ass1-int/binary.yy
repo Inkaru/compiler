@@ -126,7 +126,7 @@ exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
     | exp INF exp     {	$$ = new InfNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp SUP exp     {	$$ = new ExpNodeImpl("exp","SUP", count++);
+    | exp SUP exp     {	$$ = new SupNode("exp", $1,$3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
     | exp DBEQU exp     {	$$ = new DbEquNode("exp", $1, $3, count++);
@@ -143,7 +143,7 @@ exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
 										    $$->children.push_back($3);  }
     | MINUS exp       {	$$ = new NegNode("exp", $2, count++);
 										    $$->children.push_back($2);   }
-    | HASH exp        {	$$ = new ExpNodeImpl("exp","HASH", count++);
+    | HASH exp        {	$$ = new HashNode("exp", $2, count++);
 										    $$->children.push_back($2);  }
     ;
 
@@ -155,7 +155,7 @@ prefixexp : var                 {	$$ = $1;         }
 var : NAME                      {	$$ = new VarNode("var",$1, count++);          }
     | prefixexp DOT NAME        {	string name = $1->getValue() + "." + $3;
                                   $$ = new StdNode("func",name,count++);        }
-    | prefixexp SQBROPEN exp SQBRCLOSE {	$$ = new StdNode("var","[]", count++);
+    | prefixexp SQBROPEN exp SQBRCLOSE {	$$ = new TabNode("var",$1,$3, count++);
                                           $$->children.push_back($1);
                                           $$->children.push_back($3);  }
     ;
@@ -182,8 +182,8 @@ explist : exp                   {	$$ = new ExpListNode("explist", count++);
                                   $$->children.push_back($3);         }
         ; 
 
-tableconstructor : ACOPEN ACCLOSE           { $$ = new StdNode("tableconstructor","empty", count++);}
-                 | ACOPEN fieldlist ACCLOSE { $$ = new StdNode("tableconstructor","", count++);
+tableconstructor : ACOPEN ACCLOSE           { $$ = new TableConstructorNode("tableconstructor","empty", nullptr, count++);}
+                 | ACOPEN fieldlist ACCLOSE { $$ = new TableConstructorNode("tableconstructor","", $2,count++);
                                               $$->children.push_back($2); }
                  ;
 

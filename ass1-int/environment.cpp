@@ -3,9 +3,11 @@
 
 Environment::Environment() {}
 
-Environment::Environment(const Environment &env){
+Environment::Environment(const Environment &env)
+{
   vars = env.vars;
   funcs = env.funcs;
+  arrays = env.arrays;
 }
 
 void Environment::declare(string var, string val)
@@ -22,12 +24,28 @@ void Environment::declare(string var, string val)
   }
 }
 
+void Environment::declareFunc(string name, FunctionNode *func)
+{
+  cout << "declared func : " << name << endl;
+  funcs.insert({name, func});
+}
+
+void Environment::declareArray(string name, vector<string>* vec){
+  cout << "declared array : " << name << endl;
+  arrays.insert({name, vec});
+}
+
 bool Environment::varIsDeclared(string var)
 {
   return vars.find(var) != vars.end();
 }
 
 bool Environment::funcIsDeclared(string var)
+{
+  return funcs.find(var) != funcs.end();
+}
+
+bool Environment::arrayIsDeclared(string var)
 {
   return funcs.find(var) != funcs.end();
 }
@@ -44,8 +62,9 @@ string Environment::get(string var)
   return "0";
 }
 
-FunctionNode* Environment::getFunc(string name){
-  cout << "searching for : " << name ;
+FunctionNode *Environment::getFunc(string name)
+{
+  cout << "searching for : " << name;
   auto func = funcs.find(name);
 
   if (func != funcs.end())
@@ -58,8 +77,18 @@ FunctionNode* Environment::getFunc(string name){
   return nullptr;
 }
 
-void Environment::declareFunc(string name, FunctionNode *func)
+vector<string>* Environment::getArray(string name)
 {
-  cout << "declared func : " << name << endl;
-  funcs.insert({name, func});
+  cout << "searching for : " << name;
+  auto arr = arrays.find(name);
+
+  if (arr != arrays.end())
+  {
+    cout << "found" << endl;
+    return arr->second;
+  }
+
+  cout << "array was undefined" << endl;
+  return new vector<string>;
 }
+
