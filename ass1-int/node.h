@@ -41,6 +41,18 @@ public:
 	string execute(Environment &env);
 };
 
+class LastStatNode : public Node
+{
+public:
+	string value;
+	Node* explist;
+	LastStatNode(string t, string v, Node* explist,int i) : Node(t, i), value(v), explist(explist) {}
+
+	string getValue();
+
+	string execute(Environment &env);
+};
+
 class VarNode : public Node
 {
 public:
@@ -133,10 +145,20 @@ public:
 	string execute(Environment &env);
 };
 
-class EquNode : public ExpNode
+class DbEquNode : public ExpNode
 {
 public:
-	EquNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+	DbEquNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
+
+	string getValue();
+
+	string execute(Environment &env);
+};
+
+class InfNode : public ExpNode
+{
+public:
+	InfNode(string t, Node *left, Node *right, int i) : ExpNode(t, left, right, i) {}
 
 	string getValue();
 
@@ -293,7 +315,7 @@ public:
 	Node *block;
 	Node *block2;
 
-	IfElseNode(string t, Node *c, Node *blo, Node *blo2, int i) : Node(t, i), condition(c), block(blo), block2(blo) {}
+	IfElseNode(string t, Node *c, Node *blo, Node *blo2, int i) : Node(t, i), condition(c), block(blo), block2(blo2) {}
 
 	string getValue();
 
@@ -311,4 +333,6 @@ public:
 	string getValue();
 
 	string execute(Environment &env);
+
+	string executeFunc(Environment& env);
 };

@@ -8,21 +8,27 @@
 #include <map> 
 
 class Node;
+class FunctionNode;
 
 using namespace std;
 
 class Environment {
 	public:
 		map<string, string> vars;
-    map<string, Node*> funcs;
+    map<string, FunctionNode*> funcs;
 
 		Environment();
+    Environment(const Environment &env);
 
 		void declare(string var, string val = "");
 
-		bool isDeclared(string var);
+		bool varIsDeclared(string var);
+
+    bool funcIsDeclared(string var);
 		
 		string get(string var);
 
-    void declareFunc(string name, Node* func);
+    FunctionNode* getFunc(string name);
+
+    void declareFunc(string name, FunctionNode* func);
 };

@@ -654,14 +654,14 @@ namespace yy {
 
   case 15:
 #line 96 "binary.yy" // lalr1.cc:859
-    {	yylhs.value.as< Node * > () = new StdNode("laststat","RETURN", count++);
+    {	yylhs.value.as< Node * > () = new LastStatNode("laststat","RETURN", yystack_[0].value.as< ExpListNode * > (), count++);
                                 yylhs.value.as< Node * > ()->children.push_back(yystack_[0].value.as< ExpListNode * > ());      }
 #line 660 "binary.tab.cc" // lalr1.cc:859
     break;
 
   case 16:
 #line 98 "binary.yy" // lalr1.cc:859
-    {	yylhs.value.as< Node * > () = new StdNode("laststat","BREAK", count++);  }
+    {	yylhs.value.as< Node * > () = new LastStatNode("laststat","BREAK", nullptr, count++);  }
 #line 666 "binary.tab.cc" // lalr1.cc:859
     break;
 
@@ -751,7 +751,7 @@ namespace yy {
 
   case 29:
 #line 126 "binary.yy" // lalr1.cc:859
-    {	yylhs.value.as< Node * > () = new ExpNodeImpl("exp","INF", count++);
+    {	yylhs.value.as< Node * > () = new InfNode("exp", yystack_[2].value.as< Node * > (), yystack_[0].value.as< Node * > (), count++);
 										    yylhs.value.as< Node * > ()->children.push_back(yystack_[2].value.as< Node * > ()); 	
 										    yylhs.value.as< Node * > ()->children.push_back(yystack_[0].value.as< Node * > ());  }
 #line 758 "binary.tab.cc" // lalr1.cc:859
@@ -767,7 +767,7 @@ namespace yy {
 
   case 31:
 #line 132 "binary.yy" // lalr1.cc:859
-    {	yylhs.value.as< Node * > () = new EquNode("exp", yystack_[2].value.as< Node * > (), yystack_[0].value.as< Node * > (), count++);
+    {	yylhs.value.as< Node * > () = new DbEquNode("exp", yystack_[2].value.as< Node * > (), yystack_[0].value.as< Node * > (), count++);
 										    yylhs.value.as< Node * > ()->children.push_back(yystack_[2].value.as< Node * > ()); 	
 										    yylhs.value.as< Node * > ()->children.push_back(yystack_[0].value.as< Node * > ());  }
 #line 774 "binary.tab.cc" // lalr1.cc:859

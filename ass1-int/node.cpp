@@ -52,12 +52,31 @@ string StdNode::getValue() { return value; }
 
 string StdNode::execute(Environment &env)
 {
-  cout << "stdnode;";
-  for (auto n : children)
-  {
-    n->execute(env);
+  // cout << "stdnode;";
+
+  string returnValue = "";
+  for(auto child: children){
+    if(dynamic_cast<LastStatNode*>(child) != nullptr){
+      return child->execute(env);
+    }
+    returnValue += child->execute(env);
   }
-  return "0";
+  cout << "StdNode : " << returnValue << endl;
+  return returnValue;
+}
+
+
+	string LastStatNode::getValue(){ return value;}
+
+	string LastStatNode::execute(Environment &env){
+  cout << "LastStat " << endl;
+  if(value == "RETURN"){
+    string returnValue = explist->execute(env);
+    cout << "   return : " << returnValue << endl;
+    return returnValue;
+  }
+  cout << "   break" << endl;
+  return "";
 }
 
 
@@ -81,6 +100,11 @@ string ExpNode::childEval(Environment &env, Node *node)
   {
     return node->execute(env);
   }
+
+  if (dynamic_cast<FuncCallNode *>(node) != nullptr)
+  {
+    return node->execute(env);
+  }
 }
 
 
@@ -89,7 +113,7 @@ string ExpNodeImpl::getValue() { return "EXP"; }
 string ExpNodeImpl::execute(Environment &env)
 {
   cout << "expImplNode;";
-  return "0";
+  return "";
 }
 
 
@@ -97,6 +121,7 @@ string PlusNode::getValue() { return "PLUS"; }
 
 string PlusNode::execute(Environment &env)
 {
+  cout << "PLUS NODE " << endl;
   return to_string(stof(childEval(env, left)) + stof(childEval(env, right)));
 }
 
@@ -143,11 +168,21 @@ string ExpoNode::execute(Environment &env)
 }
 
 
-string EquNode::getValue() { return "EQU"; }
+string DbEquNode::getValue() { return "EQU"; }
 
-string EquNode::execute(Environment &env)
+string DbEquNode::execute(Environment &env)
 {
   if (stof(childEval(env, left)) == stof(childEval(env, right)))
+    return "1";
+  else
+    return "0";
+}
+
+
+string InfNode::getValue(){return "INF";}
+
+string InfNode::execute(Environment &env){
+  if (stof(childEval(env, left)) < stof(childEval(env, right)))
     return "1";
   else
     return "0";
@@ -193,7 +228,7 @@ string StringNode::execute(Environment &env) { return value; }
 
 string ArgsNode::getValue() { return ""; }
 
-string ArgsNode::execute(Environment &env) { return "0"; }
+string ArgsNode::execute(Environment &env) { return (*children.begin())->execute(env); }
 
 Node *ArgsNode::get(int i)
 {
@@ -204,7 +239,15 @@ Node *ArgsNode::get(int i)
 
 string ExpListNode::getValue() { return ""; }
 
-string ExpListNode::execute(Environment &env) { return "0"; }
+string ExpListNode::execute(Environment &env) {
+  string returnValue = "";
+  for(auto child: children){
+    cout << "debug Explist child : " << child->tag << " " << child->getValue() << endl;
+    returnValue += child->execute(env);
+  }
+  cout << "ExplistNode : " << returnValue << endl;
+  return returnValue;
+}
 
 Node *ExpListNode::get(int i)
 {
@@ -215,7 +258,7 @@ Node *ExpListNode::get(int i)
 
 string VarListNode::getValue() { return ""; }
 
-string VarListNode::execute(Environment &env) { return "0"; }
+string VarListNode::execute(Environment &env) { return ""; }
 
 Node *VarListNode::get(int i)
 {
@@ -228,6 +271,14 @@ string FuncCallNode::getValue() { return ""; }
 
 string FuncCallNode::execute(Environment &env)
 {
+
+  if (env.funcIsDeclared(left->getValue())){
+    FunctionNode* func = env.getFunc(left->getValue());
+    Environment cpy = env;
+
+    return func->executeFunc(env);
+  }
+
   if (left->getValue() == "print" || left->getValue() == "io.write")
   {
 
@@ -310,7 +361,7 @@ string FuncCallNode::execute(Environment &env)
     cout << "func not implemented yet" << endl;
   }
 
-  return "0";
+  return "";
 }
 
 
@@ -339,7 +390,7 @@ string AssignNode::execute(Environment &env)
     itExp++;
   }
 
-  return "0";
+  return "";
 }
 
 
@@ -360,7 +411,7 @@ string ForNode::execute(Environment &env)
   }
   block->execute(env);
 
-  return "0";
+  return "";
 }
 
 
@@ -375,26 +426,28 @@ string IfNode::execute(Environment &env)
     block->execute(env);
   }
 
-  return "0";
+  return "";
 }
 
 
-string IfElseNode::getValue() { return "IF"; }
+string IfElseNode::getValue() { return "IF ELSE"; }
 
 string IfElseNode::execute(Environment &env)
 {
-  cout << "If Node;";
+  cout << "If Else Node " ;
 
   if (condition->execute(env) != "0")
   {
-    block->execute(env);
+    cout << "true condition" << endl;
+    return block->execute(env);
   }
   else
   {
-    block2->execute(env);
+    cout << "false condition" << endl;
+    return block2->execute(env);
   }
 
-  return "0";
+  return "";
 }
 
 
@@ -404,7 +457,13 @@ string FunctionNode::execute(Environment &env)
 {
   cout << "funtcion Node;";
 
-  env.declareFunc(name, block);
+  env.declareFunc(name, this);
 
-  return "0";
+  return "";
+}
+
+string FunctionNode::executeFunc(Environment& env){
+  cout << "Function called : " << name << endl;
+
+  return "";
 }

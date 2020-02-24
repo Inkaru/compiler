@@ -93,9 +93,9 @@ stat : varlist EQU explist    {	$$ = new AssignNode("stat", $1, $3, count++);
      ;
 
 
-laststat : RETURN explist     {	$$ = new StdNode("laststat","RETURN", count++);
+laststat : RETURN explist     {	$$ = new LastStatNode("laststat","RETURN", $2, count++);
                                 $$->children.push_back($2);      }
-         | BREAK              {	$$ = new StdNode("laststat","BREAK", count++);  }
+         | BREAK              {	$$ = new LastStatNode("laststat","BREAK", nullptr, count++);  }
          ;
 
 
@@ -123,13 +123,13 @@ exp : NUM             {	$$ = new IntNode("num", $1, count++);  }
     | exp EXPO exp    {	$$ = new ExpoNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp INF exp     {	$$ = new ExpNodeImpl("exp","INF", count++);
+    | exp INF exp     {	$$ = new InfNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
     | exp SUP exp     {	$$ = new ExpNodeImpl("exp","SUP", count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
-    | exp DBEQU exp     {	$$ = new EquNode("exp", $1, $3, count++);
+    | exp DBEQU exp     {	$$ = new DbEquNode("exp", $1, $3, count++);
 										    $$->children.push_back($1); 	
 										    $$->children.push_back($3);  }
     | exp NEQU exp    {	$$ = new ExpNodeImpl("exp","NEQU", count++);

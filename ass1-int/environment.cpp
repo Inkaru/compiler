@@ -3,49 +3,63 @@
 
 Environment::Environment() {}
 
+Environment::Environment(const Environment &env){
+  vars = env.vars;
+  funcs = env.funcs;
+}
+
 void Environment::declare(string var, string val)
 {
-  if (isDeclared(var))
+  if (varIsDeclared(var))
   {
+    cout << "update " << var << " to : " << val << endl;
     vars.find(var)->second = val;
   }
   else
   {
+    cout << "created " << var << " to : " << val << endl;
     vars.insert({var, val});
   }
 }
 
-bool Environment::isDeclared(string var)
+bool Environment::varIsDeclared(string var)
 {
   return vars.find(var) != vars.end();
+}
+
+bool Environment::funcIsDeclared(string var)
+{
+  return funcs.find(var) != funcs.end();
 }
 
 string Environment::get(string var)
 {
 
-  if (isDeclared(var))
+  if (varIsDeclared(var))
   {
     return vars.find(var)->second;
-  }
-
-  auto func = funcs.find(var);
-
-  if (func != funcs.end())
-  {
-    // copy func vars
-    Node *block = func->second;
-    string returnValue = block->execute(*this);
-
-    //re-assigment
-
-    return returnValue;
   }
 
   cout << "var was undefined" << endl;
   return "0";
 }
 
-void Environment::declareFunc(string name, Node *func)
+FunctionNode* Environment::getFunc(string name){
+  cout << "searching for : " << name ;
+  auto func = funcs.find(name);
+
+  if (func != funcs.end())
+  {
+    cout << "found" << endl;
+    return func->second;
+  }
+
+  cout << "func was undefined" << endl;
+  return nullptr;
+}
+
+void Environment::declareFunc(string name, FunctionNode *func)
 {
+  cout << "declared func : " << name << endl;
   funcs.insert({name, func});
 }
