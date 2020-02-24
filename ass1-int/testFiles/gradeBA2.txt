@@ -7,7 +7,7 @@ function fibonacci(n)
     end
 end
 
-for n = 1, 4 do
+for n = 1, 7 do
     io.write(fibonacci(n), ", ")
 end
 io.write("...\\n")

@@ -94,7 +94,7 @@ digraph {
 59 -> 57
 58 [label="var: n"];
 42 [label="num: 1"];
-43 [label="num: 4"];
+43 [label="num: 7"];
 57 [label="block: "];
 57 -> 56
 56 [label="chunk: "];

@@ -47,6 +47,11 @@ void Node::interpreter()
   (*this).execute(env);
 }
 
+Node* Node::get(int i){
+  list<Node *>::iterator it = next(children.begin(), i);
+  return (*it);
+}
+
 
 string StdNode::getValue() { return value; }
 
@@ -230,11 +235,6 @@ string ArgsNode::getValue() { return ""; }
 
 string ArgsNode::execute(Environment &env) { return (*children.begin())->execute(env); }
 
-Node *ArgsNode::get(int i)
-{
-  list<Node *>::iterator it = next(children.begin(), i);
-  return (*it);
-}
 
 
 string ExpListNode::getValue() { return ""; }
@@ -249,22 +249,12 @@ string ExpListNode::execute(Environment &env) {
   return returnValue;
 }
 
-Node *ExpListNode::get(int i)
-{
-  list<Node *>::iterator it = next(children.begin(), i);
-  return (*it);
-}
 
 
 string VarListNode::getValue() { return ""; }
 
 string VarListNode::execute(Environment &env) { return ""; }
 
-Node *VarListNode::get(int i)
-{
-  list<Node *>::iterator it = next(children.begin(), i);
-  return (*it);
-}
 
 
 string FuncCallNode::getValue() { return ""; }
@@ -276,7 +266,29 @@ string FuncCallNode::execute(Environment &env)
     FunctionNode* func = env.getFunc(left->getValue());
     Environment cpy = env;
 
-    return func->executeFunc(env);
+    Node* funcbody = func->get(1);
+    if(funcbody->getValue() == "parlist"){
+        auto itVar = funcbody->get(0)->children.begin();
+        auto itExp = right->get(0)->children.begin();
+
+        string var;
+        string exp;
+
+        while (itVar != funcbody->get(0)->children.end() && itExp != right->get(0)->children.end())
+        {
+
+          var = (*itVar)->getValue();
+          exp = (*itExp)->execute(cpy);
+          cout << "debug : " << var << "=" << exp << endl;
+
+          cpy.declare(var, exp);
+
+          itVar++;
+          itExp++;
+        }
+    }
+
+    return func->executeFunc(cpy);
   }
 
   if (left->getValue() == "print" || left->getValue() == "io.write")
@@ -465,5 +477,5 @@ string FunctionNode::execute(Environment &env)
 string FunctionNode::executeFunc(Environment& env){
   cout << "Function called : " << name << endl;
 
-  return "";
+  return get(1)->get(1)->execute(env);
 }

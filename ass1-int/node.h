@@ -28,6 +28,8 @@ public:
 	virtual string getValue() = 0;
 	virtual string execute(Environment &env) = 0;
 	void interpreter();
+
+	Node* get(int i);
 };
 
 class StdNode : public Node
@@ -228,7 +230,6 @@ public:
 
 	string execute(Environment &env);
 
-	Node *get(int i);
 };
 
 class ExpListNode : public Node
@@ -240,7 +241,6 @@ public:
 
 	string execute(Environment &env);
 
-	Node *get(int i);
 };
 
 class VarListNode : public Node
@@ -252,7 +252,6 @@ public:
 
 	string execute(Environment &env);
 
-	Node *get(int i);
 };
 
 class FuncCallNode : public Node
