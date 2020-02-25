@@ -102,8 +102,7 @@ string TabNode::getValue()
 
 string TabNode::execute(Environment &env)
 {
-  Environment cpy = env;
-  return env.getArray(name->getValue())->at(stoi(exp->execute(cpy)) - 1);
+  return env.getArray(name->getValue())->at(stoi(exp->execute(env)) - 1);
 }
 
 string ExpNode::childEval(Environment &env, Node *node)
@@ -446,11 +445,10 @@ string AssignNode::execute(Environment &env)
     else if (dynamic_cast<TabNode *>(*itVar) != nullptr)
     {
       TabNode *tab = dynamic_cast<TabNode *>(*itVar);
-      Environment cpy1 = env;
 
       // cout << (*exprs.begin()) << endl;
 
-      env.getArray(tab->name->getValue())->at(stoi(tab->exp->execute(cpy1))-1) = (*exprs.begin());
+      env.getArray(tab->name->getValue())->at(stoi(tab->exp->execute(env))-1) = (*exprs.begin());
 
       exprs.erase(exprs.begin());
     }
