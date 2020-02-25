@@ -3,6 +3,7 @@
 
 
 extern Node *root;
+extern FILE *yyin;
 
 void yy::parser::error(std::string const&err)
 {
@@ -11,7 +12,10 @@ void yy::parser::error(std::string const&err)
 
 int main(int argc, char **argv)
 {
+
+yyin = fopen(argv[1], "r");
 yy::parser parser;
+
   if(!parser.parse()){
   	// root->dump();
     root->dumpRoot();

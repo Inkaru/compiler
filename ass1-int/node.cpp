@@ -365,31 +365,10 @@ string FuncCallNode::execute(Environment &env)
     // ArgsNode* args = dynamic_cast<ArgsNode*>(right);
     // ExpListNode* explist = dynamic_cast<ExpListNode*>(args->get(0));
     // StringNode* str = dynamic_cast<StringNode*>(explist->get(0));
-
     string val;
+    cin >> val;
 
-    // cin.ignore();
-    // cin.sync(); cin.get(); cin.clear();
-    // getline(cin, val);
-
-    // if (cin.fail ()){
-    // 	cout << "error" << endl;
-    // }
-
-    // int iValid = 1;
-    // while (iValid == 1)
-    // {
-    // 	if (cin.fail())
-    // 	{
-    // 					cin.ignore();
-    // 					cout<<"Wrong! Enter a #!"<<endl;
-    // 					cin>>val;
-    // 	} //closes if
-    // 	else
-    // 					iValid = 0;
-    // }
-
-    return "8";
+    return val;
   }
   else
   {

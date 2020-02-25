@@ -23,69 +23,70 @@ Grammar
     7     | REPEAT block UNTIL exp
     8     | DO block STEND
     9     | IF exp THEN block STEND
-   10     | FOR NAME EQU exp COMMA exp DO block STEND
-   11     | functioncall
-   12     | FUNCTION funcname funcbody
+   10     | IF exp THEN block ELSE block STEND
+   11     | FOR NAME EQU exp COMMA exp DO block STEND
+   12     | functioncall
+   13     | FUNCTION funcname funcbody
 
-   13 laststat: RETURN explist
-   14         | BREAK
+   14 laststat: RETURN explist
+   15         | BREAK
 
-   15 exp: NUM
-   16    | STRING
-   17    | prefixexp
-   18    | tableconstructor
-   19    | FALSE
-   20    | TRUE
-   21    | exp PLUS exp
-   22    | exp MINUS exp
-   23    | exp MULT exp
-   24    | exp DIV exp
-   25    | exp MOD exp
-   26    | exp EXPO exp
-   27    | exp INF exp
-   28    | exp SUP exp
-   29    | exp DBEQU exp
-   30    | exp NEQU exp
-   31    | exp INFEQ exp
-   32    | exp SUPEQ exp
-   33    | MINUS exp
-   34    | HASH exp
+   16 exp: NUM
+   17    | STRING
+   18    | prefixexp
+   19    | tableconstructor
+   20    | FALSE
+   21    | TRUE
+   22    | exp PLUS exp
+   23    | exp MINUS exp
+   24    | exp MULT exp
+   25    | exp DIV exp
+   26    | exp MOD exp
+   27    | exp EXPO exp
+   28    | exp INF exp
+   29    | exp SUP exp
+   30    | exp DBEQU exp
+   31    | exp NEQU exp
+   32    | exp INFEQ exp
+   33    | exp SUPEQ exp
+   34    | MINUS exp
+   35    | HASH exp
 
-   35 prefixexp: var
-   36          | functioncall
-   37          | BROPEN exp BRCLOSE
+   36 prefixexp: var
+   37          | functioncall
+   38          | BROPEN exp BRCLOSE
 
-   38 var: NAME
-   39    | prefixexp DOT NAME
-   40    | prefixexp SQBROPEN exp SQBRCLOSE
+   39 var: NAME
+   40    | prefixexp DOT NAME
+   41    | prefixexp SQBROPEN exp SQBRCLOSE
 
-   41 varlist: var
-   42        | varlist COMMA var
+   42 varlist: var
+   43        | varlist COMMA var
 
-   43 functioncall: prefixexp args
+   44 functioncall: prefixexp args
 
-   44 args: STRING
-   45     | BROPEN explist BRCLOSE
+   45 args: STRING
+   46     | BROPEN explist BRCLOSE
 
-   46 explist: exp
-   47        | explist COMMA exp
+   47 explist: exp
+   48        | explist COMMA exp
 
-   48 tableconstructor: ACOPEN ACCLOSE
-   49                 | ACOPEN fieldlist ACCLOSE
+   49 tableconstructor: ACOPEN ACCLOSE
+   50                 | ACOPEN fieldlist ACCLOSE
 
-   50 fieldlist: field
-   51          | fieldlist COMMA field
+   51 fieldlist: field
+   52          | fieldlist COMMA field
 
-   52 field: exp
+   53 field: exp
 
-   53 funcname: NAME
-   54         | NAME DOT funcname
+   54 funcname: NAME
+   55         | NAME DOT funcname
 
-   55 funcbody: BROPEN parlist BRCLOSE block STEND
-   56         | BROPEN BRCLOSE block STEND
+   56 funcbody: BROPEN parlist BRCLOSE block STEND
+   57         | BROPEN BRCLOSE block STEND
 
-   57 parlist: NAME
-   58        | parlist COMMA NAME
+   58 parlist: NAME
+   59        | parlist COMMA NAME
 
 
 Terminals, with rules where they appear
@@ -93,85 +94,86 @@ Terminals, with rules where they appear
 END (0) 0
 error (256)
 NEWL (258)
-BROPEN (259) 37 45 55 56
-BRCLOSE (260) 37 45 55 56
-ACOPEN (261) 48 49
-ACCLOSE (262) 48 49
-SQBROPEN (263) 40
-SQBRCLOSE (264) 40
-DOT (265) 39 54
-COMMA (266) 10 42 47 51 58
-HASH (267) 34
-RETURN (268) 13
-BREAK (269) 14
+BROPEN (259) 38 46 56 57
+BRCLOSE (260) 38 46 56 57
+ACOPEN (261) 49 50
+ACCLOSE (262) 49 50
+SQBROPEN (263) 41
+SQBRCLOSE (264) 41
+DOT (265) 40 55
+COMMA (266) 11 43 48 52 59
+HASH (267) 35
+RETURN (268) 14
+BREAK (269) 15
 REPEAT (270) 7
 UNTIL (271) 7
-FOR (272) 10
-IF (273) 9
-THEN (274) 9
-DO (275) 8 10
-STEND (276) 8 9 10 55 56
-FUNCTION (277) 12
-FALSE (278) 19
-TRUE (279) 20
-NUM (280) 15
-NAME (281) 10 38 39 53 54 57 58
-STRING (282) 16 44
-EQU (283) 6 10
-INF (284) 27
-SUP (285) 28
-NEQU (286) 30
-INFEQ (287) 31
-SUPEQ (288) 32
-DBEQU (289) 29
-PLUS (290) 21
-MINUS (291) 22 33
-MULT (292) 23
-DIV (293) 24
-MOD (294) 25
-EXPO (295) 26
+FOR (272) 11
+IF (273) 9 10
+THEN (274) 9 10
+ELSE (275) 10
+DO (276) 8 11
+STEND (277) 8 9 10 11 56 57
+FUNCTION (278) 13
+FALSE (279) 20
+TRUE (280) 21
+NUM (281) 16
+NAME (282) 11 39 40 54 55 58 59
+STRING (283) 17 45
+EQU (284) 6 11
+INF (285) 28
+SUP (286) 29
+NEQU (287) 31
+INFEQ (288) 32
+SUPEQ (289) 33
+DBEQU (290) 30
+PLUS (291) 22
+MINUS (292) 23 34
+MULT (293) 24
+DIV (294) 25
+MOD (295) 26
+EXPO (296) 27
 
 
 Nonterminals, with rules where they appear
 
-$accept (41)
+$accept (42)
     on left: 0
-chunk (42)
+chunk (43)
     on left: 1 2 3 4, on right: 3 4 5
-block (43)
-    on left: 5, on right: 0 7 8 9 10 55 56
-stat (44)
-    on left: 6 7 8 9 10 11 12, on right: 1 3
-laststat (45)
-    on left: 13 14, on right: 2 4
-exp (46)
-    on left: 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
-    33 34, on right: 7 9 10 21 22 23 24 25 26 27 28 29 30 31 32 33
-    34 37 40 46 47 52
-prefixexp (47)
-    on left: 35 36 37, on right: 17 39 40 43
-var (48)
-    on left: 38 39 40, on right: 35 41 42
-varlist (49)
-    on left: 41 42, on right: 6 42
-functioncall (50)
-    on left: 43, on right: 11 36
-args (51)
-    on left: 44 45, on right: 43
-explist (52)
-    on left: 46 47, on right: 6 13 45 47
-tableconstructor (53)
-    on left: 48 49, on right: 18
-fieldlist (54)
-    on left: 50 51, on right: 49 51
-field (55)
-    on left: 52, on right: 50 51
-funcname (56)
-    on left: 53 54, on right: 12 54
-funcbody (57)
-    on left: 55 56, on right: 12
-parlist (58)
-    on left: 57 58, on right: 55 58
+block (44)
+    on left: 5, on right: 0 7 8 9 10 11 56 57
+stat (45)
+    on left: 6 7 8 9 10 11 12 13, on right: 1 3
+laststat (46)
+    on left: 14 15, on right: 2 4
+exp (47)
+    on left: 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
+    34 35, on right: 7 9 10 11 22 23 24 25 26 27 28 29 30 31 32 33
+    34 35 38 41 47 48 53
+prefixexp (48)
+    on left: 36 37 38, on right: 18 40 41 44
+var (49)
+    on left: 39 40 41, on right: 36 42 43
+varlist (50)
+    on left: 42 43, on right: 6 43
+functioncall (51)
+    on left: 44, on right: 12 37
+args (52)
+    on left: 45 46, on right: 44
+explist (53)
+    on left: 47 48, on right: 6 14 46 48
+tableconstructor (54)
+    on left: 49 50, on right: 19
+fieldlist (55)
+    on left: 51 52, on right: 50 52
+field (56)
+    on left: 53, on right: 51 52
+funcname (57)
+    on left: 54 55, on right: 13 55
+funcbody (58)
+    on left: 56 57, on right: 13
+parlist (59)
+    on left: 58 59, on right: 56 59
 
 
 State 0
@@ -200,7 +202,7 @@ State 0
 
 State 1
 
-   37 prefixexp: BROPEN . exp BRCLOSE
+   38 prefixexp: BROPEN . exp BRCLOSE
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -221,7 +223,7 @@ State 1
 
 State 2
 
-   13 laststat: RETURN . explist
+   14 laststat: RETURN . explist
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -243,9 +245,9 @@ State 2
 
 State 3
 
-   14 laststat: BREAK .
+   15 laststat: BREAK .
 
-    $default  reduce using rule 14 (laststat)
+    $default  reduce using rule 15 (laststat)
 
 
 State 4
@@ -274,7 +276,7 @@ State 4
 
 State 5
 
-   10 stat: FOR . NAME EQU exp COMMA exp DO block STEND
+   11 stat: FOR . NAME EQU exp COMMA exp DO block STEND
 
     NAME  shift, and go to state 33
 
@@ -282,6 +284,7 @@ State 5
 State 6
 
     9 stat: IF . exp THEN block STEND
+   10     | IF . exp THEN block ELSE block STEND
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -326,7 +329,7 @@ State 7
 
 State 8
 
-   12 stat: FUNCTION . funcname funcbody
+   13 stat: FUNCTION . funcname funcbody
 
     NAME  shift, and go to state 36
 
@@ -335,9 +338,9 @@ State 8
 
 State 9
 
-   38 var: NAME .
+   39 var: NAME .
 
-    $default  reduce using rule 38 (var)
+    $default  reduce using rule 39 (var)
 
 
 State 10
@@ -389,9 +392,9 @@ State 13
 
 State 14
 
-   39 var: prefixexp . DOT NAME
-   40    | prefixexp . SQBROPEN exp SQBRCLOSE
-   43 functioncall: prefixexp . args
+   40 var: prefixexp . DOT NAME
+   41    | prefixexp . SQBROPEN exp SQBRCLOSE
+   44 functioncall: prefixexp . args
 
     BROPEN    shift, and go to state 41
     SQBROPEN  shift, and go to state 42
@@ -403,18 +406,18 @@ State 14
 
 State 15
 
-   35 prefixexp: var .
-   41 varlist: var .
+   36 prefixexp: var .
+   42 varlist: var .
 
-    COMMA     reduce using rule 41 (varlist)
-    EQU       reduce using rule 41 (varlist)
-    $default  reduce using rule 35 (prefixexp)
+    COMMA     reduce using rule 42 (varlist)
+    EQU       reduce using rule 42 (varlist)
+    $default  reduce using rule 36 (prefixexp)
 
 
 State 16
 
     6 stat: varlist . EQU explist
-   42 varlist: varlist . COMMA var
+   43 varlist: varlist . COMMA var
 
     COMMA  shift, and go to state 46
     EQU    shift, and go to state 47
@@ -422,21 +425,21 @@ State 16
 
 State 17
 
-   11 stat: functioncall .
-   36 prefixexp: functioncall .
+   12 stat: functioncall .
+   37 prefixexp: functioncall .
 
-    BROPEN    reduce using rule 11 (stat)
-    BROPEN    [reduce using rule 36 (prefixexp)]
-    SQBROPEN  reduce using rule 36 (prefixexp)
-    DOT       reduce using rule 36 (prefixexp)
-    STRING    reduce using rule 36 (prefixexp)
-    $default  reduce using rule 11 (stat)
+    BROPEN    reduce using rule 12 (stat)
+    BROPEN    [reduce using rule 37 (prefixexp)]
+    SQBROPEN  reduce using rule 37 (prefixexp)
+    DOT       reduce using rule 37 (prefixexp)
+    STRING    reduce using rule 37 (prefixexp)
+    $default  reduce using rule 12 (stat)
 
 
 State 18
 
-   48 tableconstructor: ACOPEN . ACCLOSE
-   49                 | ACOPEN . fieldlist ACCLOSE
+   49 tableconstructor: ACOPEN . ACCLOSE
+   50                 | ACOPEN . fieldlist ACCLOSE
 
     BROPEN   shift, and go to state 1
     ACOPEN   shift, and go to state 18
@@ -460,7 +463,7 @@ State 18
 
 State 19
 
-   34 exp: HASH . exp
+   35 exp: HASH . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -481,35 +484,35 @@ State 19
 
 State 20
 
-   19 exp: FALSE .
-
-    $default  reduce using rule 19 (exp)
-
-
-State 21
-
-   20 exp: TRUE .
+   20 exp: FALSE .
 
     $default  reduce using rule 20 (exp)
 
 
+State 21
+
+   21 exp: TRUE .
+
+    $default  reduce using rule 21 (exp)
+
+
 State 22
 
-   15 exp: NUM .
-
-    $default  reduce using rule 15 (exp)
-
-
-State 23
-
-   16 exp: STRING .
+   16 exp: NUM .
 
     $default  reduce using rule 16 (exp)
 
 
+State 23
+
+   17 exp: STRING .
+
+    $default  reduce using rule 17 (exp)
+
+
 State 24
 
-   33 exp: MINUS . exp
+   34 exp: MINUS . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -530,19 +533,19 @@ State 24
 
 State 25
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-   37 prefixexp: BROPEN exp . BRCLOSE
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+   38 prefixexp: BROPEN exp . BRCLOSE
 
     BRCLOSE  shift, and go to state 54
     INF      shift, and go to state 55
@@ -561,58 +564,58 @@ State 25
 
 State 26
 
-   17 exp: prefixexp .
-   39 var: prefixexp . DOT NAME
-   40    | prefixexp . SQBROPEN exp SQBRCLOSE
-   43 functioncall: prefixexp . args
+   18 exp: prefixexp .
+   40 var: prefixexp . DOT NAME
+   41    | prefixexp . SQBROPEN exp SQBRCLOSE
+   44 functioncall: prefixexp . args
 
     BROPEN    shift, and go to state 41
     SQBROPEN  shift, and go to state 42
     DOT       shift, and go to state 43
     STRING    shift, and go to state 44
 
-    BROPEN    [reduce using rule 17 (exp)]
-    $default  reduce using rule 17 (exp)
+    BROPEN    [reduce using rule 18 (exp)]
+    $default  reduce using rule 18 (exp)
 
     args  go to state 45
 
 
 State 27
 
-   35 prefixexp: var .
-
-    $default  reduce using rule 35 (prefixexp)
-
-
-State 28
-
-   36 prefixexp: functioncall .
+   36 prefixexp: var .
 
     $default  reduce using rule 36 (prefixexp)
 
 
+State 28
+
+   37 prefixexp: functioncall .
+
+    $default  reduce using rule 37 (prefixexp)
+
+
 State 29
 
-   18 exp: tableconstructor .
+   19 exp: tableconstructor .
 
-    $default  reduce using rule 18 (exp)
+    $default  reduce using rule 19 (exp)
 
 
 State 30
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-   46 explist: exp .
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+   47 explist: exp .
 
     INF    shift, and go to state 55
     SUP    shift, and go to state 56
@@ -627,17 +630,17 @@ State 30
     MOD    shift, and go to state 65
     EXPO   shift, and go to state 66
 
-    $default  reduce using rule 46 (explist)
+    $default  reduce using rule 47 (explist)
 
 
 State 31
 
-   13 laststat: RETURN explist .
-   47 explist: explist . COMMA exp
+   14 laststat: RETURN explist .
+   48 explist: explist . COMMA exp
 
     COMMA  shift, and go to state 67
 
-    $default  reduce using rule 13 (laststat)
+    $default  reduce using rule 14 (laststat)
 
 
 State 32
@@ -649,7 +652,7 @@ State 32
 
 State 33
 
-   10 stat: FOR NAME . EQU exp COMMA exp DO block STEND
+   11 stat: FOR NAME . EQU exp COMMA exp DO block STEND
 
     EQU  shift, and go to state 69
 
@@ -657,18 +660,19 @@ State 33
 State 34
 
     9 stat: IF exp . THEN block STEND
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   10     | IF exp . THEN block ELSE block STEND
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
     THEN   shift, and go to state 70
     INF    shift, and go to state 55
@@ -694,17 +698,17 @@ State 35
 
 State 36
 
-   53 funcname: NAME .
-   54         | NAME . DOT funcname
+   54 funcname: NAME .
+   55         | NAME . DOT funcname
 
     DOT  shift, and go to state 72
 
-    $default  reduce using rule 53 (funcname)
+    $default  reduce using rule 54 (funcname)
 
 
 State 37
 
-   12 stat: FUNCTION funcname . funcbody
+   13 stat: FUNCTION funcname . funcbody
 
     BROPEN  shift, and go to state 73
 
@@ -734,7 +738,7 @@ State 40
 
 State 41
 
-   45 args: BROPEN . explist BRCLOSE
+   46 args: BROPEN . explist BRCLOSE
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -756,7 +760,7 @@ State 41
 
 State 42
 
-   40 var: prefixexp SQBROPEN . exp SQBRCLOSE
+   41 var: prefixexp SQBROPEN . exp SQBRCLOSE
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -777,28 +781,28 @@ State 42
 
 State 43
 
-   39 var: prefixexp DOT . NAME
+   40 var: prefixexp DOT . NAME
 
     NAME  shift, and go to state 77
 
 
 State 44
 
-   44 args: STRING .
+   45 args: STRING .
 
-    $default  reduce using rule 44 (args)
+    $default  reduce using rule 45 (args)
 
 
 State 45
 
-   43 functioncall: prefixexp args .
+   44 functioncall: prefixexp args .
 
-    $default  reduce using rule 43 (functioncall)
+    $default  reduce using rule 44 (functioncall)
 
 
 State 46
 
-   42 varlist: varlist COMMA . var
+   43 varlist: varlist COMMA . var
 
     BROPEN  shift, and go to state 1
     NAME    shift, and go to state 9
@@ -832,26 +836,26 @@ State 47
 
 State 48
 
-   48 tableconstructor: ACOPEN ACCLOSE .
+   49 tableconstructor: ACOPEN ACCLOSE .
 
-    $default  reduce using rule 48 (tableconstructor)
+    $default  reduce using rule 49 (tableconstructor)
 
 
 State 49
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-   52 field: exp .
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+   53 field: exp .
 
     INF    shift, and go to state 55
     SUP    shift, and go to state 56
@@ -866,13 +870,13 @@ State 49
     MOD    shift, and go to state 65
     EXPO   shift, and go to state 66
 
-    $default  reduce using rule 52 (field)
+    $default  reduce using rule 53 (field)
 
 
 State 50
 
-   49 tableconstructor: ACOPEN fieldlist . ACCLOSE
-   51 fieldlist: fieldlist . COMMA field
+   50 tableconstructor: ACOPEN fieldlist . ACCLOSE
+   52 fieldlist: fieldlist . COMMA field
 
     ACCLOSE  shift, and go to state 80
     COMMA    shift, and go to state 81
@@ -880,26 +884,26 @@ State 50
 
 State 51
 
-   50 fieldlist: field .
+   51 fieldlist: field .
 
-    $default  reduce using rule 50 (fieldlist)
+    $default  reduce using rule 51 (fieldlist)
 
 
 State 52
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-   34    | HASH exp .
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+   35    | HASH exp .
 
     INF    shift, and go to state 55
     SUP    shift, and go to state 56
@@ -914,55 +918,55 @@ State 52
     MOD    shift, and go to state 65
     EXPO   shift, and go to state 66
 
-    INF       [reduce using rule 34 (exp)]
-    SUP       [reduce using rule 34 (exp)]
-    NEQU      [reduce using rule 34 (exp)]
-    INFEQ     [reduce using rule 34 (exp)]
-    SUPEQ     [reduce using rule 34 (exp)]
-    DBEQU     [reduce using rule 34 (exp)]
-    PLUS      [reduce using rule 34 (exp)]
-    MINUS     [reduce using rule 34 (exp)]
-    MULT      [reduce using rule 34 (exp)]
-    DIV       [reduce using rule 34 (exp)]
-    MOD       [reduce using rule 34 (exp)]
-    EXPO      [reduce using rule 34 (exp)]
-    $default  reduce using rule 34 (exp)
+    INF       [reduce using rule 35 (exp)]
+    SUP       [reduce using rule 35 (exp)]
+    NEQU      [reduce using rule 35 (exp)]
+    INFEQ     [reduce using rule 35 (exp)]
+    SUPEQ     [reduce using rule 35 (exp)]
+    DBEQU     [reduce using rule 35 (exp)]
+    PLUS      [reduce using rule 35 (exp)]
+    MINUS     [reduce using rule 35 (exp)]
+    MULT      [reduce using rule 35 (exp)]
+    DIV       [reduce using rule 35 (exp)]
+    MOD       [reduce using rule 35 (exp)]
+    EXPO      [reduce using rule 35 (exp)]
+    $default  reduce using rule 35 (exp)
 
 
 State 53
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-   33    | MINUS exp .
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+   34    | MINUS exp .
 
     MULT  shift, and go to state 63
     DIV   shift, and go to state 64
     MOD   shift, and go to state 65
     EXPO  shift, and go to state 66
 
-    $default  reduce using rule 33 (exp)
+    $default  reduce using rule 34 (exp)
 
 
 State 54
 
-   37 prefixexp: BROPEN exp BRCLOSE .
+   38 prefixexp: BROPEN exp BRCLOSE .
 
-    $default  reduce using rule 37 (prefixexp)
+    $default  reduce using rule 38 (prefixexp)
 
 
 State 55
 
-   27 exp: exp INF . exp
+   28 exp: exp INF . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -983,7 +987,7 @@ State 55
 
 State 56
 
-   28 exp: exp SUP . exp
+   29 exp: exp SUP . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1004,7 +1008,7 @@ State 56
 
 State 57
 
-   30 exp: exp NEQU . exp
+   31 exp: exp NEQU . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1025,7 +1029,7 @@ State 57
 
 State 58
 
-   31 exp: exp INFEQ . exp
+   32 exp: exp INFEQ . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1046,7 +1050,7 @@ State 58
 
 State 59
 
-   32 exp: exp SUPEQ . exp
+   33 exp: exp SUPEQ . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1067,7 +1071,7 @@ State 59
 
 State 60
 
-   29 exp: exp DBEQU . exp
+   30 exp: exp DBEQU . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1088,7 +1092,7 @@ State 60
 
 State 61
 
-   21 exp: exp PLUS . exp
+   22 exp: exp PLUS . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1109,7 +1113,7 @@ State 61
 
 State 62
 
-   22 exp: exp MINUS . exp
+   23 exp: exp MINUS . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1130,7 +1134,7 @@ State 62
 
 State 63
 
-   23 exp: exp MULT . exp
+   24 exp: exp MULT . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1151,7 +1155,7 @@ State 63
 
 State 64
 
-   24 exp: exp DIV . exp
+   25 exp: exp DIV . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1172,7 +1176,7 @@ State 64
 
 State 65
 
-   25 exp: exp MOD . exp
+   26 exp: exp MOD . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1193,7 +1197,7 @@ State 65
 
 State 66
 
-   26 exp: exp EXPO . exp
+   27 exp: exp EXPO . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1214,7 +1218,7 @@ State 66
 
 State 67
 
-   47 explist: explist COMMA . exp
+   48 explist: explist COMMA . exp
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1256,7 +1260,7 @@ State 68
 
 State 69
 
-   10 stat: FOR NAME EQU . exp COMMA exp DO block STEND
+   11 stat: FOR NAME EQU . exp COMMA exp DO block STEND
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1278,6 +1282,7 @@ State 69
 State 70
 
     9 stat: IF exp THEN . block STEND
+   10     | IF exp THEN . block ELSE block STEND
 
     BROPEN    shift, and go to state 1
     RETURN    shift, and go to state 2
@@ -1308,7 +1313,7 @@ State 71
 
 State 72
 
-   54 funcname: NAME DOT . funcname
+   55 funcname: NAME DOT . funcname
 
     NAME  shift, and go to state 36
 
@@ -1317,8 +1322,8 @@ State 72
 
 State 73
 
-   55 funcbody: BROPEN . parlist BRCLOSE block STEND
-   56         | BROPEN . BRCLOSE block STEND
+   56 funcbody: BROPEN . parlist BRCLOSE block STEND
+   57         | BROPEN . BRCLOSE block STEND
 
     BRCLOSE  shift, and go to state 99
     NAME     shift, and go to state 100
@@ -1328,15 +1333,15 @@ State 73
 
 State 74
 
-   12 stat: FUNCTION funcname funcbody .
+   13 stat: FUNCTION funcname funcbody .
 
-    $default  reduce using rule 12 (stat)
+    $default  reduce using rule 13 (stat)
 
 
 State 75
 
-   45 args: BROPEN explist . BRCLOSE
-   47 explist: explist . COMMA exp
+   46 args: BROPEN explist . BRCLOSE
+   48 explist: explist . COMMA exp
 
     BRCLOSE  shift, and go to state 102
     COMMA    shift, and go to state 67
@@ -1344,19 +1349,19 @@ State 75
 
 State 76
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-   40 var: prefixexp SQBROPEN exp . SQBRCLOSE
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+   41 var: prefixexp SQBROPEN exp . SQBRCLOSE
 
     SQBRCLOSE  shift, and go to state 103
     INF        shift, and go to state 55
@@ -1375,25 +1380,25 @@ State 76
 
 State 77
 
-   39 var: prefixexp DOT NAME .
+   40 var: prefixexp DOT NAME .
 
-    $default  reduce using rule 39 (var)
+    $default  reduce using rule 40 (var)
 
 
 State 78
 
-   35 prefixexp: var .
-   42 varlist: varlist COMMA var .
+   36 prefixexp: var .
+   43 varlist: varlist COMMA var .
 
-    COMMA     reduce using rule 42 (varlist)
-    EQU       reduce using rule 42 (varlist)
-    $default  reduce using rule 35 (prefixexp)
+    COMMA     reduce using rule 43 (varlist)
+    EQU       reduce using rule 43 (varlist)
+    $default  reduce using rule 36 (prefixexp)
 
 
 State 79
 
     6 stat: varlist EQU explist .
-   47 explist: explist . COMMA exp
+   48 explist: explist . COMMA exp
 
     COMMA  shift, and go to state 67
 
@@ -1402,14 +1407,14 @@ State 79
 
 State 80
 
-   49 tableconstructor: ACOPEN fieldlist ACCLOSE .
+   50 tableconstructor: ACOPEN fieldlist ACCLOSE .
 
-    $default  reduce using rule 49 (tableconstructor)
+    $default  reduce using rule 50 (tableconstructor)
 
 
 State 81
 
-   51 fieldlist: fieldlist COMMA . field
+   52 fieldlist: fieldlist COMMA . field
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1431,45 +1436,19 @@ State 81
 
 State 82
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   27    | exp INF exp .
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-
-    PLUS   shift, and go to state 61
-    MINUS  shift, and go to state 62
-    MULT   shift, and go to state 63
-    DIV    shift, and go to state 64
-    MOD    shift, and go to state 65
-    EXPO   shift, and go to state 66
-
-    $default  reduce using rule 27 (exp)
-
-
-State 83
-
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   28    | exp SUP exp .
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   28    | exp INF exp .
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
     PLUS   shift, and go to state 61
     MINUS  shift, and go to state 62
@@ -1481,99 +1460,21 @@ State 83
     $default  reduce using rule 28 (exp)
 
 
-State 84
+State 83
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   30    | exp NEQU exp .
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-
-    PLUS   shift, and go to state 61
-    MINUS  shift, and go to state 62
-    MULT   shift, and go to state 63
-    DIV    shift, and go to state 64
-    MOD    shift, and go to state 65
-    EXPO   shift, and go to state 66
-
-    $default  reduce using rule 30 (exp)
-
-
-State 85
-
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   31    | exp INFEQ exp .
-   32    | exp . SUPEQ exp
-
-    PLUS   shift, and go to state 61
-    MINUS  shift, and go to state 62
-    MULT   shift, and go to state 63
-    DIV    shift, and go to state 64
-    MOD    shift, and go to state 65
-    EXPO   shift, and go to state 66
-
-    $default  reduce using rule 31 (exp)
-
-
-State 86
-
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-   32    | exp SUPEQ exp .
-
-    PLUS   shift, and go to state 61
-    MINUS  shift, and go to state 62
-    MULT   shift, and go to state 63
-    DIV    shift, and go to state 64
-    MOD    shift, and go to state 65
-    EXPO   shift, and go to state 66
-
-    $default  reduce using rule 32 (exp)
-
-
-State 87
-
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   29    | exp DBEQU exp .
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   29    | exp SUP exp .
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
     PLUS   shift, and go to state 61
     MINUS  shift, and go to state 62
@@ -1585,45 +1486,125 @@ State 87
     $default  reduce using rule 29 (exp)
 
 
+State 84
+
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   31    | exp NEQU exp .
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+
+    PLUS   shift, and go to state 61
+    MINUS  shift, and go to state 62
+    MULT   shift, and go to state 63
+    DIV    shift, and go to state 64
+    MOD    shift, and go to state 65
+    EXPO   shift, and go to state 66
+
+    $default  reduce using rule 31 (exp)
+
+
+State 85
+
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   32    | exp INFEQ exp .
+   33    | exp . SUPEQ exp
+
+    PLUS   shift, and go to state 61
+    MINUS  shift, and go to state 62
+    MULT   shift, and go to state 63
+    DIV    shift, and go to state 64
+    MOD    shift, and go to state 65
+    EXPO   shift, and go to state 66
+
+    $default  reduce using rule 32 (exp)
+
+
+State 86
+
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+   33    | exp SUPEQ exp .
+
+    PLUS   shift, and go to state 61
+    MINUS  shift, and go to state 62
+    MULT   shift, and go to state 63
+    DIV    shift, and go to state 64
+    MOD    shift, and go to state 65
+    EXPO   shift, and go to state 66
+
+    $default  reduce using rule 33 (exp)
+
+
+State 87
+
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   30    | exp DBEQU exp .
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+
+    PLUS   shift, and go to state 61
+    MINUS  shift, and go to state 62
+    MULT   shift, and go to state 63
+    DIV    shift, and go to state 64
+    MOD    shift, and go to state 65
+    EXPO   shift, and go to state 66
+
+    $default  reduce using rule 30 (exp)
+
+
 State 88
 
-   21 exp: exp . PLUS exp
-   21    | exp PLUS exp .
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-
-    MULT  shift, and go to state 63
-    DIV   shift, and go to state 64
-    MOD   shift, and go to state 65
-    EXPO  shift, and go to state 66
-
-    $default  reduce using rule 21 (exp)
-
-
-State 89
-
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   22    | exp MINUS exp .
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   22 exp: exp . PLUS exp
+   22    | exp PLUS exp .
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
     MULT  shift, and go to state 63
     DIV   shift, and go to state 64
@@ -1633,105 +1614,129 @@ State 89
     $default  reduce using rule 22 (exp)
 
 
-State 90
+State 89
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   23    | exp MULT exp .
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   23    | exp MINUS exp .
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
+    MULT  shift, and go to state 63
+    DIV   shift, and go to state 64
+    MOD   shift, and go to state 65
     EXPO  shift, and go to state 66
 
     $default  reduce using rule 23 (exp)
 
 
-State 91
+State 90
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   24    | exp DIV exp .
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   24    | exp MULT exp .
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
     EXPO  shift, and go to state 66
 
     $default  reduce using rule 24 (exp)
 
 
-State 92
+State 91
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   25    | exp MOD exp .
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   25    | exp DIV exp .
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
     EXPO  shift, and go to state 66
 
     $default  reduce using rule 25 (exp)
 
 
-State 93
+State 92
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   26    | exp EXPO exp .
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   26    | exp MOD exp .
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
     EXPO  shift, and go to state 66
 
     $default  reduce using rule 26 (exp)
 
 
+State 93
+
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   27    | exp EXPO exp .
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+
+    EXPO  shift, and go to state 66
+
+    $default  reduce using rule 27 (exp)
+
+
 State 94
 
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
-   47 explist: explist COMMA exp .
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+   48 explist: explist COMMA exp .
 
     INF    shift, and go to state 55
     SUP    shift, and go to state 56
@@ -1746,24 +1751,24 @@ State 94
     MOD    shift, and go to state 65
     EXPO   shift, and go to state 66
 
-    $default  reduce using rule 47 (explist)
+    $default  reduce using rule 48 (explist)
 
 
 State 95
 
     7 stat: REPEAT block UNTIL exp .
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
     INF    shift, and go to state 55
     SUP    shift, and go to state 56
@@ -1783,19 +1788,19 @@ State 95
 
 State 96
 
-   10 stat: FOR NAME EQU exp . COMMA exp DO block STEND
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   11 stat: FOR NAME EQU exp . COMMA exp DO block STEND
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
 
     COMMA  shift, and go to state 105
     INF    shift, and go to state 55
@@ -1815,20 +1820,22 @@ State 96
 State 97
 
     9 stat: IF exp THEN block . STEND
+   10     | IF exp THEN block . ELSE block STEND
 
-    STEND  shift, and go to state 106
+    ELSE   shift, and go to state 106
+    STEND  shift, and go to state 107
 
 
 State 98
 
-   54 funcname: NAME DOT funcname .
+   55 funcname: NAME DOT funcname .
 
-    $default  reduce using rule 54 (funcname)
+    $default  reduce using rule 55 (funcname)
 
 
 State 99
 
-   56 funcbody: BROPEN BRCLOSE . block STEND
+   57 funcbody: BROPEN BRCLOSE . block STEND
 
     BROPEN    shift, and go to state 1
     RETURN    shift, and go to state 2
@@ -1841,7 +1848,7 @@ State 99
     NAME      shift, and go to state 9
 
     chunk         go to state 10
-    block         go to state 107
+    block         go to state 108
     stat          go to state 12
     laststat      go to state 13
     prefixexp     go to state 14
@@ -1852,44 +1859,44 @@ State 99
 
 State 100
 
-   57 parlist: NAME .
+   58 parlist: NAME .
 
-    $default  reduce using rule 57 (parlist)
+    $default  reduce using rule 58 (parlist)
 
 
 State 101
 
-   55 funcbody: BROPEN parlist . BRCLOSE block STEND
-   58 parlist: parlist . COMMA NAME
+   56 funcbody: BROPEN parlist . BRCLOSE block STEND
+   59 parlist: parlist . COMMA NAME
 
-    BRCLOSE  shift, and go to state 108
-    COMMA    shift, and go to state 109
+    BRCLOSE  shift, and go to state 109
+    COMMA    shift, and go to state 110
 
 
 State 102
 
-   45 args: BROPEN explist BRCLOSE .
+   46 args: BROPEN explist BRCLOSE .
 
-    $default  reduce using rule 45 (args)
+    $default  reduce using rule 46 (args)
 
 
 State 103
 
-   40 var: prefixexp SQBROPEN exp SQBRCLOSE .
+   41 var: prefixexp SQBROPEN exp SQBRCLOSE .
 
-    $default  reduce using rule 40 (var)
+    $default  reduce using rule 41 (var)
 
 
 State 104
 
-   51 fieldlist: fieldlist COMMA field .
+   52 fieldlist: fieldlist COMMA field .
 
-    $default  reduce using rule 51 (fieldlist)
+    $default  reduce using rule 52 (fieldlist)
 
 
 State 105
 
-   10 stat: FOR NAME EQU exp COMMA . exp DO block STEND
+   11 stat: FOR NAME EQU exp COMMA . exp DO block STEND
 
     BROPEN  shift, and go to state 1
     ACOPEN  shift, and go to state 18
@@ -1901,7 +1908,7 @@ State 105
     STRING  shift, and go to state 23
     MINUS   shift, and go to state 24
 
-    exp               go to state 110
+    exp               go to state 111
     prefixexp         go to state 26
     var               go to state 27
     functioncall      go to state 28
@@ -1910,21 +1917,7 @@ State 105
 
 State 106
 
-    9 stat: IF exp THEN block STEND .
-
-    $default  reduce using rule 9 (stat)
-
-
-State 107
-
-   56 funcbody: BROPEN BRCLOSE block . STEND
-
-    STEND  shift, and go to state 111
-
-
-State 108
-
-   55 funcbody: BROPEN parlist BRCLOSE . block STEND
+   10 stat: IF exp THEN block ELSE . block STEND
 
     BROPEN    shift, and go to state 1
     RETURN    shift, and go to state 2
@@ -1946,30 +1939,68 @@ State 108
     functioncall  go to state 17
 
 
+State 107
+
+    9 stat: IF exp THEN block STEND .
+
+    $default  reduce using rule 9 (stat)
+
+
+State 108
+
+   57 funcbody: BROPEN BRCLOSE block . STEND
+
+    STEND  shift, and go to state 113
+
+
 State 109
 
-   58 parlist: parlist COMMA . NAME
+   56 funcbody: BROPEN parlist BRCLOSE . block STEND
 
-    NAME  shift, and go to state 113
+    BROPEN    shift, and go to state 1
+    RETURN    shift, and go to state 2
+    BREAK     shift, and go to state 3
+    REPEAT    shift, and go to state 4
+    FOR       shift, and go to state 5
+    IF        shift, and go to state 6
+    DO        shift, and go to state 7
+    FUNCTION  shift, and go to state 8
+    NAME      shift, and go to state 9
+
+    chunk         go to state 10
+    block         go to state 114
+    stat          go to state 12
+    laststat      go to state 13
+    prefixexp     go to state 14
+    var           go to state 15
+    varlist       go to state 16
+    functioncall  go to state 17
 
 
 State 110
 
-   10 stat: FOR NAME EQU exp COMMA exp . DO block STEND
-   21 exp: exp . PLUS exp
-   22    | exp . MINUS exp
-   23    | exp . MULT exp
-   24    | exp . DIV exp
-   25    | exp . MOD exp
-   26    | exp . EXPO exp
-   27    | exp . INF exp
-   28    | exp . SUP exp
-   29    | exp . DBEQU exp
-   30    | exp . NEQU exp
-   31    | exp . INFEQ exp
-   32    | exp . SUPEQ exp
+   59 parlist: parlist COMMA . NAME
 
-    DO     shift, and go to state 114
+    NAME  shift, and go to state 115
+
+
+State 111
+
+   11 stat: FOR NAME EQU exp COMMA exp . DO block STEND
+   22 exp: exp . PLUS exp
+   23    | exp . MINUS exp
+   24    | exp . MULT exp
+   25    | exp . DIV exp
+   26    | exp . MOD exp
+   27    | exp . EXPO exp
+   28    | exp . INF exp
+   29    | exp . SUP exp
+   30    | exp . DBEQU exp
+   31    | exp . NEQU exp
+   32    | exp . INFEQ exp
+   33    | exp . SUPEQ exp
+
+    DO     shift, and go to state 116
     INF    shift, and go to state 55
     SUP    shift, and go to state 56
     NEQU   shift, and go to state 57
@@ -1984,30 +2015,37 @@ State 110
     EXPO   shift, and go to state 66
 
 
-State 111
-
-   56 funcbody: BROPEN BRCLOSE block STEND .
-
-    $default  reduce using rule 56 (funcbody)
-
-
 State 112
 
-   55 funcbody: BROPEN parlist BRCLOSE block . STEND
+   10 stat: IF exp THEN block ELSE block . STEND
 
-    STEND  shift, and go to state 115
+    STEND  shift, and go to state 117
 
 
 State 113
 
-   58 parlist: parlist COMMA NAME .
+   57 funcbody: BROPEN BRCLOSE block STEND .
 
-    $default  reduce using rule 58 (parlist)
+    $default  reduce using rule 57 (funcbody)
 
 
 State 114
 
-   10 stat: FOR NAME EQU exp COMMA exp DO . block STEND
+   56 funcbody: BROPEN parlist BRCLOSE block . STEND
+
+    STEND  shift, and go to state 118
+
+
+State 115
+
+   59 parlist: parlist COMMA NAME .
+
+    $default  reduce using rule 59 (parlist)
+
+
+State 116
+
+   11 stat: FOR NAME EQU exp COMMA exp DO . block STEND
 
     BROPEN    shift, and go to state 1
     RETURN    shift, and go to state 2
@@ -2020,7 +2058,7 @@ State 114
     NAME      shift, and go to state 9
 
     chunk         go to state 10
-    block         go to state 116
+    block         go to state 119
     stat          go to state 12
     laststat      go to state 13
     prefixexp     go to state 14
@@ -2029,22 +2067,29 @@ State 114
     functioncall  go to state 17
 
 
-State 115
-
-   55 funcbody: BROPEN parlist BRCLOSE block STEND .
-
-    $default  reduce using rule 55 (funcbody)
-
-
-State 116
-
-   10 stat: FOR NAME EQU exp COMMA exp DO block . STEND
-
-    STEND  shift, and go to state 117
-
-
 State 117
 
-   10 stat: FOR NAME EQU exp COMMA exp DO block STEND .
+   10 stat: IF exp THEN block ELSE block STEND .
 
     $default  reduce using rule 10 (stat)
+
+
+State 118
+
+   56 funcbody: BROPEN parlist BRCLOSE block STEND .
+
+    $default  reduce using rule 56 (funcbody)
+
+
+State 119
+
+   11 stat: FOR NAME EQU exp COMMA exp DO block . STEND
+
+    STEND  shift, and go to state 120
+
+
+State 120
+
+   11 stat: FOR NAME EQU exp COMMA exp DO block STEND .
+
+    $default  reduce using rule 11 (stat)
