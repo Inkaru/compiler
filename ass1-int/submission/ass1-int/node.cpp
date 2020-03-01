@@ -23,12 +23,10 @@ void Node::dump(int depth)
 
 void Node::dumpRoot()
 {
-  ofstream MyFile("source.md");
-  MyFile << "```graphviz" << std::endl;
+  ofstream MyFile("parse.dot");
   MyFile << "digraph {" << std::endl;
   dumpDot(MyFile);
   MyFile << "}" << endl;
-  MyFile << "```";
   MyFile.close();
 }
 
