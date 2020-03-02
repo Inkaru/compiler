@@ -14,6 +14,7 @@
 #include <initializer_list>
 #include <string>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -28,10 +29,11 @@ public:
 	{
 	}
 
-	void dump()
+	void dump(ofstream& file)
 	{
 		cout << name << " := ";
 		cout << lhs << " " << op << " " << rhs << endl;
+		file << name << ":=" << lhs << " " << op << " " << rhs << '\n';
 	}
 };
 
@@ -49,16 +51,29 @@ public:
 	{
 	}
 
-	void dump()
+	void dump(ofstream &file)
 	{
 		cout << "BBlock @ " << this << endl;
 		cout << name << endl;
-		for (auto i : instructions){
-			i.dump();
+		file << "BB" << this << " [label=\"" << name + '\n' ;
+		for (auto i : instructions)
+		{
+			i.dump(file);
 		}
+		file << "\"];" << '\n';
 		cout << "True:  " << tExit << endl;
 		cout << "False: " << fExit << endl;
+
+		if (tExit != NULL)
+		{
+			file << "BB"<< this << " -> " << "BB"<< tExit << '\n';
+		}
+		if (fExit != NULL)
+		{
+			file << "BB"<< this << " -> " << "BB"<< fExit << '\n';
+		}
 	}
+
 };
 int BBlock::nCounter = 0;
 
@@ -311,16 +326,16 @@ public:
 	{
 		// Write three address instructions into the block
 		cond->convert(out);
-		
+
 		BBlock *exit = new BBlock();
 
 		out->tExit = new BBlock();
-		true_block->convert(out->tExit);
-		out->tExit->tExit = exit;
+		true_block->convert(out->tExit)->tExit = exit;;
+		// out->tExit->tExit = exit;
 
 		out->fExit = new BBlock();
-		false_block->convert(out->fExit);
-		out->fExit->tExit = exit;
+		false_block->convert(out->fExit)->tExit = exit;
+		// out->fExit->tExit = exit;
 
 		return exit;
 	}
@@ -338,30 +353,58 @@ public:
 
 /* Test cases */
 
+// Statement *test = new Seq({new Assignment(
+// 															 "x",
+// 															 new Add(
+// 																	 new Variable("x"),
+// 																	 new Constant(1))),
+// 													 new If(
+// 															 new Equality(
+// 																	 new Variable("x"),
+// 																	 new Constant(10)),
+// 															 new Assignment(
+// 																	 "y",
+// 																	 new Add(
+// 																			 new Variable("x"),
+// 																			 new Constant(1))),
+// 															 new Assignment(
+// 																	 "y",
+// 																	 new Mult(
+// 																			 new Variable("x"),
+// 																			 new Constant(2)))),
+// 													 new Assignment(
+// 															 "x",
+// 															 new Add(
+// 																	 new Variable("x"),
+// 																	 new Constant(1)))});
+
 Statement *test = new Seq({new Assignment(
-															 "x",
-															 new Add(
-																	 new Variable("x"),
-																	 new Constant(1))),
-													 new If(
-															 new Equality(
-																	 new Variable("x"),
-																	 new Constant(10)),
-															 new Assignment(
-																	 "y",
-																	 new Add(
-																			 new Variable("x"),
-																			 new Constant(1))),
-															 new Assignment(
-																	 "y",
-																	 new Mult(
-																			 new Variable("x"),
-																			 new Constant(2)))),
-													 new Assignment(
-															 "x",
-															 new Add(
-																	 new Variable("x"),
-																	 new Constant(1)))});
+																"x",
+																new Add(
+																		new Variable("x"),
+																		new Constant(1))),
+														new Assignment(
+																"y",
+																new Add(
+																		new Variable("y"),
+																		new Constant(1))),
+														new If(
+																new Equality(
+																		new Variable("x"),
+																		new Constant(0)),
+																new If(
+																		new Equality(
+																				new Variable("y"),
+																				new Constant(0)),
+																		new Assignment(
+																				"x",
+																				new Constant(1)),
+																		new Assignment(
+																				"y",
+																				new Constant(2))),
+																new Assignment(
+																		"y",
+																		new Constant(3)))});
 
 /*
  * Iterate over each basic block that can be reached from the entry point
@@ -370,6 +413,11 @@ Statement *test = new Seq({new Assignment(
  */
 void dumpCFG(BBlock *start)
 {
+	ofstream MyFile("source.md");
+	MyFile << "```graphviz" << std::endl;
+	MyFile << "digraph {" << std::endl;
+	MyFile << "node [shape=box];" << endl;
+
 	set<BBlock *> done, todo;
 	todo.insert(start);
 	while (todo.size() > 0)
@@ -378,13 +426,17 @@ void dumpCFG(BBlock *start)
 		auto first = todo.begin();
 		BBlock *next = *first;
 		todo.erase(first);
-		next->dump();
+		next->dump(MyFile);
 		done.insert(next);
 		if (next->tExit != NULL && done.find(next->tExit) == done.end())
 			todo.insert(next->tExit);
 		if (next->fExit != NULL && done.find(next->fExit) == done.end())
 			todo.insert(next->fExit);
 	}
+
+	MyFile << "}" << endl;
+	MyFile << "```";
+	MyFile.close();
 }
 
 int main()
