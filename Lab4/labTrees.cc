@@ -53,8 +53,9 @@ public:
 	{
 		cout << "BBlock @ " << this << endl;
 		cout << name << endl;
-		for (auto i : instructions)
+		for (auto i : instructions){
 			i.dump();
+		}
 		cout << "True:  " << tExit << endl;
 		cout << "False: " << fExit << endl;
 	}
@@ -78,11 +79,13 @@ public:
 		// Lecture 8 / slide 3-onwards.
 		// Psuedo-code is illustrated on slide 5.
 		// Virtual (but not pure) to allow overriding in the leaves.
+		return "t_" + to_string(nCounter++);
 	}
 
 	virtual string convert(BBlock *) = 0; // Lecture 8 / slide 12.
 	virtual void dump(int depth) = 0;
 };
+int Expression::nCounter = 0;
 
 class Add : public Expression
 {
@@ -96,6 +99,9 @@ public:
 	string convert(BBlock *out)
 	{
 		// Write three address instructions into the block
+		name = makeNames();
+		out->instructions.push_back(ThreeAd(name, '+', lhs->convert(out), rhs->convert(out)));
+		return name;
 	}
 
 	void dump(int depth)
@@ -120,6 +126,9 @@ public:
 	string convert(BBlock *out)
 	{
 		// Write three address instructions into the block
+		name = makeNames();
+		out->instructions.push_back(ThreeAd(name, '*', lhs->convert(out), rhs->convert(out)));
+		return name;
 	}
 
 	void dump(int depth)
@@ -127,6 +136,33 @@ public:
 		for (int i = 0; i < depth; i++)
 			cout << "  ";
 		cout << "*" << endl;
+		lhs->dump(depth + 1);
+		rhs->dump(depth + 1);
+	}
+};
+
+class Equality : public Expression
+{
+public:
+	Expression *lhs, *rhs;
+
+	Equality(Expression *lhs, Expression *rhs) : lhs(lhs), rhs(rhs)
+	{
+	}
+
+	string convert(BBlock *out)
+	{
+		// Write three address instructions into the block
+		name = makeNames();
+		out->instructions.push_back(ThreeAd(name, '=', lhs->convert(out), rhs->convert(out)));
+		return name;
+	}
+
+	void dump(int depth)
+	{
+		for (int i = 0; i < depth; i++)
+			cout << "  ";
+		cout << "==" << endl;
 		lhs->dump(depth + 1);
 		rhs->dump(depth + 1);
 	}
@@ -144,6 +180,7 @@ public:
 	string convert(BBlock *out)
 	{
 		// Write three address instructions into the block
+		return to_string(value);
 	}
 
 	void dump(int depth)
@@ -166,6 +203,7 @@ public:
 	string convert(BBlock *out)
 	{
 		// Write three address instructions into the block
+		return var_name;
 	}
 
 	void dump(int depth)
@@ -173,31 +211,6 @@ public:
 		for (int i = 0; i < depth; i++)
 			cout << "  ";
 		cout << var_name << endl;
-	}
-};
-
-class Equality : public Expression
-{
-public:
-	Variable *var;
-	Expression *exp;
-
-	Equality(Variable *var, Expression *exp) : var(var), exp(exp)
-	{
-	}
-
-	string convert(BBlock *out)
-	{
-		// Write three address instructions into the block
-	}
-
-	void dump(int depth)
-	{
-		for (int i = 0; i < depth; i++)
-			cout << "  ";
-		cout << "==" << endl;
-		var->dump(depth + 1);
-		exp->dump(depth + 1);
 	}
 };
 
@@ -227,6 +240,10 @@ public:
 	BBlock *convert(BBlock *out)
 	{
 		// Write three address instructions into the block
+		string left = lhs->convert(out);
+		string right = rhs->convert(out);
+		out->instructions.push_back(ThreeAd(left, 'c', right, right));
+		return out;
 	}
 
 	void dump(int depth)
@@ -255,16 +272,24 @@ public:
 	BBlock *convert(BBlock *out)
 	{
 		// Write three address instructions into the block
+		BBlock *current = out;
+
+		for (auto child : stats)
+		{
+			current = child->convert(current);
+		}
+
+		return out;
 	}
 
 	void dump(int depth)
 	{
 		cout << "";
 		for (int i = 0; i < depth; i++)
-			cout << "  " ;
+			cout << "  ";
 
 		cout << "Statement(S)" << endl;
-		for (auto child: stats)
+		for (auto child : stats)
 		{
 			child->dump(depth + 1);
 		}
@@ -285,6 +310,19 @@ public:
 	BBlock *convert(BBlock *out)
 	{
 		// Write three address instructions into the block
+		cond->convert(out);
+		
+		BBlock *exit = new BBlock();
+
+		out->tExit = new BBlock();
+		true_block->convert(out->tExit);
+		out->tExit->tExit = exit;
+
+		out->fExit = new BBlock();
+		false_block->convert(out->fExit);
+		out->fExit->tExit = exit;
+
+		return exit;
 	}
 
 	void dump(int depth)
@@ -301,29 +339,29 @@ public:
 /* Test cases */
 
 Statement *test = new Seq({new Assignment(
-							   "x",
-							   new Add(
-								   new Variable("x"),
-								   new Constant(1))),
-						   new If(
-							   new Equality(
-								   new Variable("x"),
-								   new Constant(10)),
-							   new Assignment(
-								   "y",
-								   new Add(
-									   new Variable("x"),
-									   new Constant(1))),
-							   new Assignment(
-								   "y",
-								   new Mult(
-									   new Variable("x"),
-									   new Constant(2)))),
-						   new Assignment(
-							   "x",
-							   new Add(
-								   new Variable("x"),
-								   new Constant(1)))});
+															 "x",
+															 new Add(
+																	 new Variable("x"),
+																	 new Constant(1))),
+													 new If(
+															 new Equality(
+																	 new Variable("x"),
+																	 new Constant(10)),
+															 new Assignment(
+																	 "y",
+																	 new Add(
+																			 new Variable("x"),
+																			 new Constant(1))),
+															 new Assignment(
+																	 "y",
+																	 new Mult(
+																			 new Variable("x"),
+																			 new Constant(2)))),
+													 new Assignment(
+															 "x",
+															 new Add(
+																	 new Variable("x"),
+																	 new Constant(1)))});
 
 /*
  * Iterate over each basic block that can be reached from the entry point
