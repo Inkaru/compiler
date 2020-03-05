@@ -354,9 +354,10 @@ string ExpListNode::getValue() { return ""; }
 string ExpListNode::convertExpr(BBlock *out)
 {
   string res;
-  for(auto i: children){
+  for (auto i : children)
+  {
     res += i->convertExpr(out);
-    res +=" ";
+    res += " ";
   }
   return res;
 }
@@ -366,9 +367,10 @@ string VarListNode::getValue() { return ""; }
 string VarListNode::convertExpr(BBlock *out)
 {
   string res;
-  for(auto i: children){
+  for (auto i : children)
+  {
     res += i->convertExpr(out);
-    res +=" ";
+    res += " ";
   }
   return res;
 }
@@ -379,26 +381,42 @@ BBlock *FuncCallNode::convertStmt(BBlock *out)
 {
   string rhs;
   string lhs = left->getValue();
-  if (lhs == "print")
+  if (lhs == "print" || lhs == "io.write")
   {
-    Node* explist = right->get(0);
+    bool returns = lhs == "print";
+    Node *explist = right->get(0);
 
-    lhs = "printf(\"" ;
+    lhs = "printf(\"";
     string lhs2 = "";
 
-    for(auto i: explist->children){
+    if (dynamic_cast<StringNode *>(right) != nullptr)
+    {
+      out->code.push_back("printf(\"" + right->getValue() + "\");");
+      return out;
+    }
+
+    for (auto i : explist->children)
+    {
       cout << i->getValue() << endl;
-      if(dynamic_cast<StringNode*>(i) != nullptr){
-      lhs += i->getValue() + " ";
+      if (dynamic_cast<StringNode *>(i) != nullptr)
+      {
+        lhs += i->getValue() + " ";
       }
-      else {
-      lhs += "%f ";
-      lhs2 += ", " + i->convertExpr(out);
+      else
+      {
+        lhs += "%f ";
+        lhs2 += ", " + i->convertExpr(out);
       }
     }
 
+    if (returns)
+    {
+      lhs += "\\n";
+    }
+
     lhs += "\"";
-    lhs2 += ");" ;
+
+    lhs2 += ");";
 
     lhs += lhs2;
 
