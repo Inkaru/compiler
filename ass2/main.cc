@@ -22,7 +22,7 @@ yy::parser parser;
     cout << "root dumped" << endl;
 
     BBlock* start = new BBlock();
-    start = root->convertStmt(start);
+    root->convertStmt(start);
     cout << "root converted" << endl;
     cout << start->name << endl;
 

@@ -78,7 +78,7 @@ BBlock *StdNode::convertStmt(BBlock *out)
     current = child->convertStmt(current);
   }
 
-  return out;
+  return current;
 }
 
 string LastStatNode::getValue() { return value; }
@@ -179,7 +179,7 @@ string ModNode::convertExpr(BBlock *out)
 
   string name = makeNames();
 
-  out->code.push_back(name + " = " + lhs + " % " + rhs + ";");
+  out->code.push_back(name + " = fmod(" + lhs + "," + rhs + ");");
   return name;
 }
 
@@ -260,7 +260,7 @@ string InfEquNode::convertExpr(BBlock *out)
 
   string name = makeNames();
 
-  out->code.push_back(name + " = " + lhs + " <= " + rhs + ";");
+  out->code.push_back(name + " = fmod" + lhs + " <= " + rhs + ";");
   return name;
 }
 
@@ -407,7 +407,6 @@ string FuncCallNode::convertExpr(BBlock *out)
 
     for (auto i : explist->children)
     {
-      cout << i->getValue() << endl;
       if (dynamic_cast<StringNode *>(i) != nullptr)
       {
         lhs += i->getValue() + " ";
@@ -477,7 +476,9 @@ BBlock *ForNode::convertStmt(BBlock *out)
 
   cond->code.push_back("if(" + i + "<=" + stop + ") \n\tgoto " + loop->name + ";\nelse \n\tgoto " + exit->name + ";");
 
+  cout << "loop is " << loop->name << endl;
   loop = block->convertStmt(loop);
+  cout << "loop is " << loop->name << endl;
   loop->code.push_back(i + "++;");
   loop->tExit = cond;
   loop->code.push_back("goto " + cond->name + ";");
@@ -499,7 +500,21 @@ string IfNode::getValue() { return "IF"; }
 
 BBlock *IfNode::convertStmt(BBlock *out)
 {
-  return out;
+  BBlock* exit = new BBlock();
+  BBlock* blo = new BBlock();
+  
+  string i = condition->convertExpr(out);
+  out->tExit = blo;
+  out->fExit = exit;
+  out->code.push_back("if(" + i + " != 0)\n\tgoto " + blo->name + ";\nelse\n\tgoto " + exit->name + ";");
+  out->isFinal = false;
+  blo->isFinal = false;
+
+  blo = block->convertStmt(blo);
+  blo->tExit = exit;
+  blo->code.push_back("goto " + exit->name + ";");
+
+  return exit;
 }
 
 string IfElseNode::getValue() { return "IF ELSE"; }
