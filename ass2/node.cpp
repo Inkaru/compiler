@@ -75,7 +75,7 @@ BBlock *StdNode::convertStmt(BBlock *out)
 
   for (auto child : children)
   {
-    child->convertStmt(current);
+    current = child->convertStmt(current);
   }
 
   return out;
@@ -377,10 +377,20 @@ string VarListNode::convertExpr(BBlock *out)
 
 string FuncCallNode::getValue() { return ""; }
 
-BBlock *FuncCallNode::convertStmt(BBlock *out)
+BBlock* FuncCallNode::convertStmt(BBlock *out){
+  convertExpr(out);
+  return out;
+}
+
+string FuncCallNode::convertExpr(BBlock *out)
 {
   string rhs;
   string lhs = left->getValue();
+  if (lhs == "io.read"){
+    string name = makeNames();
+    out->code.push_back( "std::cin >> " + name + ";");
+    return name;
+  }
   if (lhs == "print" || lhs == "io.write")
   {
     bool returns = lhs == "print";
@@ -392,7 +402,7 @@ BBlock *FuncCallNode::convertStmt(BBlock *out)
     if (dynamic_cast<StringNode *>(right) != nullptr)
     {
       out->code.push_back("printf(\"" + right->getValue() + "\");");
-      return out;
+      return "";
     }
 
     for (auto i : explist->children)
@@ -427,7 +437,7 @@ BBlock *FuncCallNode::convertStmt(BBlock *out)
     rhs = right->convertExpr(out);
     out->code.push_back(lhs + "(" + rhs + ");");
   }
-  return out;
+  return "";
 }
 
 string AssignNode::getValue() { return "Assign"; }
@@ -446,7 +456,33 @@ string ForNode::getValue() { return "FOR"; }
 
 BBlock *ForNode::convertStmt(BBlock *out)
 {
-  return out;
+
+  string i = var->convertExpr(out);
+  string val = exp1->convertExpr(out);
+  string stop = exp2->convertExpr(out);
+
+  BBlock* cond = new BBlock();
+  cond->isFinal = false;
+  out->tExit = cond;
+
+  out->code.push_back(i + " = " + val +";" );
+  out->code.push_back("goto " + cond->name + ";");
+  out->isFinal = false;
+
+  BBlock* exit = new BBlock();
+  BBlock* loop = new BBlock();
+  loop->isFinal = false;
+  cond->tExit = loop;
+  cond->fExit = exit;
+
+  cond->code.push_back("if(" + i + "<=" + stop + ") \n\tgoto " + loop->name + ";\nelse \n\tgoto " + exit->name + ";");
+
+  loop = block->convertStmt(loop);
+  loop->code.push_back(i + "++;");
+  loop->tExit = cond;
+  loop->code.push_back("goto " + cond->name + ";");
+
+  return exit;
 }
 
 string RepeatNode::getValue()

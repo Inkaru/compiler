@@ -328,7 +328,8 @@ public:
 
 	string getValue();
 
-	BBlock *convertStmt(BBlock *out);
+	string convertExpr(BBlock *out);
+	BBlock* convertStmt(BBlock *out);
 };
 
 class AssignNode : public Node
