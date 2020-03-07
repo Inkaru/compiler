@@ -2,6 +2,7 @@
 #include <string>
 #include <list>
 #include <set>
+#include <map>
 #include <iostream>
 #include <fstream>
 #include <algorithm>
@@ -9,6 +10,7 @@
 using namespace std;
 
 extern set<string> names;
+extern map<string, int> arrays;
 
 /************* Three Address Instructions *************/
 class ThreeAd

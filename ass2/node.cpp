@@ -111,8 +111,10 @@ string TabNode::getValue()
 
 string TabNode::convertExpr(BBlock *out)
 {
-  out->code.push_back(name->getValue() + "[" + exp->getValue() + "]");
-  return "tmp";
+  string tmp = makeNames();
+  string i = exp->convertExpr(out);
+  out->code.push_back( tmp + "=" + name->getValue() + "[(int)" + i + "];");
+  return tmp;
 }
 
 string ExpNodeImpl::getValue() { return "EXP"; }
@@ -299,11 +301,11 @@ string HashNode::getValue()
 }
 string HashNode::convertExpr(BBlock *out)
 {
-  string rhs = right->convertExpr(out);
+  int rhs = arrays.find(right->getValue())->second;
 
   string name = makeNames();
 
-  out->code.push_back(name + " = #" + rhs);
+  out->code.push_back(name + " = " + to_string(rhs) + ";");
   return name;
 }
 
@@ -325,15 +327,13 @@ string IntNode::makeNames()
 string TrueNode::getValue() { return to_string(value); }
 string TrueNode::convertExpr(BBlock *out)
 {
-  out->code.push_back("exp : " + getValue());
-  return "out";
+  return "true";
 }
 
 string FalseNode::getValue() { return to_string(value); }
 string FalseNode::convertExpr(BBlock *out)
 {
-  out->code.push_back("exp : " + getValue());
-  return "out";
+  return "false";
 }
 
 string StringNode::getValue() { return value; }
@@ -443,6 +443,12 @@ string AssignNode::getValue() { return "Assign"; }
 
 BBlock *AssignNode::convertStmt(BBlock *out)
 {
+  TableConstructorNode* tab = dynamic_cast<TableConstructorNode*>(right->get(0));
+  if(tab!=nullptr){
+    out->code.push_back(tab->construct(left->get(0)->getValue()));
+    return out;
+  }
+
   string lhs = left->convertExpr(out);
   string rhs = right->convertExpr(out);
 
@@ -493,7 +499,21 @@ string RepeatNode::getValue()
 
 BBlock *RepeatNode::convertStmt(BBlock *out)
 {
-  return out;
+  BBlock* exit = new BBlock();
+  BBlock* blo = new BBlock();
+
+  out->tExit = blo;
+  out->code.push_back("goto " + blo->name + ";");
+  blo->isFinal = false;
+
+  blo = block->convertStmt(blo);
+  string cond = exp->convertExpr(blo);
+  
+  blo->code.push_back("if(" + cond + "!= 1)\n\tgoto " + out->tExit->name + ";\nelse\n\tgoto " + exit->name + ";");
+  blo->tExit = out->tExit;
+  blo->fExit = exit;
+  
+  return exit;
 }
 
 string IfNode::getValue() { return "IF"; }
@@ -538,5 +558,29 @@ string TableConstructorNode::getValue()
 
 string TableConstructorNode::convertExpr(BBlock *out)
 {
-  return "out";
+  return "";
+}
+
+string TableConstructorNode::construct(string name)
+{
+  vector<string> *tab = new vector<string>;
+
+  for (auto child : get(0)->children)
+  {
+    tab->push_back(child->getValue());
+  }
+
+  string tabDecl;
+
+  int size = tab->size();
+  arrays.insert({name,size});
+
+  tabDecl += "double " + name + "[" + to_string(size) + "] = {";
+  for(int i = 0; i<size-1;i++){
+    tabDecl += tab->at(i) + ",";
+  }
+  tabDecl += tab->at(size-1);
+  tabDecl += "};";
+
+  return tabDecl;
 }

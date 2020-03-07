@@ -424,4 +424,6 @@ public:
 	string getValue();
 
 	string convertExpr(BBlock *out);
+
+	string construct(string name);
 };

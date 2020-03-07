@@ -1,6 +1,7 @@
 #include "translate.h"
 
 set<string> names{};
+map<string, int> arrays{};
 
 void ThreeAd::dump(ofstream &file)
 {

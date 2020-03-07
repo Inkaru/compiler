@@ -8,4 +8,3 @@ do
     print(n)
   end
 end
-print("end")
