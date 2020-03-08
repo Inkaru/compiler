@@ -9,8 +9,7 @@
 
 using namespace std;
 
-extern set<string> names;
-extern map<string, int> arrays;
+
 
 /************* Three Address Instructions *************/
 class ThreeAd
@@ -46,3 +45,7 @@ public:
 
 void dumpToCode(BBlock* start);
 void dumpToDot(BBlock* start);
+
+extern set<string> names;
+extern map<string, int> arrays;
+extern map<string, BBlock*> funcs;

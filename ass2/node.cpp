@@ -87,11 +87,12 @@ BBlock *LastStatNode::convertStmt(BBlock *out)
 {
   if (value == "RETURN")
   {
-    out->code.push_back("return " + explist->get(0)->getValue());
+    string tmp = explist->get(0)->convertExpr(out);
+    out->code.push_back("return " + tmp + ";");
   }
   else
   {
-    out->code.push_back("return");
+    out->code.push_back("return;");
   }
   return out;
 }
@@ -379,7 +380,7 @@ string VarListNode::convertExpr(BBlock *out)
 
 string FuncCallNode::getValue() { return ""; }
 
-BBlock *FuncCallNode::convertStmt(BBlock *out)
+BBlock* FuncCallNode::convertStmt(BBlock *out)
 {
   convertExpr(out);
   return out;
@@ -437,8 +438,10 @@ string FuncCallNode::convertExpr(BBlock *out)
   }
   else
   {
+    string name = makeNames();
     rhs = right->convertExpr(out);
-    out->code.push_back(lhs + "(" + rhs + ");");
+    out->code.push_back(name + " = " + lhs + "(" + rhs + ");");
+    return name;
   }
   return "";
 }
@@ -595,13 +598,74 @@ string IfElseNode::getValue() { return "IF ELSE"; }
 
 BBlock *IfElseNode::convertStmt(BBlock *out)
 {
-  return out;
+  BBlock *exit = new BBlock();
+  BBlock *blo1 = new BBlock();
+  BBlock *blo2 = new BBlock();
+
+  string i = condition->convertExpr(out);
+  out->tExit = blo1;
+  out->fExit = blo2;
+  out->code.push_back("if(" + i + " != 0)\n\tgoto " + blo1->name + ";\nelse\n\tgoto " + blo2->name + ";");
+  out->isFinal = false;
+  blo1->isFinal = false;
+  blo2->isFinal = false;
+
+  blo1 = block->convertStmt(blo1);
+  blo1->tExit = exit;
+  blo1->code.push_back("goto " + exit->name + ";");
+
+  blo2 = block2->convertStmt(blo2);
+  blo2->tExit = exit;
+  blo2->code.push_back("goto " + exit->name + ";");
+
+  return exit;
 }
 
 string FunctionNode::getValue() { return "Function"; }
 
 BBlock *FunctionNode::convertStmt(BBlock *out)
 {
+  
+  set<string> namesCpy = names;
+  map<string, int> arraysCpy = arrays;
+
+  names = {};
+  arrays = {};
+
+  BBlock* func = new BBlock();
+  BBlock* end = block->convertStmt(func);
+
+  string f = "double " + name + "(" ;
+  if(block->getValue() == "parlist"){
+    auto list = block->get(0)->children;
+    for (auto ptr = list.begin(); ptr != list.end(); ptr++){
+      f += "double " + (*ptr)->getValue();
+      if(*ptr != list.back()){
+        f += ", ";
+      }
+      names.erase((*ptr)->getValue());
+    }
+  }
+
+  f += "){\n";
+  func->name = f + func->name;
+  f = "";
+
+  for (auto n : names)
+  {
+    f += "double " + n + " = 0;\n";
+  }
+
+  func->code.push_front(f);
+  end->code.push_back("exit(0);");
+  end->code.push_back("}");
+  end->isFinal = false;
+
+  names = namesCpy;
+  arrays = arraysCpy;
+
+  funcs.insert({name, func});
+
   return out;
 }
 

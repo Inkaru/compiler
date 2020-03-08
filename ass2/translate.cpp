@@ -2,6 +2,7 @@
 
 set<string> names{};
 map<string, int> arrays{};
+map<string, BBlock *> funcs{};
 
 void ThreeAd::dump(ofstream &file)
 {
@@ -60,8 +61,28 @@ void dumpToCode(BBlock *start)
   ofstream Source("source.cc");
   Source << "#include <iostream>" << endl
          << "#include <cmath>" << endl
-         << endl
-         << "int main() {" << endl
+         << endl;
+
+  list<BBlock *> done, todo;
+  if (!funcs.empty())
+  {
+    todo.push_back(funcs.begin()->second);
+    while (todo.size() > 0)
+    {
+      // Pop an arbitrary element from todo set
+      auto first = todo.begin();
+      BBlock *next = *first;
+      todo.erase(first);
+      next->dumpRec(Source);
+      done.push_back(next);
+      if (next->tExit != NULL && find(done.begin(), done.end(), next->tExit) == done.end() && find(todo.begin(), todo.end(), next->tExit) == todo.end())
+        todo.push_back(next->tExit);
+      if (next->fExit != NULL && find(done.begin(), done.end(), next->fExit) == done.end() && find(todo.begin(), todo.end(), next->fExit) == todo.end())
+        todo.push_back(next->fExit);
+    }
+  }
+
+  Source << "int main() {" << endl
          << endl;
 
   for (auto n : names)
@@ -71,7 +92,6 @@ void dumpToCode(BBlock *start)
 
   Source << endl;
 
-  list<BBlock *> done, todo;
   todo.push_back(start);
   while (todo.size() > 0)
   {
@@ -90,7 +110,6 @@ void dumpToCode(BBlock *start)
   Source << "}" << endl;
   Source.close();
 }
-
 
 void dumpToDot(BBlock *start)
 {
